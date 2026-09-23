@@ -615,7 +615,7 @@ func _update_hud() -> void:
 	prompt_label.text = "[ E ]  ปิดฉาก" if target else ""
 
 func notify(text: String, duration: float = 2.5) -> void:
-	if not toast: return
+	if not toast or (modal and modal.visible): return
 	toast.text = text
 	toast_timer = duration
 	toast.show()
