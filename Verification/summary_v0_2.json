@@ -97,6 +97,13 @@
     ],
     "limitations": "IAB pointer-lock WrongDocumentError and generic Chromium UnknownError observed; no Godot ScriptErrors on tested path. Not a clean-browser-console claim or full manual playthrough."
   },
-  "public_v0_2_publication": "PENDING",
+  "public_v0_2_publication": {
+    "status": "PASS",
+    "evidence": "publication_v0_2.json",
+    "game_commit": "a03a0167beaf3885669fb1099b7263392c214d7e",
+    "url": "https://avocadough.github.io/f-student-revenge/",
+    "pck_sha256": "70F3ED38212FE56AE8525CCA4443EDCBE34106B7BFB5CCFD129B8526680575D2",
+    "deployment_run": "https://github.com/Avocadough/f-student-revenge/actions/runs/35912098550"
+  },
   "private_save_path_sanitized": true
 }

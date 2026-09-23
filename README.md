@@ -6,7 +6,7 @@
 
 **สถานะต้นฉบับ:** เดโม **0.2 — 24 กันยายน 2026** ปรับการเคลื่อนที่ เมนู และฉาก พร้อมผ่านการทดสอบระบบและเล่นอัตโนมัติครบ 9 ห้อง ผลตรวจและข้อจำกัดอยู่ใน [VALIDATION.md](VALIDATION.md)
 
-**สถานะเว็บ 0.2:** ส่งออกชุดสุดท้ายและตรวจพฤติกรรมบน localhost รวมถึงเปิด–ปิด God Mode ผ่านแล้ว รอการเผยแพร่เวอร์ชันนี้ ลิงก์ด้านล่างเป็นปลายทางเดิมที่เคยยืนยันรุ่น 0.1; ผลตรวจครั้งเดิมไม่ใช้ยืนยันรุ่น 0.2
+**สถานะเว็บ 0.2:** เผยแพร่บน GitHub Pages แล้ว ตรวจเว็บจริงและเปิด–ปิด God Mode ผ่านเมื่อ **24 กันยายน 2026** ไฟล์เกมสาธารณะมี SHA-256 ตรงกับชุดที่ทดสอบ ดู [หลักฐานการเผยแพร่](Verification/publication_v0_2.json) และข้อจำกัดใน [VALIDATION.md](VALIDATION.md)
 
 - Repository: [Avocadough/f-student-revenge](https://github.com/Avocadough/f-student-revenge)
 - เล่นผ่านเว็บ: [GitHub Pages](https://avocadough.github.io/f-student-revenge/)

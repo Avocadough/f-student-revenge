@@ -1,0 +1,33 @@
+{
+  "version": "0.2",
+  "status": "PASS",
+  "game_commit": "a03a0167beaf3885669fb1099b7263392c214d7e",
+  "url": "https://avocadough.github.io/f-student-revenge/",
+  "deployment_run": "https://github.com/Avocadough/f-student-revenge/actions/runs/35912098550",
+  "deployment_conclusion": "success",
+  "http_checked_at_utc": "2026-09-23T19:52:34.2672497Z",
+  "page_http_status": 200,
+  "pck_http_status": 200,
+  "pck_bytes": 4196736,
+  "pck_sha256": "70F3ED38212FE56AE8525CCA4443EDCBE34106B7BFB5CCFD129B8526680575D2",
+  "matches_local_tested_export": true,
+  "browser": "Codex In-app Browser",
+  "browser_flows": [
+    "new menu/settings rendered",
+    "God Mode off to on and saved",
+    "stage 1 started with GOD MODE HUD",
+    "HP remained full during enemy attacks over 20 seconds",
+    "one J input eliminated both paper targets in range",
+    "pause/settings/God Mode off saved; HUD returned to student100",
+    "return to main menu"
+  ],
+  "console_observations": [
+    "Generic Chromium UnknownError once at stage entry",
+    "No Godot ScriptErrors observed in tested public path"
+  ],
+  "limitations": [
+    "Partial manual browser flow; full 9-room campaign verified separately by normal-mode automated controller",
+    "Not standalone Chrome/Edge or minimum-spec performance evidence",
+    "Existing pointer-lock fallback remains relevant; not a clean-browser-console claim"
+  ]
+}
