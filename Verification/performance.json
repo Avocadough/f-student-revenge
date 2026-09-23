@@ -1,0 +1,14 @@
+{
+	"alive_enemies": 4,
+	"engine": "4.7.2-stable (official)",
+	"fixture": "Stage 2, room 2, stationary player, normal enemy AI, player invulnerable only for repeatable performance sampling; not a manual-play or minimum-spec claim.",
+	"frames": 2160,
+	"gpu": "NVIDIA GeForce RTX 5060 Ti",
+	"mean_fps": 179.96922526248,
+	"p95_frame_ms": 5.988,
+	"p99_frame_ms": 6.173,
+	"paused_frames": 0,
+	"renderer": "Native GL Compatibility; not a Web/browser benchmark",
+	"resolution": "(1920, 1061)",
+	"sample_seconds": 12.002052
+}

@@ -1,0 +1,134 @@
+{
+  "checks": [
+    {
+      "detail": null,
+      "label": "Starts on menu",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape from intro restores menu",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape from help restores menu",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Stage completion records next stage checkpoint",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape from stage clear restores unpaused menu",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Continue after stage clear enters next stage",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape resumes normal pause",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape and resume cannot close death retry dialog",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Death retry button exists",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Death retry creates healthy playable player",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Victory records completion",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Escape from victory restores menu",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "New game start button exists",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "New game clears old completion",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Broken JSON falls back to defaults",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Wrong root schema falls back to defaults",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Unknown save version ignored",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Wrong progress and settings types ignored",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Invalid individual field types ignored",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Progress bounds clamped",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Settings bounds clamped",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Valid progress retained",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Valid settings retained",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Valid save write/read round trip",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Malformed fixtures leave menu usable",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "fixture_user_dir": "Dedicated QA directory (local path omitted)",
+  "original_user_dir_untouched": true,
+  "passed": true,
+  "test_scope": "Synthetic menu callbacks and isolated real persistence fixtures; no player save modified"
+}

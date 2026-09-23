@@ -1,0 +1,159 @@
+{
+  "status": "PASS",
+  "blender": "5.2.2 LTS",
+  "checks": [
+    "All 18 GLBs valid header and byte length",
+    "No external image or buffer URIs",
+    "Matching editable .blend for every game model",
+    "18-clips per humanoid; hair properly skinned",
+    "ScreenLoop present on phone, tablet and computer",
+    "Rendered and visually inspected Idle/Jab/Guard/Kick/Sweep plus 4-character and all-prop galleries"
+  ],
+  "limitations": "Godot runtime and gameplay integration are verified by main task, not by this art-only QA.",
+  "results": [
+    {
+      "asset": "bin.glb",
+      "mesh_count": 1,
+      "triangles": 68,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "book.glb",
+      "mesh_count": 9,
+      "triangles": 2966,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "cabinet.glb",
+      "mesh_count": 1,
+      "triangles": 372,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "chair.glb",
+      "mesh_count": 2,
+      "triangles": 588,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "computer.glb",
+      "mesh_count": 21,
+      "triangles": 4212,
+      "animation_count": 1,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "desk.glb",
+      "mesh_count": 2,
+      "triangles": 198,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "keyboard.glb",
+      "mesh_count": 1,
+      "triangles": 32,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "laptop.glb",
+      "mesh_count": 1,
+      "triangles": 68,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "paper.glb",
+      "mesh_count": 10,
+      "triangles": 1244,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "pen.glb",
+      "mesh_count": 14,
+      "triangles": 1732,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "pencil.glb",
+      "mesh_count": 14,
+      "triangles": 1540,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "phone.glb",
+      "mesh_count": 14,
+      "triangles": 2548,
+      "animation_count": 1,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "plant.glb",
+      "mesh_count": 2,
+      "triangles": 60,
+      "animation_count": 0,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "student.glb",
+      "mesh_count": 22,
+      "triangles": 19631,
+      "animation_count": 18,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "tablet.glb",
+      "mesh_count": 21,
+      "triangles": 4484,
+      "animation_count": 1,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "teacher_ai.glb",
+      "mesh_count": 25,
+      "triangles": 19775,
+      "animation_count": 18,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "teacher_programming.glb",
+      "mesh_count": 25,
+      "triangles": 19775,
+      "animation_count": 18,
+      "self_contained": true,
+      "editable_blend_exists": true
+    },
+    {
+      "asset": "teacher_web.glb",
+      "mesh_count": 25,
+      "triangles": 19775,
+      "animation_count": 18,
+      "self_contained": true,
+      "editable_blend_exists": true
+    }
+  ]
+}

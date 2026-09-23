@@ -1,0 +1,10 @@
+{
+	"bounded_after_400_requests": true,
+	"combat_blocked_in_menu": true,
+	"combat_stopped_and_blocked_during_pause": true,
+	"decoded_samples": 12,
+	"passed": true,
+	"pool_slots": 8,
+	"ui_allowed_during_pause": true,
+	"zero_volume_blocks_new_playback": true
+}

@@ -1,0 +1,234 @@
+{
+	"checks": [
+		{
+			"description": "Startup renders menu state before gameplay",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "New-game menu button is wired",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "New-game button opens story introduction",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Intro button starts playable stage",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Menu to stage 1 reaches active player",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "One actual jab damages a target once across all active frames",
+			"detail": 13.0,
+			"pass": true
+		},
+		{
+			"description": "LLL produces its documented damage through J/K events",
+			"detail": 53.0,
+			"pass": true
+		},
+		{
+			"description": "LLL emits completed combo from real attack state",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "LLH produces its documented damage through J/K events",
+			"detail": 55.0,
+			"pass": true
+		},
+		{
+			"description": "LLH emits completed combo from real attack state",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "LHL produces its documented damage through J/K events",
+			"detail": 49.0,
+			"pass": true
+		},
+		{
+			"description": "LHL emits completed combo from real attack state",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Held guard blocks a real AI attack after parry window expires",
+			"detail": {
+				"health": 100.0,
+				"posture": 13.0
+			},
+			"pass": true
+		},
+		{
+			"description": "Timed Shift parries an actual enemy attack",
+			"detail": {
+				"health": 100.0,
+				"parries": 1
+			},
+			"pass": true
+		},
+		{
+			"description": "Actual parry returns posture damage to attacker",
+			"detail": 38.0,
+			"pass": true
+		},
+		{
+			"description": "Parry then J routes through counter attack",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Space dodge avoids damage during a real enemy attack",
+			"detail": {
+				"dodges": 1,
+				"health": 100.0
+			},
+			"pass": true
+		},
+		{
+			"description": "P input opens pause modal and pauses tree",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Paused player does not move while movement input is held",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Resume modal button is wired",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Resume restores active simulation",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Normal live enemy AI can deplete player health to zero",
+			"detail": {
+				"damage_taken": 103.0,
+				"health": 0.0
+			},
+			"pass": true
+		},
+		{
+			"description": "Death retry modal button is wired",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Retry restores current checkpoint with full health",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Continue button is wired to saved checkpoint route",
+			"detail": null,
+			"pass": true
+		},
+		{
+			"description": "Continue route loads fixture stage 2 checkpoint 2",
+			"detail": "In-memory fixture only; persistent storage not exercised",
+			"pass": true
+		},
+		{
+			"description": "Automated real-player traversal reaches all three stages and final ending",
+			"detail": "Reached final ending by real player attacks and movement; no direct enemy damage, teleport, health override or invulnerability cheat.",
+			"pass": true
+		},
+		{
+			"description": "Traversal passed Web shield, server core and final F core",
+			"detail": {
+				"final_core_seen": true,
+				"server_destroyed": true,
+				"shield_seen": true
+			},
+			"pass": true
+		}
+	],
+	"controls": "Input.parse_input_event for J K Shift Space Q E P; Input.action_press/release for movement; modal Button.pressed.emit for menu navigation",
+	"engine": "4.7.2-stable (official)",
+	"failure_count": 0,
+	"failures": [],
+	"fixture_disclosure": "Isolated combat cases start a fresh level, pause encounter spawning and one stationary enemy AI, and place that enemy within reach. Defense/death cases run real enemy AI. Checkpoint-load uses disclosed in-memory save_data fixture. No user save file is touched.",
+	"scope": "Synthetic automated gameplay integration, not manual browser verification or a user fun assessment",
+	"traversal": {
+		"complete": true,
+		"events": [
+			{
+				"health": 100.0,
+				"room": "1:1",
+				"sim_seconds": 0.0
+			},
+			{
+				"health": 91.0,
+				"room": "1:2",
+				"sim_seconds": 11.0166666666667
+			},
+			{
+				"health": 100.0,
+				"room": "1:3",
+				"sim_seconds": 21.9833333333333
+			},
+			{
+				"health": 100.0,
+				"room": "2:1",
+				"sim_seconds": 35.3166666666667
+			},
+			{
+				"health": 99.0,
+				"room": "2:2",
+				"sim_seconds": 46.5166666666667
+			},
+			{
+				"health": 100.0,
+				"room": "2:3",
+				"sim_seconds": 65.3666666666667
+			},
+			{
+				"health": 100.0,
+				"room": "3:1",
+				"sim_seconds": 85.4
+			},
+			{
+				"health": 92.0,
+				"room": "3:2",
+				"sim_seconds": 99.9333333333333
+			},
+			{
+				"health": 100.0,
+				"room": "3:3",
+				"sim_seconds": 120.066666666667
+			}
+		],
+		"final_core_seen": true,
+		"note": "Reached final ending by real player attacks and movement; no direct enemy damage, teleport, health override or invulnerability cheat.",
+		"reached_rooms": [
+			"1:1",
+			"1:2",
+			"1:3",
+			"2:1",
+			"2:2",
+			"2:3",
+			"3:1",
+			"3:2",
+			"3:3"
+		],
+		"retries": 0,
+		"simulated_seconds": 140.55,
+		"web_core_destroyed": true,
+		"web_shield_seen": true
+	},
+	"traversal_disclosure": "Fresh game from menu. No direct take_hit/receive_hit calls, position teleports, health edits, enemy disabling, or invulnerability edits in traversal. Bot may observe enemy states. Production boss checkpoints legitimately heal player."
+}

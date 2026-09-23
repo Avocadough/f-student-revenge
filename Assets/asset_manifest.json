@@ -1,0 +1,362 @@
+{
+  "build_date": "2026-09-23",
+  "blender_version": "5.2.2 LTS",
+  "units": "metres; feet at y=0 in Godot; -Z forward",
+  "sources": [
+    {
+      "id": "quaternius_base",
+      "title": "Universal Base Characters Standard",
+      "author": "Quaternius",
+      "url": "https://quaternius.itch.io/universal-base-characters",
+      "license": "CC0-1.0",
+      "archive": "base.zip",
+      "folder": "base",
+      "license_file": "License_Standard.txt",
+      "used": "Superhero Male head, eyes, eyebrows, SimpleParted hairstyle",
+      "sha256_archive": "fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40",
+      "license_local": "Assets/Licenses/quaternius_base.txt"
+    },
+    {
+      "id": "quaternius_outfits",
+      "title": "Modular Character Outfits Fantasy Standard",
+      "author": "Quaternius",
+      "url": "https://quaternius.itch.io/modular-character-outfits-fantasy",
+      "license": "CC0-1.0",
+      "archive": "outfits.zip",
+      "folder": "outfits",
+      "license_file": "License_Standard.txt",
+      "used": "Male Peasant body, arms, legs and boots; shared humanoid rig",
+      "sha256_archive": "c3468b18871cc8c8f05ab14df7712baf22cb9f389cbd870babf130e595187f70",
+      "license_local": "Assets/Licenses/quaternius_outfits.txt"
+    },
+    {
+      "id": "quaternius_ual1",
+      "title": "Universal Animation Library Standard",
+      "author": "Quaternius and Gonzalo Furnier",
+      "url": "https://quaternius.itch.io/universal-animation-library",
+      "license": "CC0-1.0",
+      "archive": "animations.zip",
+      "folder": "animations",
+      "license_file": "License.txt",
+      "used": "Idle, Walk, Jog, Sprint, Jab, Cross, Hit, Death and Roll",
+      "sha256_archive": "cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724",
+      "license_local": "Assets/Licenses/quaternius_ual1.txt"
+    },
+    {
+      "id": "quaternius_ual2",
+      "title": "Universal Animation Library 2 Standard",
+      "author": "Quaternius",
+      "url": "https://quaternius.itch.io/universal-animation-library-2",
+      "license": "CC0-1.0",
+      "archive": "animations2.zip",
+      "folder": "animations2",
+      "license_file": "License.txt",
+      "used": "Hook, Throw, FoldArms and Knockback",
+      "sha256_archive": "4008ea208a604773a2b2177d965f0f5d3195498b5bf838c3f5785d68e95f2a68",
+      "license_local": "Assets/Licenses/quaternius_ual2.txt"
+    },
+    {
+      "id": "kenney_furniture",
+      "title": "Furniture Kit",
+      "author": "Kenney",
+      "url": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0-1.0",
+      "archive": "furniture.zip",
+      "folder": "furniture",
+      "license_file": "License.txt",
+      "used": "desk, chairDesk, bookcaseClosedWide, pottedPlant, laptop, computerKeyboard, trashcan, books, computerScreen",
+      "sha256_archive": "e67652d0932cee41683f74711c03d3e192a2af9979ef8e6b237711f5482d46b0",
+      "license_local": "Assets/Licenses/kenney_furniture.txt"
+    }
+  ],
+  "assets": [
+    {
+      "path": "Assets/Models/bin.glb",
+      "source_blend": "Art/bin.blend",
+      "bytes": 6736,
+      "sha256": "98bedb53721b04c725783be3a852378e40857e45bdb060e5a71fb963cd2c7374",
+      "mesh_count": 1,
+      "clips": [],
+      "source": "Kenney Furniture Kit / trashcan",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/book.glb",
+      "source_blend": "Art/book.blend",
+      "bytes": 136924,
+      "sha256": "66537a1335750f696228caefd4643e9f36399e942a3b633bb6189db9e2b86cfe",
+      "mesh_count": 9,
+      "clips": [],
+      "source": "Kenney Furniture Kit / books",
+      "modifications": "Imported book geometry with custom exam cover, typography, walking feet."
+    },
+    {
+      "path": "Assets/Models/cabinet.glb",
+      "source_blend": "Art/cabinet.blend",
+      "bytes": 21372,
+      "sha256": "a489f2d08ed8de4a59325a67aabb7e6a0f6ba537b503d5db7a9310af5f36c4e0",
+      "mesh_count": 1,
+      "clips": [],
+      "source": "Kenney Furniture Kit / bookcaseClosedWide",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/chair.glb",
+      "source_blend": "Art/chair.blend",
+      "bytes": 36468,
+      "sha256": "4f3fc0f2e1d25b394d0c7d26224166fb3c8f01fb7f3bffa9635cd285b5bba5bf",
+      "mesh_count": 2,
+      "clips": [],
+      "source": "Kenney Furniture Kit / chairDesk",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/computer.glb",
+      "source_blend": "Art/computer.blend",
+      "bytes": 236056,
+      "sha256": "35cf87bd2580aca3060ac3583fab24881c89f110999eb9084aab0d47d82647c9",
+      "mesh_count": 21,
+      "clips": [
+        "ScreenLoop"
+      ],
+      "source": "Kenney Furniture Kit / computerScreen + computerKeyboard",
+      "modifications": "Scaled and positioned imported meshes; original animated coding-tutor UI; limbs."
+    },
+    {
+      "path": "Assets/Models/desk.glb",
+      "source_blend": "Art/desk.blend",
+      "bytes": 14260,
+      "sha256": "766ef6db6a005b62b1d35f8ad1f7134309538aab778a6fc5e1e6febaa9b87f2b",
+      "mesh_count": 2,
+      "clips": [],
+      "source": "Kenney Furniture Kit / desk",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/keyboard.glb",
+      "source_blend": "Art/keyboard.blend",
+      "bytes": 3932,
+      "sha256": "2ab34dcf0fe5d5db61172d5eca237ee0f9103896303e6a98eb31b42189f3933b",
+      "mesh_count": 1,
+      "clips": [],
+      "source": "Kenney Furniture Kit / computerKeyboard",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/laptop.glb",
+      "source_blend": "Art/laptop.blend",
+      "bytes": 6416,
+      "sha256": "2fc71e47233f8de7f110e37319d6305187ffc1eec180435e3c9a455ba7addf65",
+      "mesh_count": 1,
+      "clips": [],
+      "source": "Kenney Furniture Kit / laptop",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/paper.glb",
+      "source_blend": "Art/paper.blend",
+      "bytes": 58520,
+      "sha256": "af3d7592790bce62556def630373b9c16ab83754c6881ee574083fff6ed3c50b",
+      "mesh_count": 10,
+      "clips": [],
+      "source": "Original Blender-authored campus prop",
+      "modifications": "Curved paper mesh, folded corner, red F grade typography, limbs."
+    },
+    {
+      "path": "Assets/Models/pen.glb",
+      "source_blend": "Art/pen.blend",
+      "bytes": 81056,
+      "sha256": "26e4c244dffb91a63e5d0e35e4d2132a95051e333d4ca710284b52216e7e3364",
+      "mesh_count": 14,
+      "clips": [],
+      "source": "Original Blender-authored campus prop",
+      "modifications": "Faceted manufactured barrel, metal trim, sharpened tip or correction cap, feet."
+    },
+    {
+      "path": "Assets/Models/pencil.glb",
+      "source_blend": "Art/pencil.blend",
+      "bytes": 70360,
+      "sha256": "fbeeaafc5160e758ddfffc2623d5636049e2899080fa17a00e63e296d8fbeb6d",
+      "mesh_count": 14,
+      "clips": [],
+      "source": "Original Blender-authored campus prop",
+      "modifications": "Faceted manufactured barrel, metal trim, sharpened tip or correction cap, feet."
+    },
+    {
+      "path": "Assets/Models/phone.glb",
+      "source_blend": "Art/phone.blend",
+      "bytes": 137564,
+      "sha256": "52c720d3d4120c2dd4e0d30e205fce3726917821563aebdb0e97be273ae13010",
+      "mesh_count": 14,
+      "clips": [
+        "ScreenLoop"
+      ],
+      "source": "Original Blender-authored campus prop",
+      "modifications": "Beveled device mesh, original animated fictional short feed or coding-tutor screen, feet."
+    },
+    {
+      "path": "Assets/Models/plant.glb",
+      "source_blend": "Art/plant.blend",
+      "bytes": 7408,
+      "sha256": "6762164de725376986593939405ae6dad61a7818e90ad1830965bb35d3f8f952",
+      "mesh_count": 2,
+      "clips": [],
+      "source": "Kenney Furniture Kit / pottedPlant",
+      "modifications": "Imported GLB, resized to campus scale, unified origin and game orientation."
+    },
+    {
+      "path": "Assets/Models/student.glb",
+      "source_blend": "Art/student.blend",
+      "bytes": 2159804,
+      "sha256": "f6462c198c1e8edd17bdf00d8405cfd542f8f9a6c4c85ee197ce3a33eb03e829",
+      "mesh_count": 22,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+    },
+    {
+      "path": "Assets/Models/tablet.glb",
+      "source_blend": "Art/tablet.blend",
+      "bytes": 257616,
+      "sha256": "35e88477be1cb4c87ac0e896e0e5f9790d29e272f23516340b732e6b251e661d",
+      "mesh_count": 21,
+      "clips": [
+        "ScreenLoop"
+      ],
+      "source": "Original Blender-authored campus prop",
+      "modifications": "Beveled device mesh, original animated fictional short feed or coding-tutor screen, feet."
+    },
+    {
+      "path": "Assets/Models/teacher_ai.glb",
+      "source_blend": "Art/teacher_ai.blend",
+      "bytes": 2168688,
+      "sha256": "30d3eb0532e3ad01330f21c35d1161f224bc763a4d1e3ab9195885755b20c284",
+      "mesh_count": 25,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+    },
+    {
+      "path": "Assets/Models/teacher_programming.glb",
+      "source_blend": "Art/teacher_programming.blend",
+      "bytes": 2168680,
+      "sha256": "c01e38a6467e13f04bef47351aa7a86c066357c1623dd84239129b6caae10ddc",
+      "mesh_count": 25,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+    },
+    {
+      "path": "Assets/Models/teacher_web.glb",
+      "source_blend": "Art/teacher_web.blend",
+      "bytes": 2168692,
+      "sha256": "d0ec94fe41732a97d131fd3d951a799df8bb909ff2a10092c577c5654c5dacd8",
+      "mesh_count": 25,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+    }
+  ],
+  "limitations": [
+    "Stylized humanoids adapted from free Peasant clothing: combat trousers/boots retained rather than photorealistic uniforms.",
+    "ScreenLoop is original animated graphic content, not copied social-media or tutorial videos.",
+    "Poly Pizza pages were inspected but CDN download timed out; no Poly Pizza assets are included or credited as used.",
+    "Free Standard tiers only. No paid or Source tiers downloaded."
+  ]
+}

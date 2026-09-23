@@ -1,0 +1,12 @@
+.godot/
+.work/
+evidence/
+*.docx
+*.blend1
+*.blend2
+*.zip
+*.tmp
+*.log
+__pycache__/
+.DS_Store
+Thumbs.db
