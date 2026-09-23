@@ -1,0 +1,102 @@
+{
+  "version": "0.2",
+  "date": "2026-09-24",
+  "engine": "Godot 4.7.2 Stable",
+  "scope": "Native/headless bounded regression suites; not a human fun assessment or exhaustive bug guarantee",
+  "assertions_total": 224,
+  "suites": [
+    {
+      "file": "stage_subsystem_checks.json",
+      "checks": 61,
+      "passed": true,
+      "sha256": "19c7ed3ae332125aa6974f6696cc9ad77d39d0a10877116f9119cefefd333f52"
+    },
+    {
+      "file": "gameplay_integration.json",
+      "checks": 28,
+      "passed": true,
+      "sha256": "ed7efa531b5ed6f86a77940a207b3e9b563a373dbac2982c49c6b6785c110c5a"
+    },
+    {
+      "file": "menu_persistence_checks.json",
+      "checks": 25,
+      "passed": true,
+      "sha256": "9cd9e19d923446453aca67e9e985611010eb7e52714f03ed222f0709a6372b4f"
+    },
+    {
+      "file": "browser_fallback_checks.json",
+      "checks": 15,
+      "passed": true,
+      "sha256": "5a83e571a7ed40a6a59d63924e458da2c8bc1b2bb472c3544a4f40cf8e333658"
+    },
+    {
+      "file": "motion_regressions.json",
+      "checks": 14,
+      "passed": true,
+      "sha256": "1f9d1e223dca99d9de5f04d1644560dca1197d309dcef75e2e97c2396259dae4"
+    },
+    {
+      "file": "stage_collision_checks.json",
+      "checks": 12,
+      "passed": true,
+      "sha256": "2c1672e624887e8199bf9fca21a6a96846694ced8b27f477e559e08effc25495"
+    },
+    {
+      "file": "ui_layout_checks.json",
+      "checks": 17,
+      "passed": true,
+      "sha256": "311cd983a39abefb2449eefda3e3b8deccdeecb3b9de39b4ca96e328909b452b"
+    },
+    {
+      "file": "god_mode_ui_checks.json",
+      "checks": 18,
+      "passed": true,
+      "sha256": "95130b5adddb2a8bd5aa866f173a72305e12f36c2264cc9255a1b63d0ff0e681"
+    },
+    {
+      "file": "god_mode_combat_checks.json",
+      "checks": 34,
+      "passed": true,
+      "sha256": "50466a1eff3ce53851bffc84a14059c7b6eea766cae2c2177556c4a830637405"
+    }
+  ],
+  "traversal": {
+    "mode": "normal; God Mode disabled",
+    "complete": true,
+    "rooms": 9,
+    "simulated_seconds": 136.683333333333,
+    "retries": 0
+  },
+  "performance": {
+    "primary_before": "motion_before_controlled.json",
+    "primary_after": "motion_after_controlled.json",
+    "fixture": "Native 1280x720 requested, 120fps cap, stage2room2 normal4enemyAI, invulnerable player walks left/right via real action input. Rendered root position uses engine interpolation when enabled; stationary fraction measures physics stair-stepping, not bone motion. Not browser/minimum-spec benchmark.",
+    "draw_call_reduction_percent": 53.06781485468246,
+    "median_process_reduction_percent": 19.046275395033852,
+    "fps_gain_claim": false,
+    "paused_frames_before": 0,
+    "paused_frames_after": 0,
+    "root_translation_not_bone_jitter": true,
+    "other_activity_run": "motion_after.json",
+    "excluded_interrupted_run": "motion_after_interrupted.json",
+    "limitations": "One short controlled native pair; both average FPS at cap120. Earlier other-app-activity run varied; interrupted paused run excluded. No browser/minimum-spec or universal FPS claim."
+  },
+  "blender_motion_qa": "blender_motion_qa.json",
+  "bone_clock_qa": "bone_clock_qa.json",
+  "bone_clock_scope": "Diagnostic IDLE/PHYSICS clock comparison, not v0.1 versus v0.2; root physics60Hz interpolation is separate from render-frame bone pose sampling",
+  "web_export": {
+    "status": "PASS",
+    "pck_sha256": "70F3ED38212FE56AE8525CCA4443EDCBE34106B7BFB5CCFD129B8526680575D2"
+  },
+  "localhost_browser": {
+    "status": "PASS for tested flows",
+    "flows": [
+      "menu/modal/level-select/help",
+      "play/attack/enemy-damage/pause/settings/restart",
+      "God Mode enable/save/HUD/immunity/one-hit/room-clear/disable"
+    ],
+    "limitations": "IAB pointer-lock WrongDocumentError and generic Chromium UnknownError observed; no Godot ScriptErrors on tested path. Not a clean-browser-console claim or full manual playthrough."
+  },
+  "public_v0_2_publication": "PENDING",
+  "private_save_path_sanitized": true
+}

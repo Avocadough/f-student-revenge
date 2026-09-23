@@ -183,8 +183,8 @@ func run() -> void:
 	check(not game.player.dead and game.player.health == 100 and game.checkpoint_index == death_checkpoint, "Retry restores current checkpoint with full health")
 
 	# Explicit in-memory fixture verifies routing only. qa_no_save keeps disk/user progress untouched.
-	game._show_main_menu()
 	game.save_data = {"stage": 1, "checkpoint": 1}
+	game._show_main_menu()
 	check(press_button_with("เล่นต่อจากจุดล่าสุด", game.menu_stack), "Continue button is wired to saved checkpoint route")
 	await wait_frames(3)
 	check(game.stage_index == 1 and game.checkpoint_index == 1 and absf(game.player.global_position.z + 18.0) < 0.2, "Continue route loads fixture stage 2 checkpoint 2", "In-memory fixture only; persistent storage not exercised")

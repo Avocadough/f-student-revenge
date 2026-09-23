@@ -1,0 +1,20 @@
+{
+	"engine": "4.7.2-stable (official)",
+	"fixture": "Native 1280x720 requested, 120fps cap, stage2room2 normal4enemyAI, invulnerable player walks left/right via real action input. Rendered root position uses engine interpolation when enabled; stationary fraction measures physics stair-stepping, not bone motion. Not browser/minimum-spec benchmark.",
+	"fps_cap": 120,
+	"frames": 1441,
+	"gpu": "NVIDIA GeForce RTX 5060 Ti",
+	"mean_fps": 120.073457291471,
+	"median_draw_calls": 929.0,
+	"median_process_ms": 3.06,
+	"moving_frames": 1343,
+	"nodes": 866.0,
+	"p95_frame_ms": 8.992,
+	"p99_frame_ms": 9.75,
+	"paused_frames": 0,
+	"seconds": 12.000987,
+	"stationary_render_fraction": 0.501116902457185,
+	"stationary_render_steps": 673,
+	"tag": "before",
+	"viewport": "(1280, 720)"
+}

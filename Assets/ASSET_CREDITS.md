@@ -12,7 +12,7 @@ All downloaded assets below were obtained from their publisher's free Standard /
 
 Paper, pen, pencil, phone and tablet are original Blender-authored meshes for this project. Device screens contain original fictional short-feed and coding-tutor graphics. The instructor portrait is fictional; no real video, face, logo, audio or social-media material was copied.
 
-Custom animation clips: **Guard, Parry, Kick, Sweep, Dodge**. Device animation: **ScreenLoop**. Lecturer uniforms share the same downloaded rig and clothing geometry with distinct materials and glasses.
+Custom animation clips: **Guard, Parry, Kick, Sweep, Dodge**. Device animation: **ScreenLoop**. Lecturer uniforms share the same downloaded rig and clothing geometry with distinct materials and glasses. The downloaded **Run** clip received one cyclic three-sample smoothing pass; **Hook** received the same pass on upper-body tracks only. Original lengths and Hook impact timing were retained, and Hook pelvis/leg tracks were preserved. See `Art/motion_qa.json` for measured before/after motion and foot-contact checks.
 
 The planned Poly Pizza files were **not included** because their CDN download timed out. They must not appear in credits as implemented assets. Raw download archives are kept locally under `.work/assets` and excluded from the source repository; selected edited models, working `.blend` files and licenses are included.
 

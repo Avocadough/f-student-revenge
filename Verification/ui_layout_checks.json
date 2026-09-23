@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "label": "Continue disabled without checkpoint",
+      "pass": true
+    },
+    {
+      "label": "Menu decoration animates while visible",
+      "pass": true
+    },
+    {
+      "label": "Modal scrim blocks background pointer events",
+      "pass": true
+    },
+    {
+      "label": "Modal excludes background keyboard focus",
+      "pass": true
+    },
+    {
+      "label": "Help fits 1280x720",
+      "pass": true
+    },
+    {
+      "label": "Settings initially focuses first slider",
+      "pass": true
+    },
+    {
+      "label": "Settings fits 1280x720",
+      "pass": true
+    },
+    {
+      "label": "Volume zero fully mutes master bus",
+      "pass": true
+    },
+    {
+      "label": "Positive volume unmutes master bus",
+      "pass": true
+    },
+    {
+      "label": "Closing modal removes scrim and restores menu focusability",
+      "pass": true
+    },
+    {
+      "label": "Hidden menu animation stops during gameplay",
+      "pass": true
+    },
+    {
+      "label": "Pause fits 1280x720",
+      "pass": true
+    },
+    {
+      "label": "Menu panel fits short 960x540 viewport",
+      "pass": true
+    },
+    {
+      "label": "Settings panel fits short 960x540 viewport",
+      "pass": true
+    },
+    {
+      "label": "Long settings can scroll in short viewport",
+      "pass": true
+    },
+    {
+      "label": "Keyboard navigation scrolls final action into view",
+      "pass": true
+    },
+    {
+      "label": "Help fits narrower 800x720 viewport",
+      "pass": true
+    }
+  ],
+  "passed": true,
+  "scope": "Native synthetic UI state/layout checks at 1280x720, 960x540, 800x720; no player save touched"
+}

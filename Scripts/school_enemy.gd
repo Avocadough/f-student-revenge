@@ -4,6 +4,8 @@ class_name SchoolEnemy
 signal defeated(enemy: Node)
 
 const ProjectileScript = preload("res://Scripts/projectile.gd")
+const ENEMY_FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
+static var _model_scenes: Dictionary = {}
 
 var kind := "paper"
 var display_name := "กระดาษ F"
@@ -47,6 +49,8 @@ var visual: Node3D
 var model: Node3D
 var animator: AnimationPlayer
 var current_animation := ""
+var animation_clips: Dictionary = {}
+var hurt_visual_timer := 0.0
 var hint: Label3D
 var name_label: Label3D
 var telegraph: MeshInstance3D
@@ -55,6 +59,13 @@ var floor_warning: Node3D
 var base_color := Color("ee6652")
 var phase_core: Node
 var born_delay := 0.55
+
+static func preload_models(kinds: Array) -> void:
+	for requested in kinds:
+		var asset_kind: String = "teacher_" + requested if requested in ["programming", "ai", "web"] else "computer" if requested in ["server_core", "final_core"] else requested
+		var path := "res://Assets/Models/%s.glb" % asset_kind
+		if not _model_scenes.has(path) and ResourceLoader.exists(path):
+			_model_scenes[path] = load(path) as PackedScene
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -110,7 +121,9 @@ func _build_visual() -> void:
 		asset_kind = "computer"
 	var path := "res://Assets/Models/%s.glb" % asset_kind
 	if ResourceLoader.exists(path):
-		var packed := load(path) as PackedScene
+		if not _model_scenes.has(path):
+			_model_scenes[path] = load(path) as PackedScene
+		var packed: PackedScene = _model_scenes[path]
 		if packed != null:
 			model = packed.instantiate() as Node3D
 	if model == null:
@@ -126,6 +139,14 @@ func _build_visual() -> void:
 		model = mesh
 	visual.add_child(model)
 	animator = _find_animator(model)
+	if animator:
+		# Teacher clips animate bones; device clips move interpolated Node3Ds.
+		animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE if is_boss else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
+		for clip: StringName in animator.get_animation_list():
+			var short_name := String(clip).get_slice("/", String(clip).get_slice_count("/") - 1).to_lower()
+			animation_clips[short_name] = clip
+			if short_name in ["idle", "walk", "run", "guard"]:
+				animator.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
 	if kind in ["phone", "tablet", "computer"] and animator and animator.has_animation("ScreenLoop"):
 		animator.get_animation("ScreenLoop").loop_mode = Animation.LOOP_LINEAR
 		animator.play("ScreenLoop")
@@ -155,7 +176,7 @@ func _build_visual() -> void:
 	telegraph.visible = false
 	add_child(telegraph)
 	if kind in ["phone", "tablet", "computer"]:
-		var screen_note := _label("SHORTS ↻\nอีกคลิปเดียว" if kind == "phone" else "CODE TUTOR\nLet's fix this step by step", 24, base_color)
+		var screen_note := _label("SHORTS LOOP\nอีกคลิปเดียว" if kind == "phone" else "CODE TUTOR\nLet's fix this step by step", 24, base_color)
 		screen_note.position.y = 0.8
 		screen_note.position.z = -0.15
 		screen_note.pixel_size = 0.0026
@@ -170,15 +191,14 @@ func _build_visual() -> void:
 func _label(text_value: String, size: int, color: Color) -> Label3D:
 	var label := Label3D.new()
 	label.text = text_value
-	label.font_size = size
-	label.pixel_size = 0.0038
+	label.font_size = size * 2
+	label.pixel_size = 0.0019
 	label.modulate = color
-	label.outline_size = 8
+	label.outline_size = 10
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
-	var font_path := "res://Assets/Fonts/NotoSansThai.ttf"
-	if ResourceLoader.exists(font_path):
-		label.font = load(font_path) as Font
+	label.font = ENEMY_FONT
+	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return label
 
 func _find_animator(node: Node) -> AnimationPlayer:
@@ -193,11 +213,7 @@ func _find_animator(node: Node) -> AnimationPlayer:
 func _play(clip: String) -> void:
 	if animator == null or current_animation == clip:
 		return
-	var matching := ""
-	for available_clip in animator.get_animation_list():
-		if available_clip.to_lower() == clip.to_lower() or available_clip.to_lower().ends_with("/" + clip.to_lower()):
-			matching = available_clip
-			break
+	var matching: String = animation_clips.get(clip.to_lower(), "")
 	if matching.is_empty():
 		return
 	current_animation = clip
@@ -237,6 +253,7 @@ func _physics_process(delta: float) -> void:
 			posture = max_posture * 0.35
 			mode = "recover"
 			state_time = 0.8
+			telegraph.visible = false
 			_update_hint()
 		move_and_slide()
 		_resolve_knockback_impact()
@@ -316,7 +333,8 @@ func _resolve_knockback_impact() -> void:
 
 func _separation() -> Vector3:
 	var push := Vector3.ZERO
-	for other in get_tree().get_nodes_in_group("enemies"):
+	var neighbors: Array = stage.active_enemies if is_instance_valid(stage) else get_tree().get_nodes_in_group("enemies")
+	for other in neighbors:
 		if other == self or not is_instance_valid(other) or other.dead:
 			continue
 		var offset: Vector3 = global_position - other.global_position
@@ -434,6 +452,9 @@ func _melee_hit(damage_value: float, structure_value: float, reach: float, unblo
 		return
 	if not all_directions and offset.length() > 0.1 and attack_direction.dot(offset.normalized()) < 0.25:
 		return
+	var obstacle_query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 0.9, player.global_position + Vector3.UP * 0.9, 1)
+	if not get_world_3d().direct_space_state.intersect_ray(obstacle_query).is_empty():
+		return
 	var result: String = player.receive_hit(damage_value, structure_value, global_position, unblockable)
 	if result == "parried":
 		on_parried()
@@ -461,6 +482,7 @@ func _fire_projectile() -> void:
 	bullet.direction = (player.global_position + Vector3.UP * 0.9 - spawn).normalized()
 	stage.add_child(bullet)
 	bullet.global_position = spawn
+	bullet.reset_physics_interpolation()
 	if bullet.direction.length_squared() > 0.01:
 		bullet.look_at(spawn + bullet.direction, Vector3.UP)
 
@@ -486,6 +508,13 @@ func _interrupt(duration: float) -> void:
 func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0, heavy: bool = false) -> String:
 	if dead:
 		return "dead"
+	# Every successful player hit is lethal in the optional demonstration mode,
+	# including guarded enemies, bosses and the Web shield. Normal hit detection
+	# still enforces range and cover before this damage interface is called.
+	if _player_has_god_mode():
+		health = 0.0
+		_die()
+		return "hit"
 	if shielded:
 		hint.text = "ทำลาย SERVER CORE ก่อน"
 		return "shielded"
@@ -527,7 +556,8 @@ func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0
 func _has_support() -> bool:
 	if kind == "tablet" or is_boss or is_core:
 		return false
-	for other in get_tree().get_nodes_in_group("enemies"):
+	var neighbors: Array = stage.active_enemies if is_instance_valid(stage) else get_tree().get_nodes_in_group("enemies")
+	for other in neighbors:
 		if other != self and is_instance_valid(other) and not other.dead and other.kind == "tablet" and global_position.distance_to(other.global_position) < 4.8:
 			return true
 	return false
@@ -546,10 +576,14 @@ func _check_broken() -> void:
 func can_finish() -> bool:
 	return broken and not dead and not shielded and not is_core
 
+func _player_has_god_mode() -> bool:
+	return is_instance_valid(player) and player.get("god_mode") == true
+
 func finish() -> void:
 	if not can_finish():
 		return
-	if not is_boss:
+	if not is_boss or _player_has_god_mode():
+		health = 0.0
 		_die()
 	else:
 		broken = false

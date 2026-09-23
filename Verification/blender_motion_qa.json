@@ -1,0 +1,177 @@
+{
+  "status": "PASS",
+  "method": "One symmetric quaternion/position three-sample pass, weights 0.25/0.50/0.25. Run uses cyclic neighbors and an exact closing key. Hook smooths upper body only and preserves endpoints, pelvis and legs. No other clips changed.",
+  "blender_version": "5.2.2 LTS",
+  "baseline_student_sha256": "f6462c198c1e8edd17bdf00d8405cfd542f8f9a6c4c85ee197ce3a33eb03e829",
+  "edited_student_sha256": "4d1243eb6caaac6f8346e4d83394cbb07fef6c6b71cae86ef311aaa132f3c911",
+  "measurements": {
+    "before_Run": {
+      "length": 0.9333333333333333,
+      "max_bone_step_deg": 60.93256837816897,
+      "max_endpoint_rotation_deg": 0.6489099127815835,
+      "pelvis_vertical_range_m": 0.244684636592865,
+      "sole_min_m": 0.019036225974559784,
+      "sole_max_m": 0.23538346588611603,
+      "hand_forward_peak_frame": 14
+    },
+    "before_Hook": {
+      "length": 0.4666666666666667,
+      "max_bone_step_deg": 94.99054852343968,
+      "max_endpoint_rotation_deg": 108.48714575735745,
+      "pelvis_vertical_range_m": 0.3100768029689789,
+      "sole_min_m": -0.010840674862265587,
+      "sole_max_m": 0.04532809555530548,
+      "hand_forward_peak_frame": 6
+    },
+    "after_Run": {
+      "length": 0.9333333333333333,
+      "max_bone_step_deg": 35.90699773095779,
+      "max_endpoint_rotation_deg": 0.0,
+      "pelvis_vertical_range_m": 0.22847044467926025,
+      "sole_min_m": 0.004049227107316256,
+      "sole_max_m": 0.23549067974090576,
+      "hand_forward_peak_frame": 13
+    },
+    "after_Hook": {
+      "length": 0.4666666666666667,
+      "max_bone_step_deg": 52.74709550700186,
+      "max_endpoint_rotation_deg": 108.48714575735745,
+      "pelvis_vertical_range_m": 0.3100768029689789,
+      "sole_min_m": -0.010840674862265587,
+      "sole_max_m": 0.04532809555530548,
+      "hand_forward_peak_frame": 6
+    },
+    "Run_comparison": {
+      "plant_definition": "toe bone height <= 55 mm in baseline; additional displacement between same animation phases, not runtime sliding",
+      "plant_samples": 9,
+      "plant_max_horizontal_change_m": 0.013822017626908666,
+      "plant_max_lift_m": 0.015279434621334076,
+      "plant_max_sink_m": -0.02169652096927166,
+      "root_position_max_change_m": 0.0
+    },
+    "Hook_comparison": {
+      "plant_definition": "toe bone height <= 55 mm in baseline; additional displacement between same animation phases, not runtime sliding",
+      "plant_samples": 19,
+      "plant_max_horizontal_change_m": 0.0,
+      "plant_max_lift_m": 0.0,
+      "plant_max_sink_m": 0.0,
+      "root_position_max_change_m": 0.0
+    }
+  },
+  "all_character_clip_parity": {
+    "student": {
+      "unchanged_clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "changed_only": [
+        "Hook",
+        "Run"
+      ],
+      "same_clip_lengths": true,
+      "hook_lower_body_unchanged": true
+    },
+    "teacher_programming": {
+      "unchanged_clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "changed_only": [
+        "Hook",
+        "Run"
+      ],
+      "same_clip_lengths": true,
+      "hook_lower_body_unchanged": true
+    },
+    "teacher_ai": {
+      "unchanged_clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "changed_only": [
+        "Hook",
+        "Run"
+      ],
+      "same_clip_lengths": true,
+      "hook_lower_body_unchanged": true
+    },
+    "teacher_web": {
+      "unchanged_clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "changed_only": [
+        "Hook",
+        "Run"
+      ],
+      "same_clip_lengths": true,
+      "hook_lower_body_unchanged": true
+    }
+  },
+  "visual_checks": [
+    "Previews/run_motion_contact_sheet.png",
+    "Previews/hook_motion_contact_sheet.png"
+  ],
+  "limitations": [
+    "Run retains the source jog style and airborne phase; the fix smooths rapid changes rather than replacing the gait.",
+    "Foot-plant drift numbers describe added displacement between equal animation phases, not runtime world-space foot sliding.",
+    "Hook has a pre-existing minimum sole penetration of about 10.8 mm. It is unchanged; whole-body Hook smoothing was rejected because it increased that penetration.",
+    "Runtime frame pacing, physics interpolation and gameplay transition timing are outside this asset-only verification."
+  ]
+}

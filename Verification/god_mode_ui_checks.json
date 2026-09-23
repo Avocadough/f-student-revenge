@@ -1,0 +1,81 @@
+{
+  "checks": [
+    {
+      "label": "God Mode defaults off with no save",
+      "pass": true
+    },
+    {
+      "label": "Non-boolean God Mode save value ignored: true",
+      "pass": true
+    },
+    {
+      "label": "Non-boolean God Mode save value ignored: 1",
+      "pass": true
+    },
+    {
+      "label": "Non-boolean God Mode save value ignored: <null>",
+      "pass": true
+    },
+    {
+      "label": "Normal player starts with God Mode disabled",
+      "pass": true
+    },
+    {
+      "label": "Settings exposes a clearly named God Mode toggle",
+      "pass": true
+    },
+    {
+      "label": "Enabling UI toggle applies God Mode to current player",
+      "pass": true
+    },
+    {
+      "label": "Enabling God Mode restores a living player's health and balance",
+      "pass": true
+    },
+    {
+      "label": "HUD clearly marks active God Mode",
+      "pass": true
+    },
+    {
+      "label": "God Mode settings can be saved and return to pause",
+      "pass": true
+    },
+    {
+      "label": "Saving settings preserves the pause state",
+      "pass": true
+    },
+    {
+      "label": "God Mode enabled value persists as a boolean",
+      "pass": true
+    },
+    {
+      "label": "God Mode toggle does not alter normal progress",
+      "pass": true
+    },
+    {
+      "label": "Reload restores the explicitly enabled God Mode setting",
+      "pass": true
+    },
+    {
+      "label": "Loaded God Mode remains visible on the next player",
+      "pass": true
+    },
+    {
+      "label": "Disabling God Mode restores and persists the normal mode",
+      "pass": true
+    },
+    {
+      "label": "Disabled mode removes the active HUD marker",
+      "pass": true
+    },
+    {
+      "label": "Settings do not revive or bypass a dead-player state",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "fixture_user_dir": "Dedicated QA directory (local path omitted)",
+  "original_user_dir_untouched": true,
+  "passed": true,
+  "scope": "Isolated God Mode UI/save integration fixtures; combat behavior tested separately"
+}

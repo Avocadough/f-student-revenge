@@ -1,74 +1,74 @@
 {
-	"checks": [
-		{
-			"description": "Starting a level clears pointer-capture history",
-			"pass": true
-		},
-		{
-			"description": "Continuously denied pointer capture never auto-pauses gameplay",
-			"pass": true
-		},
-		{
-			"description": "Capture denial explains the middle-mouse camera fallback",
-			"pass": true
-		},
-		{
-			"description": "Fallback notification is not repeated over later gameplay notices",
-			"pass": true
-		},
-		{
-			"description": "Fallback notification is visible text",
-			"pass": true
-		},
-		{
-			"description": "Brief capture below stability threshold does not arm loss-based pause",
-			"pass": true
-		},
-		{
-			"description": "Stable capture arms normal loss-of-capture protection",
-			"pass": true
-		},
-		{
-			"description": "Transient loss within grace period keeps gameplay running",
-			"pass": true
-		},
-		{
-			"description": "Loss after stable capture and grace period opens pause menu",
-			"pass": true
-		},
-		{
-			"description": "Resume clears previous capture history and resumes the simulation",
-			"pass": true
-		},
-		{
-			"description": "Denied capture after resume does not create an endless pause loop",
-			"pass": true
-		},
-		{
-			"description": "Uncaptured mouse movement without middle button does not rotate camera",
-			"pass": true
-		},
-		{
-			"description": "Middle-button dragging rotates camera without pointer capture",
-			"pass": true
-		},
-		{
-			"description": "Paused camera ignores middle-drag motion",
-			"pass": true
-		},
-		{
-			"description": "Paused camera also ignores uncaptured middle-button motion",
-			"pass": true
-		}
-	],
-	"engine": "4.7.2-stable (official)",
-	"failures": [],
-	"passed": true,
-	"scope": "Headless helper regression for browser capture denial and camera fallback; actual browser pointer lock remains a separate verification",
-	"skipped": [
-		{
-			"case": "Captured mouse motion camera branch",
-			"reason": "Headless display backend cannot grant MOUSE_MODE_CAPTURED; verify in browser"
-		}
-	]
+  "checks": [
+    {
+      "description": "Starting a level clears pointer-capture history",
+      "pass": true
+    },
+    {
+      "description": "Continuously denied pointer capture never auto-pauses gameplay",
+      "pass": true
+    },
+    {
+      "description": "Capture denial explains the middle-mouse camera fallback",
+      "pass": true
+    },
+    {
+      "description": "Fallback notification is not repeated over later gameplay notices",
+      "pass": true
+    },
+    {
+      "description": "Fallback notification is visible text",
+      "pass": true
+    },
+    {
+      "description": "Brief capture below stability threshold does not arm loss-based pause",
+      "pass": true
+    },
+    {
+      "description": "Stable capture arms normal loss-of-capture protection",
+      "pass": true
+    },
+    {
+      "description": "Transient loss within grace period keeps gameplay running",
+      "pass": true
+    },
+    {
+      "description": "Loss after stable capture and grace period opens pause menu",
+      "pass": true
+    },
+    {
+      "description": "Resume clears previous capture history and resumes the simulation",
+      "pass": true
+    },
+    {
+      "description": "Denied capture after resume does not create an endless pause loop",
+      "pass": true
+    },
+    {
+      "description": "Uncaptured mouse movement without middle button does not rotate camera",
+      "pass": true
+    },
+    {
+      "description": "Middle-button dragging rotates camera without pointer capture",
+      "pass": true
+    },
+    {
+      "description": "Paused camera ignores middle-drag motion",
+      "pass": true
+    },
+    {
+      "description": "Paused camera also ignores uncaptured middle-button motion",
+      "pass": true
+    }
+  ],
+  "engine": "4.7.2-stable (official)",
+  "failures": [],
+  "passed": true,
+  "scope": "Headless helper regression for browser capture denial and camera fallback; actual browser pointer lock remains a separate verification",
+  "skipped": [
+    {
+      "case": "Captured mouse motion camera branch",
+      "reason": "Headless display backend cannot grant MOUSE_MODE_CAPTURED; verify in browser"
+    }
+  ]
 }

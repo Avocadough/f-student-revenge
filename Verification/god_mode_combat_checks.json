@@ -1,0 +1,206 @@
+{
+  "checks": [
+    {
+      "detail": null,
+      "label": "God Mode defaults off without changing the normal campaign",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Programming boss retains original 340 health",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Ordinary hit cannot damage health or posture in God Mode",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Lethal unblockable hit cannot damage health or posture in God Mode",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "God immunity leaves no damage, stagger or invulnerability timer residue",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Disabling God Mode immediately restores ordinary damage without a lingering grace period",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Normal-mode actual J still deals exactly 13 damage instead of an instant kill",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Web boss retains original 480 health",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Normal-mode actual J cannot bypass the Web boss shield",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills paper once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills book once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills pencil once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills pen once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills phone once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills tablet once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills computer once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills programming once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "AI boss retains original 410 health",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills ai once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills web once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills server_core once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "defeat_events": 1
+      },
+      "label": "One actual J kills final_core once in God Mode",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Shielded Web fixture has a real live server core before toggling",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "God jab kills a shielded Web boss and creates the final F core",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "God Web defeat removes the old phase core instead of leaving a shield softlock",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Final core remains required and targetable after a God Web defeat",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Actual J on the final core reaches the ending with God Mode active",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "God jab cannot kill a boss beyond attack range",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "God jab cannot kill a boss through a solid wall",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Removing the wall permits the same God attack to kill",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Actual E finisher kills a posture-broken boss in God Mode",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Actual E throws a nearby prop that kills a boss on collision in God Mode",
+      "pass": true
+    },
+    {
+      "detail": {
+        "completed_attacks": 1
+      },
+      "label": "Live enemy AI attacks leave a God player alive without health or posture loss",
+      "pass": true
+    },
+    {
+      "detail": null,
+      "label": "Falling outside the map in God Mode recovers to the checkpoint without losing health",
+      "pass": true
+    }
+  ],
+  "engine": "4.7.2-stable (official)",
+  "failures": [],
+  "fixture_disclosure": "Spawns, stationary-enemy state, guard/adaptation/posture setup and specific player positions/health are explicitly configured only for isolated cases. qa_no_save prevents reading or writing user progress.",
+  "one_j_kill_kinds": 12,
+  "passed": true,
+  "scope": "Synthetic isolated production combat fixtures; actual J/E input, live AI, normal-mode comparisons and fall recovery. UI/persistence have their own separate suite. No human-playthrough or exhaustive-bug claim."
+}

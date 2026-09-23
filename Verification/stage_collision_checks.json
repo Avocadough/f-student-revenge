@@ -1,0 +1,60 @@
+{
+  "batching": {
+    "source_instances": 387,
+    "static_batches": 57
+  },
+  "checks": [
+    {
+      "case": "Swept projectile hits player before a wall later on the same frame segment",
+      "passed": true
+    },
+    {
+      "case": "Swept projectile does not hit a player behind an earlier wall",
+      "passed": true
+    },
+    {
+      "case": "Thrown prop misses a target that moves away from the flight path",
+      "passed": true
+    },
+    {
+      "case": "Thrown prop hits a stationary target once when its path reaches the target",
+      "passed": true
+    },
+    {
+      "case": "Solid wall stops thrown prop damage through the wall",
+      "passed": true
+    },
+    {
+      "case": "Enemy melee cannot pass through an environment wall",
+      "passed": true
+    },
+    {
+      "case": "Unobstructed enemy melee still damages the player",
+      "passed": true
+    },
+    {
+      "case": "Broken enemy displays its finisher ring",
+      "passed": true
+    },
+    {
+      "case": "Expired posture break removes the misleading green finisher ring",
+      "passed": true
+    },
+    {
+      "case": "Restart cancels an in-progress gate-opening tween and keeps the gate shut",
+      "passed": true
+    },
+    {
+      "case": "Static room architecture and furniture are materially batched",
+      "passed": true
+    },
+    {
+      "case": "Only current and adjacent room visuals are enabled",
+      "passed": true
+    }
+  ],
+  "engine": "4.7.2-stable (official)",
+  "failures": [],
+  "passed": true,
+  "scope": "Synthetic collision, lifecycle and static batching regressions; not an exhaustive bug guarantee or browser performance benchmark"
+}

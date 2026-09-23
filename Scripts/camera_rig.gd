@@ -7,8 +7,12 @@ var shake_enabled: bool = true
 var shake: float = 0.0
 var spring: SpringArm3D
 var camera: Camera3D
+var target: Node3D
 
 func _ready() -> void:
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	process_priority = 100
+	target = get_parent() as Node3D
 	position.y = 1.55
 	rotation.x = -0.23
 	spring = SpringArm3D.new()
@@ -26,8 +30,14 @@ func _ready() -> void:
 	spring.add_child(camera)
 	camera.current = true
 	set_as_top_level(true)
-	global_position = get_parent().global_position + Vector3.UP * 1.55
-	Input.set_use_accumulated_input(false)
+	snap_to_target()
+	# One accumulated mouse event per render frame avoids redundant work on high-Hz mice.
+	Input.set_use_accumulated_input(true)
+
+func snap_to_target() -> void:
+	if is_instance_valid(target):
+		global_position = target.global_position + Vector3.UP * 1.55
+		reset_physics_interpolation()
 
 func _input(event: InputEvent) -> void:
 	if get_tree().paused:
@@ -41,7 +51,9 @@ func rotate_from_vector(motion: Vector2) -> void:
 	rotation.x = clampf(rotation.x - motion.y, -0.85, 0.22)
 
 func _process(delta: float) -> void:
-	global_position = global_position.lerp(get_parent().global_position + Vector3.UP * 1.55, 1.0 - exp(-18.0 * delta))
+	if not is_instance_valid(target): return
+	var rendered_target := target.get_global_transform_interpolated().origin + Vector3.UP * 1.55
+	global_position = global_position.lerp(rendered_target, 1.0 - exp(-18.0 * delta))
 	shake = maxf(0.0, shake - delta * 1.2)
 	if camera:
 		camera.h_offset = sin(Time.get_ticks_msec() * 0.1) * shake * 0.1 if shake_enabled else 0.0

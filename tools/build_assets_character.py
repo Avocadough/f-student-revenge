@@ -135,6 +135,50 @@ for folder,pattern in [('animations','UAL1_Standard.glb'),('animations2','UAL2_S
  for o in imported:bpy.data.objects.remove(o,do_unlink=True)
 
 rig.animation_data_create()
+
+def smooth_source_action(name, loop=False, upper_body_only=False):
+ """One symmetric three-sample pass; keep original duration and attack phase.
+
+ The free jog has 60-degree calf changes in one 30-fps frame. Smoothing
+ cyclic neighbours softens that step without adding latency or root motion.
+ Hook keeps pelvis/leg samples untouched so its foot plants do not deteriorate.
+ """
+ source=animations[name]
+ rig.animation_data.action=source;rig.animation_data.action_slot=source.slots[0]
+ start,end=(int(round(v)) for v in source.frame_range)
+ frames=list(range(start,end if loop else end+1))
+ poses=[]
+ for frame in frames:
+  bpy.context.scene.frame_set(frame)
+  poses.append({b.name:(b.location.copy(),b.rotation_quaternion.copy(),b.scale.copy()) for b in rig.pose.bones})
+ filtered=[]
+ upper_prefixes=('spine','neck','Head','clavicle','upperarm','lowerarm','hand','index','middle','pinky','ring','thumb')
+ for i,pose in enumerate(poses):
+  result={}
+  for bone,now in pose.items():
+   preserve=(not loop and i in [0,len(poses)-1]) or (upper_body_only and not bone.startswith(upper_prefixes))
+   if preserve:
+    result[bone]=now;continue
+   prev=poses[(i-1)%len(poses) if loop else max(0,i-1)][bone]
+   nxt=poses[(i+1)%len(poses) if loop else min(len(poses)-1,i+1)][bone]
+   q0,q1,q2=prev[1].copy(),now[1].copy(),nxt[1].copy()
+   if q0.dot(q1)<0:q0.negate()
+   if q2.dot(q1)<0:q2.negate()
+   quat=Quaternion(tuple((q0[k]+2*q1[k]+q2[k])*.25 for k in range(4)));quat.normalize()
+   result[bone]=((prev[0]+2*now[0]+nxt[0])*.25,quat,now[2])
+  filtered.append(result)
+ source.name=name+'_unfiltered_source'
+ action=bpy.data.actions.new(name);action.use_fake_user=True;rig.animation_data.action=action
+ for frame in range(start,end+1):
+  pose=filtered[(frame-start)%len(filtered)]
+  for bone in rig.pose.bones:
+   loc,quat,scale=pose[bone.name];bone.rotation_mode='QUATERNION';bone.location=loc;bone.rotation_quaternion=quat;bone.scale=scale
+   for key in ['location','rotation_quaternion','scale']:bone.keyframe_insert(key,frame=frame)
+ animations[name]=action
+ bpy.data.actions.remove(source)
+
+smooth_source_action('Run',loop=True)
+smooth_source_action('Hook',upper_body_only=True)
 rig.animation_data.action=animations['Idle']
 rig.animation_data.action_slot=animations['Idle'].slots[0]
 bpy.context.scene.frame_set(1)

@@ -1,0 +1,244 @@
+{
+  "bone_names": [
+    "root",
+    "pelvis",
+    "spine_01",
+    "spine_02",
+    "spine_03",
+    "clavicle_l",
+    "upperarm_l",
+    "lowerarm_l",
+    "hand_l",
+    "index_01_l",
+    "index_02_l",
+    "index_03_l",
+    "index_04_leaf_l",
+    "middle_01_l",
+    "middle_02_l",
+    "middle_03_l",
+    "middle_04_leaf_l",
+    "pinky_01_l",
+    "pinky_02_l",
+    "pinky_03_l",
+    "pinky_04_leaf_l",
+    "ring_01_l",
+    "ring_02_l",
+    "ring_03_l",
+    "ring_04_leaf_l",
+    "thumb_01_l",
+    "thumb_02_l",
+    "thumb_03_l",
+    "thumb_04_leaf_l",
+    "clavicle_r",
+    "upperarm_r",
+    "lowerarm_r",
+    "hand_r",
+    "index_01_r",
+    "index_02_r",
+    "index_03_r",
+    "index_04_leaf_r",
+    "middle_01_r",
+    "middle_02_r",
+    "middle_03_r",
+    "middle_04_leaf_r",
+    "pinky_01_r",
+    "pinky_02_r",
+    "pinky_03_r",
+    "pinky_04_leaf_r",
+    "ring_01_r",
+    "ring_02_r",
+    "ring_03_r",
+    "ring_04_leaf_r",
+    "thumb_01_r",
+    "thumb_02_r",
+    "thumb_03_r",
+    "thumb_04_leaf_r",
+    "neck_01",
+    "Head",
+    "thigh_l",
+    "calf_l",
+    "foot_l",
+    "ball_l",
+    "ball_leaf_l",
+    "thigh_r",
+    "calf_r",
+    "foot_r",
+    "ball_r",
+    "ball_leaf_r"
+  ],
+  "engine": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "idle": {
+    "frames": 301,
+    "max_pose_step_metric": 0.318136452231556,
+    "repeated_animation_clock": 1,
+    "repeated_entire_pose": 1,
+    "repeated_fraction": 0.00332225913621262,
+    "seconds": 2.501313
+  },
+  "idle_hook": {
+    "expected_duration": 0.6,
+    "finished_attack": true,
+    "first_active_render": {
+      "animation_game_time": 0.183324002341492,
+      "attack_elapsed": 0.2,
+      "source_time": 0.142585335761547
+    },
+    "max_visual_vs_physics_game_seconds": 0.0166919925497432,
+    "pause_clock_stable": true,
+    "pause_samples": 8,
+    "source_length": 0.466666668653488
+  },
+  "physics": {
+    "frames": 279,
+    "max_pose_step_metric": 2.23876216262579,
+    "repeated_animation_clock": 136,
+    "repeated_entire_pose": 136,
+    "repeated_fraction": 0.487455197132616,
+    "seconds": 2.506104
+  },
+  "track_audit": {
+    "Cross": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Death": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Dodge": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "FoldArms": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Guard": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Hit": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Hook": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Idle": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Jab": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Kick": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Knockback": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Parry": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Roll": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Run": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Sprint": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Sweep": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Throw": {
+      "outside_bones": [],
+      "tracks": 56
+    },
+    "Walk": {
+      "outside_bones": [],
+      "tracks": 56
+    }
+  },
+  "comparison": "PHYSICS versus IDLE animation clocks on current assets; not v0.1 versus v0.2.",
+  "fixture": "Native GL Compatibility, 120 FPS cap, 60 physics ticks, stationary Run pose sampled after rendering, 2.5 seconds per clock. Hook uses real player attack timing with an injected 50 ms hit pause. qa_no_save is enabled.",
+  "limitations": "Frame counts include the first sample; frame pacing can vary between runs. Bone repetition is distinct from root-position interpolation and overall FPS. Visual-versus-physics clock skew around one 60 Hz tick is expected.",
+  "model_track_audit": {
+    "computer": {
+      "clips": 1,
+      "non_bone_paths": [
+        "computer/Code line",
+        "computer/Code line_001",
+        "computer/Code line_002",
+        "computer/Code line_003",
+        "computer/Code line_004",
+        "computer/Tutor beard",
+        "computer/Tutor eye",
+        "computer/Tutor eye_001",
+        "computer/Tutor portrait head",
+        "computer/Video progress"
+      ],
+      "tracks": 10
+    },
+    "phone": {
+      "clips": 1,
+      "non_bone_paths": [
+        "phone/Clip dancer arm",
+        "phone/Clip dancer head",
+        "phone/Clip dancer torso"
+      ],
+      "tracks": 3
+    },
+    "tablet": {
+      "clips": 1,
+      "non_bone_paths": [
+        "tablet/Code line",
+        "tablet/Code line_001",
+        "tablet/Code line_002",
+        "tablet/Code line_003",
+        "tablet/Code line_004",
+        "tablet/Tutor beard",
+        "tablet/Tutor eye",
+        "tablet/Tutor eye_001",
+        "tablet/Tutor portrait head",
+        "tablet/Video progress"
+      ],
+      "tracks": 10
+    },
+    "teacher_ai": {
+      "clips": 18,
+      "non_bone_paths": [],
+      "tracks": 1008
+    },
+    "teacher_programming": {
+      "clips": 18,
+      "non_bone_paths": [],
+      "tracks": 1008
+    },
+    "teacher_web": {
+      "clips": 18,
+      "non_bone_paths": [],
+      "tracks": 1008
+    }
+  }
+}

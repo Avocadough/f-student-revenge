@@ -6,7 +6,7 @@ var failures: Array[String] = []
 var game: Node
 var original_user_dir := ""
 var fixture_user_dir := ""
-const DEFAULT_SETTINGS := {"volume": 0.75, "sfx": 0.8, "sensitivity": 1.0, "shake": true, "quality": 1}
+const DEFAULT_SETTINGS := {"volume": 0.75, "sfx": 0.8, "sensitivity": 1.0, "shake": true, "quality": 1, "god_mode": false}
 
 func _initialize() -> void:
 	call_deferred("run")
@@ -97,7 +97,7 @@ func run() -> void:
 	check(game.save_data.is_empty() and game.settings == DEFAULT_SETTINGS, "Invalid individual field types ignored")
 	load_fixture('{"version":1,"progress":{"stage":99,"checkpoint":-1,"complete":true},"settings":{"volume":-10,"sfx":22,"sensitivity":50,"quality":99,"shake":false}}')
 	check(game.save_data == {"stage":2,"checkpoint":0,"complete":true}, "Progress bounds clamped")
-	check(game.settings == {"volume":0.0,"sfx":1.0,"sensitivity":2.0,"quality":1.0,"shake":false}, "Settings bounds clamped")
+	check(game.settings == {"volume":0.0,"sfx":1.0,"sensitivity":2.0,"quality":1.0,"shake":false,"god_mode":false}, "Settings bounds clamped")
 	load_fixture('{"version":1,"progress":{"stage":1,"checkpoint":2,"complete":false},"settings":{"volume":0.4,"sfx":0.2,"sensitivity":0.7,"quality":0,"shake":false}}')
 	check(game.save_data == {"stage":1,"checkpoint":2,"complete":false}, "Valid progress retained")
 	check(is_equal_approx(game.settings.volume,0.4) and is_equal_approx(game.settings.sfx,0.2) and is_equal_approx(game.settings.sensitivity,0.7) and game.settings.quality == 0 and game.settings.shake == false, "Valid settings retained")

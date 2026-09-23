@@ -7,7 +7,8 @@
     "Matching editable .blend for every game model",
     "18-clips per humanoid; hair properly skinned",
     "ScreenLoop present on phone, tablet and computer",
-    "Rendered and visually inspected Idle/Jab/Guard/Kick/Sweep plus 4-character and all-prop galleries"
+    "Rendered and visually inspected Idle/Jab/Guard/Kick/Sweep plus 4-character and all-prop galleries",
+    "Run/Hook bounded motion cleanup verified; other 16 animations unchanged on all 4 characters"
   ],
   "limitations": "Godot runtime and gameplay integration are verified by main task, not by this art-only QA.",
   "results": [
@@ -155,5 +156,6 @@
       "self_contained": true,
       "editable_blend_exists": true
     }
-  ]
+  ],
+  "motion_cleanup_qa": "Art/motion_qa.json"
 }

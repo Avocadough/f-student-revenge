@@ -24,6 +24,7 @@ var posture: float = 0.0
 var focus: float = 0.0
 var active: bool = true
 var dead: bool = false
+var god_mode: bool = false
 var stage_ref: Node
 var camera_rig: Node3D
 var visual: Node3D
@@ -62,6 +63,9 @@ var parry_count: int = 0
 var dodge_count: int = 0
 var damage_taken: float = 0.0
 var step_timer: float = 0.0
+var animation_hold: float = 0.0
+var locomotion_clip: String = "idle"
+var audio_ref: Node
 
 func _ready() -> void:
 	add_to_group("player")
@@ -81,6 +85,8 @@ func _ready() -> void:
 	_load_model()
 	camera_rig = CameraRig.new()
 	add_child(camera_rig)
+	audio_ref = get_tree().get_first_node_in_group("game_audio")
+	FX.prepare(get_parent())
 
 func _load_model() -> void:
 	var path := "res://Assets/Models/student.glb"
@@ -89,6 +95,9 @@ func _load_model() -> void:
 		visual.add_child(model)
 		animation_player = _find_animation_player(model)
 		if animation_player:
+			# Imported clips only animate bones. Bone poses do not inherit Node3D
+			# physics interpolation, so sample them every rendered frame.
+			animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE
 			_build_animation_map()
 			_play_animation("idle")
 	else:
@@ -140,7 +149,26 @@ func _play_animation(key: String, duration: float = 0.0, force: bool = false) ->
 	var anim := animation_player.get_animation(clip)
 	anim.loop_mode = Animation.LOOP_LINEAR if key in ["idle", "walk", "run", "guard"] else Animation.LOOP_NONE
 	var speed := anim.length / duration if duration > 0.0 else 1.0
-	animation_player.play(clip, 0.09, speed)
+	var blend := 0.16 if key in ["idle", "walk", "run", "guard"] else 0.07
+	animation_player.speed_scale = 1.0
+	animation_player.play(clip, blend, speed)
+
+func _update_locomotion() -> void:
+	if animation_hold > 0.0: return
+	var speed := Vector2(velocity.x, velocity.z).length()
+	var key := "guard" if guarding else locomotion_clip
+	if not guarding:
+		# Velocity and hysteresis prevent idle/run flicker while accelerating or brushing walls.
+		if speed < 0.12:
+			key = "idle"
+		elif speed > 3.2:
+			key = "run"
+		elif speed < 2.7 or locomotion_clip == "idle":
+			key = "walk"
+		locomotion_clip = key
+	_play_animation(key)
+	if animation_player:
+		animation_player.speed_scale = clampf(speed / (4.5 if key == "run" else 2.0), 0.65, 1.2) if key in ["run", "walk"] else 1.0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not active or dead or get_tree().paused:
@@ -203,6 +231,7 @@ func _start_attack(id: String) -> void:
 	attack_elapsed = 0.0
 	hit_targets.clear()
 	attack_connected = false
+	animation_hold = 0.0
 	attack_count += 1
 	var target := nearest_enemy(3.0, true)
 	if target:
@@ -211,7 +240,6 @@ func _start_attack(id: String) -> void:
 		facing = direction.normalized()
 	elif move_direction.length() > 0.1:
 		facing = move_direction.normalized()
-	visual.rotation.y = atan2(-facing.x, -facing.z)
 	var data: Dictionary = ATTACKS[id]
 	var duration: float = data.startup + data.active + data.recovery
 	_play_animation("kick" if id == "focus" else "cross" if id == "counter" else id, duration, true)
@@ -224,6 +252,9 @@ func request_dodge() -> void:
 		return
 	attack_id = ""
 	chain = ""
+	queued_action = ""
+	queue_timer = 0.0
+	animation_hold = 0.0
 	guarding = false
 	dodge_direction = move_direction.normalized() if move_direction.length() > 0.1 else facing
 	dodge_timer = 0.36
@@ -234,7 +265,7 @@ func request_dodge() -> void:
 	_sound("swing")
 
 func request_focus() -> void:
-	if focus < 50.0 or dead or not active or not attack_id.is_empty() or stagger_timer > 0.0:
+	if focus < 50.0 or dead or not active or not attack_id.is_empty() or stagger_timer > 0.0 or dodge_timer > 0.0:
 		return
 	focus -= 50.0
 	chain = ""
@@ -244,7 +275,7 @@ func request_focus() -> void:
 	invulnerability = 0.5
 
 func request_interact() -> void:
-	if dead or not active or stagger_timer > 0.0 or not attack_id.is_empty():
+	if dead or not active or stagger_timer > 0.0 or not attack_id.is_empty() or dodge_timer > 0.0:
 		return
 	var target := nearest_enemy(2.4, false, true)
 	if target:
@@ -253,6 +284,7 @@ func request_interact() -> void:
 		if not boss:
 			heal(8.0)
 		_play_animation("kick", 0.65, true)
+		animation_hold = 0.55
 		stagger_timer = 0.35
 		invulnerability = 0.85
 		camera_rig.shake = 0.32
@@ -260,6 +292,7 @@ func request_interact() -> void:
 		_sound("heavy")
 	elif stage_ref and stage_ref.consume_prop(self, facing):
 		_play_animation("throw", 0.55, true)
+		animation_hold = 0.45
 		stagger_timer = 0.35
 		_sound("swing")
 
@@ -273,6 +306,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	parry_timer = maxf(0, parry_timer - delta)
+	animation_hold = maxf(0, animation_hold - delta)
 	counter_timer = maxf(0, counter_timer - delta)
 	invulnerability = maxf(0, invulnerability - delta)
 	dodge_cooldown = maxf(0, dodge_cooldown - delta)
@@ -288,11 +322,21 @@ func _physics_process(delta: float) -> void:
 	move_direction = Vector3(move_dir.x, 0, move_dir.y)
 	if not is_on_floor(): velocity.y -= 20.0 * delta
 	if global_position.y < -8.0:
+		if god_mode:
+			# Immortality must not leave the player falling forever outside the map.
+			global_position = stage_ref.get_spawn_position() if is_instance_valid(stage_ref) else Vector3(0, 0.12, 0)
+			velocity = Vector3.ZERO
+			reset_physics_interpolation()
+			camera_rig.snap_to_target()
+			return
 		receive_hit(1000.0, 0.0, global_position, true)
 		return
 	if hit_pause > 0.0:
 		hit_pause -= delta
+		if animation_player: animation_player.speed_scale = 0.0
 		return
+	if animation_player and animation_player.speed_scale == 0.0:
+		animation_player.speed_scale = 1.0
 	if dodge_timer > 0.0:
 		dodge_timer -= delta
 		velocity.x = dodge_direction.x * 8.2
@@ -301,6 +345,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, delta * 18.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 18.0)
 	elif not attack_id.is_empty():
+		visual.rotation.y = rotate_toward(visual.rotation.y, atan2(-facing.x, -facing.z), 26.0 * delta)
 		_tick_attack(delta)
 		velocity.x = move_toward(velocity.x, 0.0, delta * 15.0)
 		velocity.z = move_toward(velocity.z, 0.0, delta * 15.0)
@@ -312,7 +357,7 @@ func _physics_process(delta: float) -> void:
 		if move_direction.length() > 0.1:
 			facing = move_direction.normalized()
 			visual.rotation.y = rotate_toward(visual.rotation.y, atan2(-facing.x, -facing.z), model_rot_speed * delta)
-		_play_animation("guard" if guarding else "run" if move_dir.length() > 0.1 else "idle")
+		_update_locomotion()
 		step_timer -= delta
 		if move_dir.length() > 0.1 and is_on_floor() and step_timer <= 0.0:
 			_sound("step")
@@ -401,6 +446,10 @@ func nearest_enemy(radius: float, require_front: bool = false, finish_only: bool
 			continue
 		if require_front and distance > 0.2 and preference.dot(direction.normalized()) < 0.0:
 			continue
+		if finish_only:
+			var sight := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP, enemy.global_position + Vector3.UP, 1)
+			if not get_world_3d().direct_space_state.intersect_ray(sight).is_empty():
+				continue
 		best = distance
 		result = enemy
 	return result
@@ -408,6 +457,8 @@ func nearest_enemy(radius: float, require_front: bool = false, finish_only: bool
 func receive_hit(damage: float, structure: float, from: Vector3, unblockable: bool = false) -> String:
 	if dead or not active or invulnerability > 0.0:
 		return "dodged"
+	if god_mode:
+		return "invulnerable"
 	var direction := from - global_position
 	direction.y = 0
 	var frontal := direction.length() < 0.1 or facing.dot(direction.normalized()) >= -0.1
@@ -420,6 +471,7 @@ func receive_hit(damage: float, structure: float, from: Vector3, unblockable: bo
 			posture = maxf(0.0, posture - 12.0)
 			parry_count += 1
 			_play_animation("parry", 0.2, true)
+			animation_hold = 0.18
 			FX.burst(get_parent(), global_position + Vector3.UP + facing * 0.6, Color("7be8e0"), true)
 			message.emit("ปัดป้อง!  คลิกซ้ายเพื่อสวน")
 			_sound("parry")
@@ -445,6 +497,7 @@ func receive_hit(damage: float, structure: float, from: Vector3, unblockable: bo
 	velocity.z = -direction.normalized().z * 2.6
 	camera_rig.shake = 0.35
 	_play_animation("hit", 0.3, true)
+	animation_hold = 0.25
 	_sound("hurt")
 	if health <= 0.0:
 		dead = true
@@ -456,5 +509,4 @@ func heal(amount: float) -> void:
 	health = minf(max_health, health + amount)
 
 func _sound(id: String) -> void:
-	var audio := get_tree().get_first_node_in_group("game_audio")
-	if audio: audio.play_effect(id)
+	if is_instance_valid(audio_ref): audio_ref.play_effect(id)

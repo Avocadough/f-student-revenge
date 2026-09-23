@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "label": "Project interpolates rendered physics motion",
+      "pass": true
+    },
+    {
+      "label": "Camera uses manual render-frame interpolation",
+      "pass": true
+    },
+    {
+      "label": "Spawn camera snaps to positioned player without a startup fly-in",
+      "pass": true
+    },
+    {
+      "label": "Impact hitstop holds animation time, then resumes it",
+      "pass": true
+    },
+    {
+      "label": "Fixture produces a real parry",
+      "pass": true
+    },
+    {
+      "label": "Parry pose is not replaced by guard on the next tick",
+      "pass": true
+    },
+    {
+      "label": "Focus cannot overlap an active dodge or spend focus",
+      "pass": true
+    },
+    {
+      "label": "Interact cannot overlap dodge with a finisher or throw",
+      "pass": true
+    },
+    {
+      "label": "Dodge cancel clears stale buffered attacks",
+      "pass": true
+    },
+    {
+      "label": "Finisher target cannot be acquired through solid cover",
+      "pass": true
+    },
+    {
+      "label": "Finisher target remains available with clear line of sight",
+      "pass": true
+    },
+    {
+      "label": "Impact effects reuse the existing pool",
+      "pass": true
+    },
+    {
+      "label": "400 impacts do not allocate more nodes or timers",
+      "pass": true
+    },
+    {
+      "label": "Pooled impacts respect pause",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "scope": "Isolated locomotion/camera/animation/effect regressions; fixtures alter action state, not a full playthrough."
+}

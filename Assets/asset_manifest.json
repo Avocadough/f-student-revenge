@@ -207,8 +207,8 @@
     {
       "path": "Assets/Models/student.glb",
       "source_blend": "Art/student.blend",
-      "bytes": 2159804,
-      "sha256": "f6462c198c1e8edd17bdf00d8405cfd542f8f9a6c4c85ee197ce3a33eb03e829",
+      "bytes": 2158568,
+      "sha256": "4d1243eb6caaac6f8346e4d83394cbb07fef6c6b71cae86ef311aaa132f3c911",
       "mesh_count": 22,
       "clips": [
         "Cross",
@@ -236,7 +236,7 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
     },
     {
       "path": "Assets/Models/tablet.glb",
@@ -253,8 +253,8 @@
     {
       "path": "Assets/Models/teacher_ai.glb",
       "source_blend": "Art/teacher_ai.blend",
-      "bytes": 2168688,
-      "sha256": "30d3eb0532e3ad01330f21c35d1161f224bc763a4d1e3ab9195885755b20c284",
+      "bytes": 2167452,
+      "sha256": "74485a68f4113bd689b5c26394cb7aa99da654fd9117bfe5d177959f95307d03",
       "mesh_count": 25,
       "clips": [
         "Cross",
@@ -282,13 +282,13 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
     },
     {
       "path": "Assets/Models/teacher_programming.glb",
       "source_blend": "Art/teacher_programming.blend",
-      "bytes": 2168680,
-      "sha256": "c01e38a6467e13f04bef47351aa7a86c066357c1623dd84239129b6caae10ddc",
+      "bytes": 2167444,
+      "sha256": "12716137b0e87d855a332dbeea5df0bacf95d37225712921d91be29f65cc65bb",
       "mesh_count": 25,
       "clips": [
         "Cross",
@@ -316,13 +316,13 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
     },
     {
       "path": "Assets/Models/teacher_web.glb",
       "source_blend": "Art/teacher_web.blend",
-      "bytes": 2168692,
-      "sha256": "d0ec94fe41732a97d131fd3d951a799df8bb909ff2a10092c577c5654c5dacd8",
+      "bytes": 2167456,
+      "sha256": "2dee54145a4bd164259de751569470e94ceb69f6d1c69ccaaa5eea2c0f81966b",
       "mesh_count": 25,
       "clips": [
         "Cross",
@@ -350,7 +350,7 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation."
+      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
     }
   ],
   "limitations": [

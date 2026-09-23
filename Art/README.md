@@ -1,6 +1,6 @@
 # Editable Blender work
 
-Each `.blend` is an editable source for the matching `Assets/Models/*.glb`. Characters share the Quaternius humanoid skeleton and contain the full 18-clip animation set. Open the Action Editor to select a clip. Character materials are different between student, programming lecturer, AI lecturer and Web App lecturer.
+Each `.blend` is an editable source for the matching `Assets/Models/*.glb`. Characters share the Quaternius humanoid skeleton and contain the full 18-clip animation set. Open the Action Editor to select a clip. Character materials are different between student, programming lecturer, AI lecturer and Web App lecturer. Run and Hook have a bounded three-sample motion cleanup; `motion_qa.json` records the baseline comparison, and `Previews/` includes contact sheets.
 
 Device files contain an NLA track named `ScreenLoop` for original screen motion. The Godot animation should be set to loop and started explicitly after instantiation.
 
