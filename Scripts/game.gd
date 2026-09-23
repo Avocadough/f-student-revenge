@@ -340,6 +340,8 @@ func _bar(parent: Node, color: Color, height: float) -> ProgressBar:
 	return bar
 
 func show_modal(title: String, copy: String, actions: Array = []) -> void:
+	toast_timer = 0.0
+	if toast: toast.hide()
 	for child in modal_stack.get_children():
 		modal_stack.remove_child(child)
 		child.queue_free()
@@ -356,6 +358,8 @@ func show_modal(title: String, copy: String, actions: Array = []) -> void:
 		modal_stack.get_child(2).grab_focus()
 
 func _show_main_menu() -> void:
+	toast_timer = 0.0
+	if toast: toast.hide()
 	running = false
 	paused = false
 	get_tree().paused = false
