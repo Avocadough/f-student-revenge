@@ -20,18 +20,24 @@ def main() -> None:
     results = []
     for name in FILES:
         local = (ROOT / "docs" / name).read_bytes()
+        committed = subprocess.check_output(["git", "show", f"{revision}:docs/{name}"], cwd=ROOT)
+        local_matches = local == committed or (
+            Path(name).suffix in {".html", ".js"} and local.replace(b"\r\n", b"\n") == committed
+        )
         request = Request(URL + name + "?verify=" + revision, headers={"Cache-Control": "no-cache"})
         with urlopen(request, timeout=90) as response:
             remote = response.read()
             status = response.status
-        expected = hashlib.sha256(local).hexdigest()
+        expected = hashlib.sha256(committed).hexdigest()
         received = hashlib.sha256(remote).hexdigest()
         results.append({"file": name, "http_status": status, "bytes": len(remote),
-                        "local_sha256": expected, "public_sha256": received,
-                        "match": status == 200 and expected == received})
+                        "committed_sha256": expected, "public_sha256": received,
+                        "working_tree_sha256": hashlib.sha256(local).hexdigest(),
+                        "working_tree_matches_commit_allowing_text_crlf": local_matches,
+                        "match": status == 200 and expected == received and local_matches})
     record = {"version": "0.3", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "source_commit": revision, "url": URL,
-              "scope": "Public HTTP bytes against local production export; browser behavior is separately documented in VALIDATION.md.",
+              "scope": "Public HTTP bytes against committed production export, also checked against the local export allowing Git CRLF conversion for HTML/JS only. Binary PCK/WASM bytes must match exactly. Browser behavior is separately documented in VALIDATION.md.",
               "passed": all(row["match"] for row in results), "files": results,
               "rollback_commit": "d75d0f6283f2fd60f66cb5114a455c588f5f7219",
               "rollback_branch": "codex/pre-demon-v0.2"}

@@ -387,4 +387,3 @@ func run_traversal() -> void:
 	check(traversal_finished, "Automated real-player traversal reaches all three stages and final ending", traversal_note)
 	if traversal_finished:
 		check(web_shield_seen and web_core_destroyed and final_seal_seen, "Traversal passed demon shield, curse pylon and final E portal seal", {"shield_seen": web_shield_seen, "server_destroyed": web_core_destroyed, "final_seal_seen": final_seal_seen})
-

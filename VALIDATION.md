@@ -49,6 +49,8 @@
 
 ## การเผยแพร่และย้อนกลับ
 
-สถานะ: รอตรวจเว็บชุดสุดท้ายก่อนอัปเดต GitHub Pages เดิม เก็บฐานก่อนเปลี่ยนไว้ที่ branch `codex/pre-demon-v0.2`, commit `d75d0f6283f2fd60f66cb5114a455c588f5f7219` การเผยแพร่ใช้ไฟล์ `docs` บน main และต้องตรวจ hash ไฟล์สาธารณะตรงกับไฟล์ส่งออก
+**เผยแพร่สำเร็จ:** [เล่นเดโม 0.3](https://avocadough.github.io/f-student-revenge/) จาก commit `386d08225b6b9b6e81b4bf04e92a352b8ebf830f` บน main/docs, GitHub Pages build/deploy สำเร็จ [run 36778800639](https://github.com/Avocadough/f-student-revenge/actions/runs/36778800639) ตรวจ HTTP 200 และ SHA-256 ตรงครบ 9 ไฟล์ใน [publication_v0_3.json](Verification/publication_v0_3.json) ตัวเปรียบเทียบยอมรับเฉพาะการแปลง CRLF ของ Git สำหรับ HTML/JS ส่วน PCK/WASM ต้องตรงทุกไบต์
+
+PCK สาธารณะตรงกับแพ็กที่เล่นจบ: `29aca469b3f7c52209be3c2c3b4b920a5e8024018bcf480b2754960e8e347a97` เก็บฐานก่อนเปลี่ยนไว้ทั้ง local และ remote ที่ branch `codex/pre-demon-v0.2`, commit `d75d0f6283f2fd60f66cb5114a455c588f5f7219` หากต้องย้อนเว็บให้คืนโฟลเดอร์ docs จากฐานนี้แล้วสร้าง commit ใหม่โดยไม่ลบประวัติ
 
 ผลรุ่น 0.2 เป็นประวัติคนละ campaign: [VALIDATION เดิม](https://github.com/Avocadough/f-student-revenge/blob/d75d0f6283f2fd60f66cb5114a455c588f5f7219/VALIDATION.md) และ JSON เดิมใน `Verification/` ไม่ใช้ผลเก่าทดแทนการตรวจรุ่นนี้
