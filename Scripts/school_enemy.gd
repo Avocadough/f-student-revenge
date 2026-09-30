@@ -5,7 +5,7 @@ signal defeated(enemy: Node)
 
 const Campaign = preload("res://Scripts/campaign_data.gd")
 const ProjectileScript = preload("res://Scripts/projectile.gd")
-const ENEMY_FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
+const WorldLabel = preload("res://Scripts/world_label.gd")
 static var _model_scenes: Dictionary = {}
 
 var kind := "paper"
@@ -116,7 +116,7 @@ func _configure() -> void:
 		"web":
 			display_name = Campaign.BOSS_NAMES[2]; max_health = 480; speed = 2.4; is_boss = true; base_color = Color("ee5f8d")
 		"server_core":
-			display_name = "เสาคำสาป • ทำลายเพื่อปิดโล่"; max_health = 65; speed = 0; is_core = true; base_color = Color("53e6dc")
+			display_name = "ต่ออายุอัตโนมัติ"; max_health = 65; speed = 0; is_core = true; base_color = Color("53e6dc")
 		"final_core":
 			display_name = "เศษแกนคำสาป"; max_health = 40; speed = 0; is_core = true; base_color = Color("ff525d")
 	if model_kind == "demon_imp": display_name = "อิมป์คลั่ง"
@@ -208,13 +208,10 @@ func _build_visual() -> void:
 func _label(text_value: String, size: int, color: Color) -> Label3D:
 	var label := Label3D.new()
 	label.text = text_value
-	label.font_size = size * 2
-	label.pixel_size = 0.0019
+	WorldLabel.apply(label, size * 2, 0.0035)
 	label.modulate = color
-	label.outline_size = 10
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
-	label.font = ENEMY_FONT
 	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return label
 
@@ -645,7 +642,7 @@ func notify_combo(combo_id: String) -> void:
 		adapting = true
 		adapt_time = 6.0
 		_update_hint()
-		_toast("อ่านแพตเทิร์นออกแล้ว! เปลี่ยนคอมโบหนัก หรือปัดป้องแล้วสวน", 3.0)
+		_toast("แคปช่า: ลอกคอมโบตัวเองอีกแล้ว! เปลี่ยนท่าหนัก หรือปัดป้องแล้วสวน", 3.0)
 	else:
 		adapting = false
 
@@ -661,14 +658,14 @@ func _check_web_phase() -> void:
 	hint.text = "ม่านคำสาป • ทำลายเสาพลัง"
 	if is_instance_valid(stage):
 		phase_core = stage.spawn_web_core(self)
-	_toast("ราชันสร้างม่านคำสาป! ทำลายเสาพลังที่ส่องแสงเพื่อเปิดช่อง", 4.0)
+	_toast("ยมทะเบียนเปิดต่ออายุอัตโนมัติ! ทำลายเสาพลังเพื่อยกเลิกโล่", 4.0)
 
 func disable_shield() -> void:
 	shielded = false
 	if not dead:
 		_interrupt(1.2)
 		_update_hint()
-		_toast("ม่านคำสาปแตกแล้ว! ระวังการโจมตีระยะสอง", 3.0)
+		_toast("ยกเลิกต่ออายุแล้ว! ยมทะเบียนเข้าสู่โหมดไม่รับคืนเงิน", 3.0)
 
 func _die() -> void:
 	if dead:

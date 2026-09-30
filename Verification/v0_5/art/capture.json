@@ -1,0 +1,469 @@
+{
+	"engine": "4.7.2-stable (official)",
+	"gpu": "NVIDIA GeForce RTX 5060 Ti",
+	"images": [
+		{
+			"camera_position": "(0.0, 2.8, 8.75)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 0,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 2,
+			"path": "res://evidence/v05/art/final/stage_1_standard.png",
+			"player_position": "(0.0, 0.03, 3.4)",
+			"quality": 1,
+			"render_scale": 1.0,
+			"stage": 0,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(0.0, 2.8, 8.75)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 0,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 1,
+			"path": "res://evidence/v05/art/final/stage_1_low.png",
+			"player_position": "(0.0, 0.03, 3.4)",
+			"quality": 0,
+			"render_scale": 1.0,
+			"stage": 0,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(0.0, 2.8, -12.65)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 1,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 2,
+			"path": "res://evidence/v05/art/final/stage_2_standard.png",
+			"player_position": "(0.0, 0.03, -18.0)",
+			"quality": 1,
+			"render_scale": 1.0,
+			"stage": 1,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(0.0, 2.8, -12.65)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 1,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 1,
+			"path": "res://evidence/v05/art/final/stage_2_low.png",
+			"player_position": "(0.0, 0.03, -18.0)",
+			"quality": 0,
+			"render_scale": 1.0,
+			"stage": 1,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(2.0, 0.95, -15.0)",
+			"camera_rotation": "(-0.119429, 0.0, 0.0)",
+			"checkpoint": 1,
+			"detail": true,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 2,
+			"path": "res://evidence/v05/art/final/stage_2_standard_floor.png",
+			"player_position": "(0.0, 0.03, -18.0)",
+			"quality": 1,
+			"render_scale": 1.0,
+			"stage": 1,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(2.0, 0.95, -15.0)",
+			"camera_rotation": "(-0.119429, 0.0, 0.0)",
+			"checkpoint": 1,
+			"detail": true,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 1,
+			"path": "res://evidence/v05/art/final/stage_2_low_floor.png",
+			"player_position": "(0.0, 0.03, -18.0)",
+			"quality": 0,
+			"render_scale": 1.0,
+			"stage": 1,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(0.0, 2.8, -36.65)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 2,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 2,
+			"path": "res://evidence/v05/art/final/stage_3_standard.png",
+			"player_position": "(0.0, 0.03, -42.0)",
+			"quality": 1,
+			"render_scale": 1.0,
+			"stage": 2,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		},
+		{
+			"camera_position": "(0.0, 2.8, -36.65)",
+			"camera_rotation": "(-0.229527, 0.0, 0.0)",
+			"checkpoint": 2,
+			"detail": false,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"floor": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.45, 0.45, 0.45)"
+			},
+			"msaa": 1,
+			"path": "res://evidence/v05/art/final/stage_3_low.png",
+			"player_position": "(0.0, 0.03, -42.0)",
+			"quality": 0,
+			"render_scale": 1.0,
+			"stage": 2,
+			"wall": {
+				"albedo": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"filter": 5,
+				"normal": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"normal_enabled": true,
+				"normal_scale": 0.280000001192093,
+				"roughness": {
+					"mipmaps": true,
+					"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+					"size": "(1024.0, 1024.0)"
+				},
+				"uv_scale": "(0.38, 0.38, 0.38)"
+			},
+			"window_pixels": "(1280.0, 720.0)"
+		}
+	],
+	"passed": true,
+	"scope": "Rendered native 1280x720 still comparison, same camera and held pose. AI/physics/animations disabled after spawning up to four real enemies; portal TIME fixed to 1.25 in duplicated runtime shader. No assets or production materials edited by fixture; no save I/O. Not gameplay/performance evidence.",
+	"source_hashes": {
+		"res://Assets/Textures/concrete_floor_diff.jpg.import": "3fcae0f1cddb77132dd3b948f6816f87896121e95ab1304e2f8f2960e3900ecf",
+		"res://Assets/Textures/concrete_floor_normal.jpg.import": "932df3fe86780f02005980b8ba37daff43eaf8e061ce2fd7123bb3eb5ad1ee88",
+		"res://Assets/Textures/concrete_floor_rough.jpg.import": "43bf2a3434869145f9eec5f47ed5c8335e7f341767dc9a07f1b0f6a5d5d742e3",
+		"res://Assets/Textures/painted_plaster_wall_diff.jpg.import": "014d3710f394df1b023c3855708c902d853fbe07bf11cf2921b9bb076f1a0441",
+		"res://Assets/Textures/painted_plaster_wall_normal.jpg.import": "8ed766ba16f06f94882a4f1760aab351cc6d7dce29a1a82ba1fc9454399f518b",
+		"res://Assets/Textures/painted_plaster_wall_rough.jpg.import": "48ff5a0f42718f5cbdc367c766bfa16361274c256c88ddc6a7b904623df23acf",
+		"res://Scripts/campus_environment.gd": "abdeec1f24a85624f3536e10da975a68a1d642e757a351f8928c0873e4c257cf",
+		"res://Scripts/game.gd": "9dbe1dbdf026b29dc6a44db58242a22c0f8c85c92e8034712ce38e553deeba5e",
+		"res://project.godot": "0482c7e1cf09989f6405fd1f9ce3c3b373a9d68a0b58fc4206505f915bf9c4da",
+		"res://tools/capture_surface_quality.gd": "d0446264f4938863a7668c50100ef8d4a77811ce8475d8b391604d0477156215"
+	},
+	"tag": "final"
+}

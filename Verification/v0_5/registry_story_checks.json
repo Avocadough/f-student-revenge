@@ -1,0 +1,220 @@
+{
+	"checks": [
+		{
+			"description": "First boss starts one visible stamp warning",
+			"pass": true
+		},
+		{
+			"description": "Stamp grants the full 1.2 second warning",
+			"pass": true
+		},
+		{
+			"description": "A second stamp cannot overlap the first",
+			"pass": true
+		},
+		{
+			"description": "Warning never damages player or demon before its deadline",
+			"pass": true
+		},
+		{
+			"description": "Stamp hits both stationary player and demon at impact",
+			"pass": true
+		},
+		{
+			"description": "Stamp uses bounded posture damage through the existing combat interface",
+			"pass": true
+		},
+		{
+			"description": "Repeated impact dispatch cannot deal damage twice",
+			"pass": true
+		},
+		{
+			"description": "Impact visual frees after its brief hold",
+			"pass": true
+		},
+		{
+			"description": "Stamp cannot restart before the eight second cooldown",
+			"pass": true
+		},
+		{
+			"description": "Stamp restarts once the full cooldown expires",
+			"pass": true
+		},
+		{
+			"description": "Warning target remains fixed when the player moves",
+			"pass": true
+		},
+		{
+			"description": "Moving clear safely baits the stamp onto a demon",
+			"pass": true
+		},
+		{
+			"description": "Real dodge invulnerability avoids a stamp at impact",
+			"pass": true
+		},
+		{
+			"description": "Tree pause immediately cancels an armed stamp",
+			"pass": true
+		},
+		{
+			"description": "Resuming cannot deliver a stale delayed impact",
+			"pass": true
+		},
+		{
+			"description": "Inactive player cancels the hazard without damage",
+			"pass": true
+		},
+		{
+			"description": "Dead player cannot retain or start an armed stamp",
+			"pass": true
+		},
+		{
+			"description": "A visible modal cancels hazard even without tree pause",
+			"pass": true
+		},
+		{
+			"description": "Restart removes the old hazard and restores its whole cooldown",
+			"pass": true
+		},
+		{
+			"description": "Killing the last demon clears an armed stamp before objective work",
+			"pass": true
+		},
+		{
+			"description": "Stamp stays out of stage 1 checkpoint 1",
+			"pass": true
+		},
+		{
+			"description": "Stamp stays out of stage 2 checkpoint 3",
+			"pass": true
+		},
+		{
+			"description": "Stamp stays out of stage 3 checkpoint 3",
+			"pass": true
+		},
+		{
+			"description": "Stage 1 room 1 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 1 room 1 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "Stage 1 room 2 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 1 room 2 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "Stage 2 room 1 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 2 room 1 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "Stage 2 room 2 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 2 room 2 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "Stage 3 room 1 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 3 room 1 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "Stage 3 room 2 accepts nearby E after clear",
+			"pass": true
+		},
+		{
+			"description": "Stage 3 room 2 shows its authored safe payoff",
+			"pass": true
+		},
+		{
+			"description": "Story objective is already complete and duplicate E is harmless",
+			"pass": true
+		},
+		{
+			"description": "Continue resumes immediately without another confirmation",
+			"pass": true
+		},
+		{
+			"description": "First boss objective does not stack a story modal over stage completion",
+			"pass": true
+		},
+		{
+			"description": "Final stamp goes straight to the earned-grade ending once",
+			"pass": true
+		},
+		{
+			"description": "Final ending rejects repeated objective interaction",
+			"pass": true
+		},
+		{
+			"description": "Returning to menu destroys the hazard with its stage",
+			"pass": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"fixture_disclosure": "Fresh levels, disabled player/enemy/stage physics for deterministic clock tests, direct position setup, synthetic combat clears for E lifecycle. Real hit/dodge/E/modal code is used. User saves untouched. Full ordinary-input traversal is separate.",
+	"passed": true,
+	"scope": "Synthetic authored-event regressions, not browser, FPS or a human fun assessment",
+	"source_sha256": {
+		"Scripts/campaign_data.gd": "706273b00b655aea4e054d7a61f54e2f78a8b031f6a0bec931e7cf1f0f1f040b",
+		"Scripts/campus_stage.gd": "5823e8dd8b0d085c35f89b65d3b2f453e9328bb87f0b12661ee8bd2b283b830f",
+		"Scripts/game.gd": "9dbe1dbdf026b29dc6a44db58242a22c0f8c85c92e8034712ce38e553deeba5e",
+		"Scripts/school_enemy.gd": "8b5013cf226d291ebb53ad9cb8818e6885aa0dffdbef2ae9c700afd6dc75e16a",
+		"tools/test_registry_story.gd": "011778da4b0ca7f1c26af064b4283234b9f611b510b9c1c1de4aa755aa5b373a"
+	}
+}

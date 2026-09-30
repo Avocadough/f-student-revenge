@@ -1,0 +1,176 @@
+{
+	"checks": [
+		{
+			"case": "Narrative identity stays independent of save schema v2",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty stages",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty teachers",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty bosses",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty support",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty briefs",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty trophies",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty support quips",
+			"passed": true
+		},
+		{
+			"case": "Three nonempty boss quotes",
+			"passed": true
+		},
+		{
+			"case": "Three-by-three rooms preserve checkpoint indexing",
+			"passed": true
+		},
+		{
+			"case": "Three-by-three objectives preserve checkpoint indexing",
+			"passed": true
+		},
+		{
+			"case": "Three-by-three openings preserve checkpoint indexing",
+			"passed": true
+		},
+		{
+			"case": "Three-by-three encounters preserve checkpoint indexing",
+			"passed": true
+		},
+		{
+			"case": "Three-by-three payoffs preserve checkpoint indexing",
+			"passed": true
+		},
+		{
+			"case": "Stage0 room0 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage0 room1 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage0 room2 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage1 room0 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage1 room1 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage1 room2 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage2 room0 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage2 room1 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Stage2 room2 supplies a complete readable payoff",
+			"passed": true
+		},
+		{
+			"case": "Two stage transitions lead to the authored grade and post-credits payoff",
+			"passed": true
+		},
+		{
+			"case": "Old v2 without story_id retains progress and advertises the new story",
+			"passed": true
+		},
+		{
+			"case": "Old v2 settings survive the narrative revision",
+			"passed": true
+		},
+		{
+			"case": "Loading the old v2 file is read-only",
+			"passed": true
+		},
+		{
+			"case": "Continue reconstructs the same checkpoint and upgrades only narrative metadata",
+			"passed": true
+		},
+		{
+			"case": "Actual nearby E objective opens the room payoff after an arranged clear",
+			"passed": true
+		},
+		{
+			"case": "Story beat pauses the active run with a visible modal",
+			"passed": true
+		},
+		{
+			"case": "Opening the payoff does not undo the completed objective",
+			"passed": true
+		},
+		{
+			"case": "The E interaction displays this exact checkpoint's authored payoff",
+			"passed": true
+		},
+		{
+			"case": "Keyboard focus settles inside the story modal",
+			"passed": true
+		},
+		{
+			"case": "Duplicate story notifications cannot replace an open beat",
+			"passed": true
+		},
+		{
+			"case": "Escape skips the payoff and resumes the same run",
+			"passed": true
+		},
+		{
+			"case": "Repeated E cannot replay the already-completed room payoff",
+			"passed": true
+		},
+		{
+			"case": "Returning to menu clears story state and old gameplay nodes",
+			"passed": true
+		},
+		{
+			"case": "Starting again cannot inherit a stale story overlay or pause",
+			"passed": true
+		},
+		{
+			"case": "Story beat exposes a continue button",
+			"passed": true
+		},
+		{
+			"case": "Continue button also resumes and clears the story flag",
+			"passed": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"fixture_user_dir": "C:/Users/Admin/AppData/Roaming/FStudentRevenge_QA_Story_8396/",
+	"original_user_dir_untouched": true,
+	"passed": true,
+	"scope": "Synthetic 3x3 story contract, isolated real old-v2 persistence, and one real E-payoff/modal lifecycle. Arranged combat clear; not a full playthrough or visual audit.",
+	"source_hashes": {
+		"campaign_data.gd": "706273b00b655aea4e054d7a61f54e2f78a8b031f6a0bec931e7cf1f0f1f040b",
+		"campus_stage.gd": "5823e8dd8b0d085c35f89b65d3b2f453e9328bb87f0b12661ee8bd2b283b830f",
+		"game.gd": "9dbe1dbdf026b29dc6a44db58242a22c0f8c85c92e8034712ce38e553deeba5e"
+	},
+	"story_id": "registry_midnight_v3"
+}

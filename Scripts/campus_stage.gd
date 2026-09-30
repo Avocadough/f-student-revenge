@@ -9,7 +9,7 @@ const CampusEnvironmentBuilder = preload("res://Scripts/campus_environment.gd")
 const TeacherScript = preload("res://Scripts/teacher_ally.gd")
 const EnemyScript = preload("res://Scripts/school_enemy.gd")
 const PropScript = preload("res://Scripts/interactable_prop.gd")
-const CAMPUS_FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
+const WorldLabel = preload("res://Scripts/world_label.gd")
 static var _model_scenes: Dictionary = {}
 
 const STAGE_TITLES = Campaign.STAGE_NAMES
@@ -19,6 +19,9 @@ const INTRO_LINES = Campaign.INTRO_LINES
 const OBJECTIVE_TITLES = Campaign.OBJECTIVE_TITLES
 const SUPPORT_COOLDOWN := 15.0
 const WEB_SECOND_WAVE := ["demon_imp", "demon_brute", "demon_caster"]
+const STAMP_COOLDOWN := 8.0
+const STAMP_WARNING := 1.2
+const STAMP_RADIUS := 1.8
 
 var stage_index := 0
 var checkpoint_index := 0
@@ -72,6 +75,12 @@ var combat_cleared := false
 var objective_completed := false
 var wave_index := 1
 var defeated_ids: Dictionary = {}
+var _stamp_cooldown := STAMP_COOLDOWN
+var _stamp_warning_time := 0.0
+var _stamp_impact_time := 0.0
+var _stamp_target := Vector3.ZERO
+var _stamp_visual: Node3D
+var _stamp_press: Node3D
 
 func _ready() -> void:
 	stage_index = clampi(stage_index, 0, 2)
@@ -163,6 +172,7 @@ func restart_encounter() -> void:
 	_start_encounter(checkpoint_index)
 
 func _start_encounter(index: int) -> void:
+	_clear_stamp_hazard()
 	checkpoint_index = index
 	encounter_started = true
 	spawn_serial = 0
@@ -180,14 +190,11 @@ func _start_encounter(index: int) -> void:
 	_setup_mission(index)
 	_update_visual_quality()
 	encounter_changed.emit(index, ROOM_TITLES[stage_index][index])
-	if index == 2:
-		_toast("%s: “%s”" % [Campaign.TEACHER_NAMES[stage_index], INTRO_LINES[stage_index]], 4.0)
-	elif stage_index == 0 and index == 0:
-		_toast("ช่วยอาจารย์ที่ถูกล้อม! WASD เดิน • คลิกซ้ายต่อคอมโบ • Shift ปัดป้อง • Space หลบ", 5.0)
-	elif stage_index == 2 and index == 1:
-		_toast("อาจารย์กำลังเปิดเครื่องผนึก! ป้องกันปีศาจ 2 ระลอก • T กางกำแพง", 5.0)
-	else:
-		_toast("%s • T ขอแรงอาจารย์ • E ใช้อุปกรณ์เมื่อพื้นที่ปลอดภัย" % OBJECTIVE_TITLES[stage_index][index], 4.5)
+	_toast(Campaign.ROOM_OPENING_LINES[stage_index][index], 5.0)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PAUSED:
+		_clear_stamp_hazard()
 
 func apply_render_quality(quality: int) -> void:
 	render_quality = clampi(quality, 0, 1)
@@ -210,6 +217,7 @@ func _update_visual_quality() -> void:
 func _physics_process(delta: float) -> void:
 	if not encounter_started or completed or not is_instance_valid(player) or get_tree().paused:
 		return
+	_tick_stamp_hazard(delta)
 	elapsed += delta
 	support_cooldown = maxf(0.0, support_cooldown - delta)
 	support_time = maxf(0.0, support_time - delta)
@@ -255,8 +263,7 @@ func _setup_mission(index: int) -> void:
 	objective_node.name = "MissionDevice"
 	objective_node.position = objective_markers[index]
 	add_child(objective_node)
-	var device_kind := "cabinet" if stage_index == 0 else "terminal"
-	if checkpoint_index == 2 and stage_index > 0 or stage_index == 2 and checkpoint_index == 1: device_kind = "seal"
+	var device_kind: String = ["printer", "captcha", "stamp"][stage_index]
 	_build_objective_device(device_kind)
 	var ring := MeshInstance3D.new()
 	var ring_shape := TorusMesh.new()
@@ -270,9 +277,7 @@ func _setup_mission(index: int) -> void:
 	ring.material_override = _material(Color("61def0"), 0.4, 0.9)
 	objective_node.add_child(ring)
 	objective_label = Label3D.new()
-	objective_label.font = CAMPUS_FONT
-	objective_label.font_size = 38
-	objective_label.pixel_size = 0.003
+	WorldLabel.apply(objective_label, 48, 0.005)
 	objective_label.position.y = 1.6
 	objective_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	objective_label.modulate = Color("a0f0ef")
@@ -295,24 +300,30 @@ func _device_box(size: Vector3, at: Vector3, color: Color, glow: float = 0.0) ->
 func _build_objective_device(device_kind: String) -> void:
 	# Distinct visual affordances share E interaction and never obstruct a combat lane.
 	match device_kind:
-		"cabinet":
-			_device_box(Vector3(0.9, 1.35, 0.55), Vector3(0, 0.675, 0), Color("4b656e"))
-			_device_box(Vector3(0.72, 0.82, 0.04), Vector3(0, 0.76, 0.3), Color("233845"))
-			for index in range(3):
-				_device_box(Vector3(0.13, 0.23, 0.07), Vector3(-0.23 + index * 0.23, 0.73, 0.34), Color("83d7e1"), 0.4)
-			_device_box(Vector3(0.62, 0.09, 0.05), Vector3(0, 1.22, 0.31), Color("e2c176"), 0.3)
-		"terminal":
+		"printer":
+			_device_box(Vector3(0.85, 0.7, 0.65), Vector3(0, 0.35, 0), Color("35434c"))
+			_device_box(Vector3(1.2, 0.4, 0.78), Vector3(0, 0.92, 0), Color("bcc0b6"))
+			_device_box(Vector3(0.76, 0.07, 0.05), Vector3(0, 0.92, 0.41), Color("17262b"))
+			_device_box(Vector3(0.58, 0.02, 0.44), Vector3(0, 0.89, 0.56), Color("e2ddc5"))
+			_device_box(Vector3(0.26, 0.05, 0.15), Vector3(0.36, 1.14, 0.13), Color("81d3cd"), 0.5)
+		"captcha":
 			_device_box(Vector3(0.68, 0.7, 0.65), Vector3(0, 0.35, 0), Color("35434c"))
 			_device_box(Vector3(1.0, 0.64, 0.12), Vector3(0, 1.04, -0.16), Color("304b58"))
 			_device_box(Vector3(0.85, 0.47, 0.025), Vector3(0, 1.05, -0.083), Color("78ccd9"), 0.6)
 			_device_box(Vector3(0.76, 0.055, 0.35), Vector3(0, 0.74, 0.14), Color("688c97"))
-		"seal":
+			for index in range(3):
+				_device_box(Vector3(0.18, 0.18, 0.025), Vector3((index - 1) * 0.24, 1.05, -0.063), Color("314753"))
+		"stamp":
 			var stone := CylinderMesh.new()
 			stone.top_radius = 0.72
 			stone.bottom_radius = 0.86
 			stone.height = 0.55
 			stone.radial_segments = 8
 			_device_mesh(stone, Vector3(0, 0.275, 0), Color("6e747b"))
+			_device_box(Vector3(0.95, 0.1, 0.58), Vector3(0, 0.61, 0), Color("502331"))
+			_device_box(Vector3(0.85, 0.16, 0.52), Vector3(0, 0.91, 0), Color("917653"))
+			_device_box(Vector3(0.18, 0.38, 0.18), Vector3(0, 1.17, 0), Color("57392d"))
+			_device_box(Vector3(0.47, 0.14, 0.27), Vector3(0, 1.38, 0), Color("57392d"))
 			var seal := TorusMesh.new()
 			seal.inner_radius = 0.35
 			seal.outer_radius = 0.43
@@ -330,6 +341,121 @@ func _player_can_act() -> bool:
 	if game and game.get("modal") is Control and game.modal.visible: return false
 	return true
 
+func _stamp_can_run() -> bool:
+	return stage_index == 0 and checkpoint_index == 2 and encounter_started and not combat_cleared and _player_can_act() and is_instance_valid(get_boss())
+
+func _tick_stamp_hazard(delta: float) -> void:
+	if not _stamp_can_run():
+		_clear_stamp_hazard()
+		return
+	_stamp_cooldown = maxf(0.0, _stamp_cooldown - delta)
+	if _stamp_warning_time > 0.0:
+		_stamp_warning_time = maxf(0.0, _stamp_warning_time - delta)
+		if is_instance_valid(_stamp_press):
+			_stamp_press.position.y = lerpf(3.2, 0.2, 1.0 - clampf(_stamp_warning_time / 0.24, 0.0, 1.0))
+		if _stamp_warning_time <= 0.0: _resolve_stamp_impact()
+	elif _stamp_impact_time > 0.0:
+		_stamp_impact_time = maxf(0.0, _stamp_impact_time - delta)
+		if _stamp_impact_time <= 0.0: _clear_stamp_visual()
+	elif _stamp_cooldown <= 0.0:
+		_begin_stamp_warning()
+
+func _begin_stamp_warning() -> bool:
+	if not _stamp_can_run() or is_instance_valid(_stamp_visual): return false
+	_stamp_cooldown = STAMP_COOLDOWN
+	_stamp_warning_time = STAMP_WARNING
+	_stamp_target = player.global_position
+	_stamp_target.y = to_global(room_centers[checkpoint_index]).y + 0.04
+	_stamp_visual = Node3D.new()
+	_stamp_visual.name = "RegistryStampHazard"
+	add_child(_stamp_visual)
+	_stamp_visual.global_position = _stamp_target
+	var warning := MeshInstance3D.new()
+	var disc := CylinderMesh.new()
+	disc.top_radius = STAMP_RADIUS
+	disc.bottom_radius = STAMP_RADIUS
+	disc.height = 0.025
+	disc.radial_segments = 40
+	warning.mesh = disc
+	var warning_material := _material(Color(1.0, 0.2, 0.14, 0.32), 1.0)
+	warning_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	warning_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	warning.material_override = warning_material
+	warning.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_stamp_visual.add_child(warning)
+	var outline := MeshInstance3D.new()
+	var ring := TorusMesh.new()
+	ring.inner_radius = STAMP_RADIUS - 0.08
+	ring.outer_radius = STAMP_RADIUS
+	ring.rings = 40
+	ring.ring_segments = 6
+	outline.mesh = ring
+	outline.scale.y = 0.2
+	outline.position.y = 0.025
+	outline.material_override = _material(Color("ffb150"), 0.5, 1.2)
+	outline.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_stamp_visual.add_child(outline)
+	var label := Label3D.new()
+	WorldLabel.apply(label, 44, 0.006)
+	label.text = "หลบตราปั๊ม!"
+	label.modulate = Color("ffd08a")
+	label.position = Vector3(0, 0.45, 0)
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_stamp_visual.add_child(label)
+	_stamp_press = Node3D.new()
+	_stamp_visual.add_child(_stamp_press)
+	_stamp_press.position.y = 3.2
+	_stamp_box(Vector3(2.35, 0.32, 1.35), Vector3.ZERO, Color("8f3941"))
+	_stamp_box(Vector3(0.35, 0.8, 0.35), Vector3(0, 0.55, 0), Color("604534"))
+	_stamp_box(Vector3(1.15, 0.24, 0.6), Vector3(0, 1.05, 0), Color("927152"))
+	_play_audio("warning")
+	_toast("ตราปั๊มลงทั้งคนทั้งปีศาจ! ล่อมันเข้าวง แล้วหลบออก", 3.0)
+	return true
+
+func _stamp_box(size: Vector3, at: Vector3, color: Color) -> void:
+	var mesh := MeshInstance3D.new()
+	var shape := BoxMesh.new()
+	shape.size = size
+	mesh.mesh = shape
+	mesh.position = at
+	mesh.material_override = _material(color, 0.75)
+	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_stamp_press.add_child(mesh)
+
+func _resolve_stamp_impact() -> void:
+	# One impact only; targets are tested at impact time so movement and dodges matter.
+	if not _stamp_can_run() or not is_instance_valid(_stamp_visual) or _stamp_impact_time > 0.0: return
+	_stamp_warning_time = 0.0
+	_stamp_impact_time = 0.28
+	if _inside_stamp(player.global_position):
+		player.receive_hit(14.0, 24.0, _stamp_target, true)
+	for enemy in active_enemies.duplicate():
+		if is_instance_valid(enemy) and not enemy.dead and _inside_stamp(enemy.global_position):
+			enemy.take_hit(28.0, 32.0, _stamp_target, 0.0, true)
+	_play_audio("heavy")
+
+func _inside_stamp(point: Vector3) -> bool:
+	return Vector2(point.x - _stamp_target.x, point.z - _stamp_target.z).length() <= STAMP_RADIUS and absf(point.y - _stamp_target.y) < 2.3
+
+func _clear_stamp_visual() -> void:
+	if is_instance_valid(_stamp_visual):
+		_stamp_visual.hide()
+		_stamp_visual.queue_free()
+	_stamp_visual = null
+	_stamp_press = null
+
+func _clear_stamp_hazard() -> void:
+	_clear_stamp_visual()
+	_stamp_warning_time = 0.0
+	_stamp_impact_time = 0.0
+	_stamp_cooldown = STAMP_COOLDOWN
+
+func _quiet_quip(text: String) -> void:
+	if _stamp_warning_time > 0.0: return
+	for enemy in active_enemies:
+		if is_instance_valid(enemy) and not enemy.dead and enemy.mode in ["telegraph", "attack"]: return
+	_toast(text, 3.0)
+
 func request_teacher_support() -> bool:
 	if not _player_can_act() or not teacher_rescued or support_cooldown > 0.0: return false
 	support_cooldown = SUPPORT_COOLDOWN
@@ -346,7 +472,7 @@ func request_teacher_support() -> bool:
 	else:
 		support_time = 6.0
 		_show_support_ring(3.4, Color("76beff"))
-	_toast("%s: %s!" % [Campaign.TEACHER_NAMES[stage_index], Campaign.SUPPORT_NAMES[stage_index]], 2.5)
+	_quiet_quip("%s: %s" % [Campaign.TEACHER_NAMES[stage_index], Campaign.SUPPORT_QUIPS[stage_index]])
 	return true
 
 func _show_support_ring(radius: float, color: Color) -> void:
@@ -391,12 +517,21 @@ func interact_objective(user: Node3D) -> bool:
 		_complete_stage()
 	else:
 		_open_gate(checkpoint_index)
-		_toast("ภารกิจสำเร็จ! ผ่านประตูสีเขียวไปพื้นที่ถัดไป", 3.5)
+		if checkpoint_index < 2:
+			var payoff: Dictionary = Campaign.OBJECTIVE_PAYOFFS[stage_index][checkpoint_index]
+			var game := get_tree().get_first_node_in_group("game")
+			if game and game.has_method("show_story_beat"):
+				game.show_story_beat(str(payoff.title), str(payoff.body))
+			else:
+				_toast(str(payoff.body), 5.0)
+		else:
+			_toast("เอกสารผ่านแล้ว! ไปยื่นเรื่องที่พื้นที่ถัดไป", 3.5)
 	return true
 
 func _complete_stage() -> void:
 	if completed: return
 	completed = true
+	_clear_stamp_hazard()
 	_clear_projectiles()
 	stage_completed.emit()
 
@@ -452,9 +587,10 @@ func _on_enemy_defeated(enemy: Node) -> void:
 		wave_index = 2
 		for enemy_kind in WEB_SECOND_WAVE: pending_enemies.append(enemy_kind)
 		next_spawn_delay = 1.1
-		_toast("ระลอกที่ 2/2 • ป้องกันอาจารย์ระหว่างเปิดเครื่องผนึก!", 4.0)
+		_toast("ระลอกที่ 2/2 • ป้องกันอาจารย์ระหว่างรับรองสำเนาที่สอง!", 4.0)
 		return
 	combat_cleared = true
+	_clear_stamp_hazard()
 	_clear_projectiles()
 	if not teacher_rescued:
 		teacher_rescued = true
@@ -656,14 +792,11 @@ func _sign(text_value: String, at: Vector3, pixel_size: float, color: Color, ang
 	label.text = text_value
 	label.position = at
 	label.rotation = angles
-	label.pixel_size = pixel_size * 0.5
-	label.font_size = 64
+	WorldLabel.apply(label, 64, maxf(0.005, pixel_size))
 	label.modulate = color
-	label.outline_size = 4
 	label.shaded = false
 	label.double_sided = false
 	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	label.font = CAMPUS_FONT
 	_visual_regions[_batch_region].add_child(label)
 	return label
 

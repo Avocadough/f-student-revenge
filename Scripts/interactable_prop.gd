@@ -2,6 +2,7 @@ extends Node3D
 class_name CampusProp
 
 const ProjectileScript = preload("res://Scripts/projectile.gd")
+const WorldLabel = preload("res://Scripts/world_label.gd")
 static var _model_scenes: Dictionary = {}
 
 var available := true
@@ -37,13 +38,11 @@ func _ready() -> void:
 	add_child(model)
 	model.scale = Vector3.ONE * 0.9
 	prompt = Label3D.new()
-	prompt.text = "E  •  THROW"
+	prompt.text = "E • ขว้าง"
 	prompt.position.y = 1.3
-	prompt.pixel_size = 0.003
-	prompt.font_size = 32
+	WorldLabel.apply(prompt, 48, 0.004)
 	prompt.modulate = Color(1, 0.8, 0.3)
 	prompt.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	prompt.outline_size = 8
 	prompt.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(prompt)
 	if not is_instance_valid(player):

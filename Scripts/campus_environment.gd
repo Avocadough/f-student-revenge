@@ -34,11 +34,13 @@ static func build(stage) -> void:
 		_exit_arch(stage, room, z)
 		_connector(stage, room, z)
 		if not outdoor:
-			_light(stage, Vector3(0, 3.4, z + 2.5), Color("bec9c6"), 2.4, 14, true)
+			# The key survives Low quality, retaining each wing's colour and readable faces.
+			var key_colors := [Color("ffe2b4"), Color("bce9ec"), Color("f6d0b8")]
+			_light(stage, Vector3(-2.8, 3.7, z + 7.2), key_colors[stage.stage_index], 2.65, 15, true)
 		stage._create_gate(room, z - 10.0)
 	stage._batch_region = 0
 	_box(stage, "DoorWall", Vector3(18.4, 4.5, 0.4), Vector3(0, 2.25, 10.2), "wall", true)
-	stage._sign("เขตอพยพปิดแล้ว  •  เดินหน้าช่วยมหาวิทยาลัย", Vector3(0, 2.0, 9.95), 0.007, Color("c4d3cc"), Vector3(0, PI, 0))
+	stage._sign("ปิดรับเรื่อง", Vector3(0, 2.0, 9.95), 0.010, Color("c4d3cc"), Vector3(0, PI, 0))
 	stage._batch_region = 3
 	_campus_skyline(stage)
 
@@ -69,6 +71,14 @@ static func _prepare_materials(stage) -> void:
 	m["vein"] = _mat(Color("ab4868"), 0.55, 0.0, 1.1)
 	m["portal"] = _mat(Color("d17eaa"), 0.5, 0.0, 2.0)
 	m["void"] = _mat(Color("120c1a"), 1.0)
+	# Hero props share a small material palette and cached meshes across all rooms.
+	m["ivory"] = _mat(Color("cfc4a4"), 0.72)
+	m["ink"] = _mat(Color("172b35"), 0.74)
+	m["amber"] = _mat(Color("e0a656"), 0.47, 0.35)
+	m["cyan"] = _mat(Color("49a7b1"), 0.5, 0.24)
+	m["stamp"] = _mat(Color("a43849"), 0.51, 0.12)
+	m["rubber"] = _mat(Color("2b1d2b"), 0.92)
+	m["warm_screen"] = _mat(Color("ebb86b"), 0.68, 0.0, 0.45)
 
 static func _surface(stem: String, tint: Color, density: float) -> StandardMaterial3D:
 	var material: StandardMaterial3D = _mat(tint, 0.91)
@@ -138,13 +148,13 @@ static func _exit_arch(stage, room: int, z: float) -> void:
 		_box(stage, "DoorLintel", Vector3(5.5, 1.15, 0.62), Vector3(0, 4.85, z - 10.0), "concrete", true)
 		_box(stage, "ExitLight", Vector3(2.4, 0.07, 0.08), Vector3(0, 4.15, z - 9.62), "light")
 	var destinations: Array = [
-		["อาคารเรียน  /  TEACHING BLOCK", "ห้องไฟฟ้า  /  POWER CONTROL", "ศูนย์วิจัย  /  RESEARCH WING"],
-		["ศูนย์ข้อมูล  /  DATA CENTRE", "ห้องทดลอง  /  CONTAINMENT", "หอประชุม  /  ASSEMBLY HALL"],
-		["หอประชุม  /  AUDITORIUM", "ลานกลาง  /  CENTRAL PLAZA", "ประตูมิติ  /  THE BREACH"]
+		["รับบัตรคิว", "ห้องสำเนา", "ศูนย์ตรวจคน"],
+		["คลังรายชื่อ", "ยืนยันตัวตน", "พิธีสิ้นภาค"],
+		["หอประชุม", "ลานพิธี", "ยกเลิกคำสั่ง"]
 	]
 	if not final_portal:
-		stage._sign(destinations[stage.stage_index][room], Vector3(0, 3.7, z - 9.6), 0.008, Color("d9e2d6"))
-	stage._sign("%02d" % (room + 1), Vector3(-3.4, 1.9, z - 9.7), 0.027, Color("a8b9b0"))
+		stage._sign(destinations[stage.stage_index][room], Vector3(0, 3.7, z - 9.54), 0.010, Color("e9e4d5"))
+	stage._sign("%02d" % (room + 1), Vector3(-3.4, 1.9, z - 9.55), 0.015, Color("a8b9b0"))
 
 static func _connector(stage, room: int, z: float) -> void:
 	_box(stage, "ConnectorFloor", Vector3(6.0, 0.35, 4.2), Vector3(0, -0.19, z - 12), "floor", true)
@@ -154,7 +164,10 @@ static func _connector(stage, room: int, z: float) -> void:
 	_box(stage, "CeilingStrip", Vector3(1.7, 0.06, 0.23), Vector3(0, 4.3, z - 12), "light")
 	_box(stage, "RoofSlab", Vector3(6.2, 0.22, 4.1), Vector3(0, 4.7, z - 12), "concrete", true)
 	if room < 2:
-		stage._sign("ทางไปต่อ  ↑", Vector3(0, 0.005, z - 12), 0.008, Color("c1baa0"), Vector3(-PI / 2.0, 0, 0))
+		# A broad physical arrow stays recognisable at grazing angles without tiny floor text.
+		_rot_box(stage, Vector3(0.18, 0.012, 1.1), Vector3(0, 0.005, z - 12), Vector3.ZERO, "amber")
+		for side in [-1, 1]:
+			_rot_box(stage, Vector3(0.18, 0.012, 0.65), Vector3(side * 0.2, 0.005, z - 12.42), Vector3(0, side * -0.75, 0), "amber")
 
 static func _grade_courtyard(stage, z: float) -> void:
 	for side in [-1, 1]:
@@ -163,13 +176,19 @@ static func _grade_courtyard(stage, z: float) -> void:
 			_planter(stage, Vector3(side * 7.5, 0, z + offset), true)
 			_bench(stage, Vector3(side * 7.15, 0, z + offset + 2), side * PI / 2.0)
 		_box(stage, "WalkwayBorder", Vector3(0.12, 0.014, 18), Vector3(side * 5.8, 0, z), "brass")
-	_notice_board(stage, Vector3(-7.45, 0, z - 1.0), PI / 2.0, "ประกาศผลการศึกษา", "ภาคการศึกษาปลาย\nรหัส 6633…       F\nขาดเรียนเกินกำหนด")
-	_box(stage, "CampusMonument", Vector3(2.0, 0.55, 2.0), Vector3(7.35, 0.275, z - 1.0), "concrete", true)
-	_box(stage, "CampusMonument", Vector3(0.48, 2.6, 0.48), Vector3(7.35, 1.8, z - 1), "brass")
-	_rot_box(stage, Vector3(1.45, 1.45, 0.22), Vector3(7.35, 3.05, z - 1.0), Vector3(0, 0, PI / 4), "brass")
-	stage._sign("มหาวิทยาลัย  •  CAMPUS", Vector3(0, 5.95, z - 9.72), 0.015, Color("cfceb3"))
+	_notice_board(stage, Vector3(-7.8, 0, z + 4.7), PI / 2, "ผลการเรียน", "F\nขาดเรียน")
+	_queue_dispenser(stage, Vector3(-6.55, 0, z - 5.5))
+	_copier(stage, Vector3(6.7, 0, z - 3.8), 1.0)
+	_ticket_cascade(stage, Vector3(6.7, 1.3, z - 2.2), 9)
+	_hero_box(stage, Vector3(7.0, 1.12, 0.32), Vector3(0, 5.0, z - 9.5), "ink")
+	stage._sign("ยมทะเบียน", Vector3(0, 6.12, z - 9.38), 0.021, Color("efce95"))
+	stage._sign("คิว 666", Vector3(0, 5.05, z - 9.29), 0.018, Color("ffd591"))
+	for offset in [-3.0, 0.0, 3.0]:
+		_queue_post(stage, Vector3(-5.8, 0, z + offset + 2.0))
+	for offset in [-1.5, 1.5]:
+		_pipe(stage, Vector3(-5.8, 0.92, z + offset + 0.5), Vector3(-5.8, 0.92, z + offset + 3.5), 0.045, "stamp")
 	_scattered_papers(stage, Vector3(-6.6, 0, z + 0.8), 7)
-	_light(stage, Vector3(-6, 4.3, z - 2), Color("d8c19a"), 1.2, 11)
+	_light(stage, Vector3(-4.2, 4.3, z + 1), Color("ffcf8a"), 2.2, 14, true)
 
 static func _emergency_corridor(stage, z: float) -> void:
 	for side in [-1, 1]:
@@ -183,14 +202,16 @@ static func _emergency_corridor(stage, z: float) -> void:
 		_rubble(stage, Vector3(side * 7.5, 0, z + 7.0), 6)
 	_box(stage, "FireCabinet", Vector3(0.2, 1.1, 0.72), Vector3(-8.76, 1.5, z - 1.6), "red")
 	stage._sign("FIRE\nHOSE", Vector3(-8.61, 1.5, z - 1.6), 0.005, Color("d9d7bf"), Vector3(0, PI / 2, 0))
-	_notice_board(stage, Vector3(7.7, 0, z + 4.5), -PI / 2, "ประกาศฉุกเฉิน", "โปรดอพยพตามลูกศร\nรวมพลที่หอประชุม")
-	stage._sign("เส้นทางอพยพ  ↑", Vector3(0, 0.005, z - 5), 0.013, Color("bdb394"), Vector3(-PI / 2, 0, 0))
+	_notice_board(stage, Vector3(7.7, 0, z + 4.5), -PI / 2, "เอกสารไม่ครบ", "กลับไปต่อคิว")
+	_file_tower(stage, Vector3(-7.2, 0, z - 4.5), 1.0, 7)
+	_stamp(stage, Vector3(7.2, 0, z - 5.2), 0.85, -0.25)
 	_light(stage, Vector3(-4.0, 4.5, z + 3), Color("b7ccc0"), 1.6, 13)
 	_light(stage, Vector3(5.5, 3.3, z - 5), Color("cb8860"), 0.9, 8)
 
 static func _power_room(stage, z: float) -> void:
 	for side in [-1, 1]:
 		for offset in [-6.2, -2.1, 2.1, 6.2]:
+			if side == -1 and offset == -6.2: continue # The oversized copier owns this bay.
 			_electrical_cabinet(stage, Vector3(side * 7.65, 0, z + offset), side)
 		for height in [3.8, 4.15, 4.5]:
 			_pipe(stage, Vector3(side * 8.4, height, z - 9.4), Vector3(side * 8.4, height, z + 9.4), 0.075, "rust" if height == 3.8 else "trim")
@@ -198,8 +219,10 @@ static func _power_room(stage, z: float) -> void:
 	for offset in [-5, 5]:
 		_box(stage, "RoofBeam", Vector3(17.8, 0.65, 0.4), Vector3(0, 4.8, z + offset), "dark")
 		_box(stage, "CeilingStrip", Vector3(3.0, 0.08, 0.3), Vector3(0, 4.42, z + offset), "warm_light")
-	stage._sign("DANGER  •  HIGH VOLTAGE", Vector3(-5.2, 3.55, z - 9.73), 0.007, Color("c9a862"))
-	stage._sign("MAIN SWITCHBOARD\nคืนพลังงานให้อาคารเรียน", Vector3(5.8, 3.25, z - 9.73), 0.007, Color("d3d7c3"))
+	stage._sign("สำเนานรก", Vector3(-5.2, 3.55, z - 9.63), 0.014, Color("e7c88c"))
+	stage._sign("KPI = 0", Vector3(5.8, 3.25, z - 9.63), 0.013, Color("f0d7ac"))
+	_copier(stage, Vector3(-6.65, 0, z - 6.3), 1.22)
+	_ticket_cascade(stage, Vector3(-6.2, 1.4, z - 4.4), 13)
 	_corruption(stage, Vector3(7.0, 0, z - 6.5), 1.9)
 	_light(stage, Vector3(0, 4.2, z + 1), Color("c7b798"), 1.7, 15)
 
@@ -213,11 +236,12 @@ static func _ai_lab(stage, z: float) -> void:
 			_box(stage, "WindowMullion", Vector3(0.09, 1.85, 0.06), Vector3(side * 8.83, 2.7, z + offset), "trim")
 			_contact(stage, Vector3(side * 7.4, 0.003, z + offset), Vector2(3.3, 3.9), 0)
 		_pipe(stage, Vector3(side * 4.7, 4.6, z - 9), Vector3(side * 4.7, 4.6, z + 9), 0.12, "dark")
-	_box(stage, "LabDisplay", Vector3(4.2, 1.5, 0.1), Vector3(-5.8, 2.5, z - 9.72), "screen")
-	stage._sign("AI RESEARCH LAB\nระบบกักกัน: OFFLINE", Vector3(-5.8, 2.5, z - 9.63), 0.01, Color("a6ced0"))
-	stage._sign("RESEARCH  /  04", Vector3(5.9, 3.1, z - 9.7), 0.011, Color("afbeb8"))
+	_captcha_panel(stage, Vector3(-4.85, 0.8, z - 9.15))
+	stage._sign("CAPTCHA", Vector3(0, 4.9, z - 9.35), 0.014, Color("a7e7ec"))
+	stage._sign("เป็นคนแน่นะ?", Vector3(5.8, 3.1, z - 9.55), 0.012, Color("e5d2a3"))
+	_file_tower(stage, Vector3(6.65, 0, z - 8.6), 0.8, 6)
 	_scattered_papers(stage, Vector3(6.5, 0, z + 3), 5)
-	_light(stage, Vector3(0, 4.6, z), Color("a8c4c6"), 1.7, 15)
+	_light(stage, Vector3(5.0, 3.7, z - 4), Color("68cfdb"), 1.9, 11)
 
 static func _server_hall(stage, z: float) -> void:
 	for side in [-1, 1]:
@@ -230,9 +254,11 @@ static func _server_hall(stage, z: float) -> void:
 		for cable in range(3):
 			_pipe(stage, Vector3(side * 6.5 + cable * 0.12, 4.75, z - 9), Vector3(side * 6.5 + cable * 0.12, 4.75, z + 9), 0.035, "rust")
 		_box(stage, "CeilingStrip", Vector3(0.12, 0.06, 17.5), Vector3(side * 3.8, 4.9, z), "code")
-	stage._sign("DATA CENTRE  /  RESTRICTED", Vector3(0, 5.9, z - 9.7), 0.012, Color("a3bdc1"))
-	stage._sign("ข้อมูลสำรอง\nBACKUP ARRAY", Vector3(-5.6, 3.3, z - 9.72), 0.01, Color("9fbec0"))
-	_light(stage, Vector3(0, 4.5, z), Color("97b7c8"), 1.5, 14)
+	stage._sign("คลังรายชื่อ", Vector3(0, 4.9, z - 9.4), 0.014, Color("a7e7ec"))
+	_captcha_panel(stage, Vector3(-4.85, 0.8, z - 9.16))
+	_hero_box(stage, Vector3(2.8, 1.38, 0.3), Vector3(4.9, 2.8, z - 9.35), "ink")
+	stage._sign("404\nไร้ตัวตน", Vector3(4.9, 2.8, z - 9.1), 0.009, Color("f3c187"))
+	_light(stage, Vector3(4.3, 3.6, z - 3), Color("71cadb"), 1.9, 11)
 
 static func _rift_chamber(stage, z: float) -> void:
 	for side in [-1, 1]:
@@ -246,8 +272,9 @@ static func _rift_chamber(stage, z: float) -> void:
 	_ring(stage, Vector3(0, 0.015, z), Vector3(5.4, 0.035, 5.4), Vector3.ZERO, "trim")
 	_ring(stage, Vector3(0, 0.025, z), Vector3(4.9, 0.015, 4.9), Vector3.ZERO, "vein")
 	_portal(stage, Vector3(6.8, 2.7, z - 2), 1.4, -PI / 2)
-	stage._sign("CONTAINMENT BREACH", Vector3(0, 5.8, z - 9.65), 0.013, Color("c791a4"))
-	stage._sign("อย่าให้มันผ่านออกไป", Vector3(-5.5, 2.5, z - 9.7), 0.010, Color("c4b8b1"))
+	stage._sign("กู้คืนรายชื่อ", Vector3(0, 4.9, z - 9.45), 0.014, Color("a7e7ec"))
+	stage._sign("HUMAN: TRUE", Vector3(-5.5, 2.8, z - 9.45), 0.009, Color("c7e9d7"))
+	_file_tower(stage, Vector3(-5.7, 0, z - 7.9), 1.1, 8)
 	_light(stage, Vector3(-3, 4.0, z + 2), Color("a5c7c1"), 1.7, 15)
 	_light(stage, Vector3(6.5, 2.4, z - 2), Color("c2669c"), 1.6, 9)
 
@@ -255,16 +282,17 @@ static func _evacuation_court(stage, z: float) -> void:
 	for side in [-1, 1]:
 		_colonnade(stage, side, z, true)
 		_planter(stage, Vector3(side * 7.3, 0, z + 6.0), true)
-		_bench(stage, Vector3(side * 7.3, 0, z - 5.5), PI / 2)
 		_box(stage, "Barrier", Vector3(1.15, 1.0, 4.0), Vector3(side * 7.3, 0.5, z), "concrete", true)
 		_hazard_line(stage, Vector3(side * 6.5, 0.01, z), 4, 0)
 		_corruption(stage, Vector3(side * 7.9, 0, z - 7), 2.2)
-	_notice_board(stage, Vector3(-7.4, 0, z + 2.8), PI / 2, "จุดรวมพล", "อาจารย์และนักศึกษา\nช่วยกันรักษามหาวิทยาลัย")
-	stage._sign("หอประชุมกลาง", Vector3(0, 6.35, z - 9.7), 0.022, Color("c4c1aa"))
+	_notice_board(stage, Vector3(-7.4, 0, z + 2.8), 0.20, "กำหนดการ", "วันสิ้นภาค")
+	stage._sign("พิธีสิ้นภาค", Vector3(0, 6.35, z - 9.4), 0.022, Color("efc590"))
+	_file_tower(stage, Vector3(7.0, 0, z - 6.0), 1.35, 9)
+	_stamp(stage, Vector3(-7.0, 0, z - 5.4), 1.1, 0.22)
 	for x in [-4.8, 4.8]:
 		_box(stage, "CampusBanner", Vector3(1.1, 3.7, 0.09), Vector3(x, 4.6, z - 9.68), "red")
-		stage._sign("CAMPUS\nTOGETHER", Vector3(x, 4.65, z - 9.58), 0.007, Color("d1c6b0"))
-	_light(stage, Vector3(0, 5.5, z - 7), Color("c8b28a"), 1.5, 14)
+		stage._sign("KPI\n0", Vector3(x, 4.65, z - 9.50), 0.013, Color("edcb94"))
+	_light(stage, Vector3(-3, 5.0, z + 1), Color("f5c09b"), 2.25, 15, true)
 
 static func _auditorium(stage, z: float) -> void:
 	for side in [-1, 1]:
@@ -280,7 +308,10 @@ static func _auditorium(stage, z: float) -> void:
 		_box(stage, "AisleStrip", Vector3(0.07, 0.012, 18.0), Vector3(side * 5.25, 0.006, z), "warm_light")
 		_box(stage, "AuditoriumStage", Vector3(3.8, 0.6, 2.6), Vector3(side * 6.85, 0.3, z - 8.1), "wood", true)
 	_box(stage, "ProjectionScreen", Vector3(6.2, 2.8, 0.12), Vector3(0, 6.35, z - 9.7), "paper")
-	stage._sign("TOGETHER\nไม่มีใครรอดได้เพียงลำพัง", Vector3(0, 6.35, z - 9.58), 0.015, Color("344a47"))
+	stage._sign("วันสิ้นภาค", Vector3(0, 6.7, z - 9.48), 0.019, Color("74313d"))
+	stage._sign("ตกค้าง = 0", Vector3(0, 5.73, z - 9.47), 0.013, Color("344a47"))
+	_stamp(stage, Vector3(-6.85, 0.6, z - 7.8), 1.3, -0.20)
+	_file_tower(stage, Vector3(6.85, 0.6, z - 7.8), 1.3, 8)
 	for offset in [-6.0, 2.0, 8.0]:
 		_box(stage, "RoofBeam", Vector3(18, 0.4, 0.42), Vector3(0, 7.1, z + offset), "dark")
 	_light(stage, Vector3(0, 6.2, z - 6), Color("d2c097"), 2.1, 16)
@@ -289,9 +320,10 @@ static func _auditorium(stage, z: float) -> void:
 static func _portal_plaza(stage, z: float) -> void:
 	for side in [-1, 1]:
 		for offset in [-6.0, 0.0, 6.0]:
-			_box(stage, "Pillar", Vector3(0.95, 6.8, 0.95), Vector3(side * 7.45, 3.4, z + offset), "concrete", true)
-			_contact(stage, Vector3(side * 7.4, 0.01, z + offset), Vector2(2.8, 2.8), 0)
-			_corruption(stage, Vector3(side * 7.4, 0, z + offset), 1.7)
+			if offset != -6.0:
+				_box(stage, "Pillar", Vector3(0.95, 6.8, 0.95), Vector3(side * 7.45, 3.4, z + offset), "concrete", true)
+				_contact(stage, Vector3(side * 7.4, 0.01, z + offset), Vector2(2.8, 2.8), 0)
+			if offset != -6.0: _corruption(stage, Vector3(side * 7.4, 0, z + offset), 1.7)
 		_box(stage, "RoofBeam", Vector3(0.7, 0.65, 20), Vector3(side * 7.4, 6.7, z), "dark")
 		_rubble(stage, Vector3(side * 7, 0, z + 3), 7)
 	# Ritual inlays have no collision; the climax arena remains level.
@@ -302,9 +334,137 @@ static func _portal_plaza(stage, z: float) -> void:
 		var angle: float = TAU * spoke / 12.0
 		_rot_box(stage, Vector3(0.1, 0.018, 0.7), Vector3(sin(angle) * 4.4, 0.019, z - 1 + cos(angle) * 4.4), Vector3(0, angle, 0), "brass")
 	_portal(stage, Vector3(0, 4.0, z - 9.15), 3.1, 0, true)
-	stage._sign("ปิดประตูมิติ  •  ช่วยมหาวิทยาลัย", Vector3(0, 7.8, z - 10.1), 0.014, Color("d2b3c0"))
-	_light(stage, Vector3(0, 5.5, z - 7), Color("bd729c"), 2.4, 14)
-	_light(stage, Vector3(0, 4.8, z + 5), Color("a4bdc9"), 1.8, 15)
+	_stamp(stage, Vector3(-6.5, 0, z - 6.0), 1.65, -0.22)
+	_file_tower(stage, Vector3(6.5, 0, z - 6.2), 1.6, 11)
+	_light(stage, Vector3(3.8, 4.5, z - 6), Color("ec6c91"), 2.8, 12)
+	_light(stage, Vector3(-2.7, 4.4, z + 3.5), Color("e7c3a9"), 2.25, 14, true)
+
+static func _queue_dispenser(stage, at: Vector3) -> void:
+	_hero_box(stage, Vector3(1.12, 1.75, 0.96), at + Vector3(0, 0.89, 0), "amber")
+	_hero_box(stage, Vector3(1.24, 0.82, 1.05), at + Vector3(0, 2.04, 0), "ivory")
+	_hero_box(stage, Vector3(0.88, 0.48, 0.08), at + Vector3(0, 2.11, 0.55), "ink")
+	stage._sign("666", at + Vector3(0, 2.12, 0.61), 0.0062, Color("ffcf84"))
+	_box(stage, "TicketSlot", Vector3(0.65, 0.07, 0.03), at + Vector3(0, 1.48, 0.50), "ink")
+	_rot_box(stage, Vector3(0.39, 0.56, 0.012), at + Vector3(0, 1.20, 0.57), Vector3(-0.18, 0, 0.08), "paper")
+	stage._sign("คิว", at + Vector3(0, 0.73, 0.50), 0.006, Color("382b26"))
+	_contact(stage, at + Vector3(0, 0.006, 0), Vector2(1.9, 1.8), 0)
+
+static func _queue_post(stage, at: Vector3) -> void:
+	stage._batch_instance(_disc_mesh(), Transform3D(Basis.IDENTITY.scaled(Vector3(0.24, 0.07, 0.24)), at + Vector3.UP * 0.035), stage.materials["brass"], false)
+	_pipe(stage, at + Vector3.UP * 0.05, at + Vector3.UP * 0.93, 0.04, "brass")
+	_sphere(stage, at + Vector3.UP * 0.97, Vector3.ONE * 0.075, "amber")
+
+static func _copier(stage, at: Vector3, scale_factor: float) -> void:
+	_hero_box(stage, Vector3(2.45, 1.85, 1.95) * scale_factor, at + Vector3(0, 0.96, 0) * scale_factor, "ivory")
+	_hero_box(stage, Vector3(2.6, 0.26, 2.10) * scale_factor, at + Vector3(0, 1.99, 0) * scale_factor, "ink")
+	_hero_box(stage, Vector3(2.23, 0.10, 1.72) * scale_factor, at + Vector3(0, 2.14, 0) * scale_factor, "cyan")
+	_hero_box(stage, Vector3(2.52, 0.17, 2.07) * scale_factor, at + Vector3(0, 2.45, -0.25) * scale_factor, "ivory", Vector3(-0.19, 0, 0))
+	_hero_box(stage, Vector3(0.65, 0.28, 0.50) * scale_factor, at + Vector3(0.76, 2.22, 0.91) * scale_factor, "ink")
+	_box(stage, "CopierScreen", Vector3(0.46, 0.08, 0.27) * scale_factor, at + Vector3(0.76, 2.39, 0.95) * scale_factor, "warm_screen")
+	for index in range(3):
+		_hero_box(stage, Vector3(1.84, 0.38, 0.07) * scale_factor, at + Vector3(0, 0.4 + index * 0.45, 1.01) * scale_factor, "paper")
+		_box(stage, "CopierHandle", Vector3(0.5, 0.06, 0.08) * scale_factor, at + Vector3(0, 0.43 + index * 0.45, 1.065) * scale_factor, "trim")
+	_hero_box(stage, Vector3(1.46, 0.16, 0.80) * scale_factor, at + Vector3(0, 1.45, 1.24) * scale_factor, "ink")
+	for index in range(5):
+		_rot_box(stage, Vector3(0.92, 0.024, 0.64) * scale_factor, at + Vector3(index * 0.04, 1.55 + index * 0.035, 1.36) * scale_factor, Vector3(0, index * 0.04, 0), "paper")
+	stage._sign("F", at + Vector3(-0.80, 1.65, 1.04) * scale_factor, 0.013 * scale_factor, Color("a83543"))
+	_contact(stage, at + Vector3(0, 0.005, 0), Vector2(3.3, 3.2) * scale_factor, 0)
+
+static func _ticket_cascade(stage, at: Vector3, count: int) -> void:
+	# Static paper arc: visible absurdity without particle overdraw or per-frame allocations.
+	for index in range(count):
+		var phase: float = float(index) / maxf(1.0, count - 1)
+		var point := at + Vector3(sin(phase * 5.0) * 0.60, sin(phase * PI) * 1.55, phase * 2.6)
+		_rot_box(stage, Vector3(0.42, 0.016, 0.59), point, Vector3(phase * 0.8, phase * 1.3, phase * 0.55), "paper")
+
+static func _file_tower(stage, at: Vector3, scale_factor: float, count: int) -> void:
+	_hero_box(stage, Vector3(2.25, 0.23, 1.85) * scale_factor, at + Vector3.UP * 0.12 * scale_factor, "ink")
+	for index in range(count):
+		var angle: float = sin(index * 1.7) * 0.12
+		var offset := Vector3(sin(index * 2.3) * 0.12, 0.42 + index * 0.29, cos(index * 1.4) * 0.10) * scale_factor
+		_hero_box(stage, Vector3(2.0, 0.25, 1.5) * scale_factor, at + offset, "stamp" if index % 3 == 0 else "ivory", Vector3(0, angle, 0))
+		_box(stage, "FileSpine", Vector3(1.28, 0.12, 0.025) * scale_factor, at + offset + Vector3(0, 0, 0.77) * scale_factor, "paper")
+		_box(stage, "FileTag", Vector3(0.23, 0.07, 0.033) * scale_factor, at + offset + Vector3(-0.42, 0, 0.80) * scale_factor, "amber")
+	_contact(stage, at + Vector3(0, 0.005, 0), Vector2(3.0, 2.6) * scale_factor, 0)
+
+static func _stamp(stage, at: Vector3, scale_factor: float, lean: float) -> void:
+	var basis := Basis(Vector3.BACK, lean)
+	_hero_box(stage, Vector3(2.18, 0.34, 1.60) * scale_factor, at + basis * Vector3(0, 0.25, 0) * scale_factor, "rubber", Vector3(0, 0, lean))
+	_hero_box(stage, Vector3(2.25, 0.23, 1.66) * scale_factor, at + basis * Vector3(0, 0.52, 0) * scale_factor, "amber", Vector3(0, 0, lean))
+	_pipe(stage, at + basis * Vector3(0, 0.63, 0) * scale_factor, at + basis * Vector3(0, 2.00, 0) * scale_factor, 0.27 * scale_factor, "stamp")
+	_sphere(stage, at + basis * Vector3(0, 2.26, 0) * scale_factor, Vector3(0.78, 0.57, 0.56) * scale_factor, "stamp")
+	_hero_box(stage, Vector3(1.5, 0.42, 0.045) * scale_factor, at + basis * Vector3(0, 0.30, 0.82) * scale_factor, "paper", Vector3(0, 0, lean))
+	var caption = stage._sign("ยกเลิก", at + basis * Vector3(0, 0.31, 0.86) * scale_factor, 0.0065 * scale_factor, Color("9c3446"), Vector3(0, 0, lean))
+	caption.outline_size = 0
+	_contact(stage, at + Vector3(0, 0.004, 0), Vector2(3.0, 2.5) * scale_factor, 0)
+
+static func _captcha_panel(stage, at: Vector3) -> void:
+	_hero_box(stage, Vector3(4.0, 3.80, 0.35), at + Vector3(0, 1.85, 0), "ink")
+	stage._sign("ยืนยันว่าเป็นคน", at + Vector3(0, 3.45, 0.24), 0.0075, Color("c5e9e3"))
+	for row in range(3):
+		for col in range(3):
+			var slot := at + Vector3((col - 1) * 1.07, 2.65 - row * 1.02, 0.25)
+			var human: bool = (row + col) % 3 == 0
+			_hero_box(stage, Vector3(0.94, 0.88, 0.045), slot, "cyan" if human else "trim")
+			if human:
+				_sphere(stage, slot + Vector3(0, 0.16, 0.09), Vector3(0.14, 0.15, 0.06), "ivory")
+				_hero_box(stage, Vector3(0.39, 0.29, 0.06), slot + Vector3(0, -0.16, 0.10), "ivory")
+			else:
+				_hero_box(stage, Vector3(0.5, 0.19, 0.08), slot + Vector3(0, -0.18, 0.1), "amber")
+				_pipe(stage, slot + Vector3(0, -0.1, 0.10), slot + Vector3(0, 0.17, 0.10), 0.07, "amber")
+				_sphere(stage, slot + Vector3(0, 0.21, 0.10), Vector3(0.16, 0.09, 0.06), "amber")
+
+static func _hero_box(stage, size: Vector3, at: Vector3, material: String, angles: Vector3 = Vector3.ZERO) -> void:
+	# 44 triangles form a bevelled unit box; all instances share the same cached mesh.
+	if not _geometry.has("bevel_box"):
+		var surface := SurfaceTool.new()
+		surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var a: float = 0.43
+		for axis in range(3):
+			var first: int = (axis + 1) % 3
+			var second: int = (axis + 2) % 3
+			for side in [-1.0, 1.0]:
+				var normal := Vector3.ZERO
+				normal[axis] = side
+				var points: Array[Vector3] = []
+				for corner in [Vector2(-a, -a), Vector2(a, -a), Vector2(a, a), Vector2(-a, a)]:
+					var vertex := normal * 0.5
+					vertex[first] = corner.x
+					vertex[second] = corner.y
+					points.append(vertex)
+				_mesh_face(surface, points, normal)
+			for side_a in [-1.0, 1.0]:
+				for side_b in [-1.0, 1.0]:
+					var points: Array[Vector3] = []
+					for corner in [Vector2(0.5, a), Vector2(a, 0.5)]:
+						for end in [-a, a]:
+							var vertex := Vector3.ZERO
+							vertex[axis] = end
+							vertex[first] = corner.x * side_a
+							vertex[second] = corner.y * side_b
+							points.append(vertex)
+					var normal := Vector3.ZERO
+					normal[first] = side_a
+					normal[second] = side_b
+					_mesh_face(surface, [points[0], points[1], points[3], points[2]], normal.normalized())
+		for x in [-1.0, 1.0]:
+			for y in [-1.0, 1.0]:
+				for z in [-1.0, 1.0]:
+					_mesh_face(surface, [Vector3(x * 0.5, y * a, z * a), Vector3(x * a, y * 0.5, z * a), Vector3(x * a, y * a, z * 0.5)], Vector3(x, y, z).normalized())
+		_geometry["bevel_box"] = surface.commit()
+	stage._batch_instance(_geometry["bevel_box"], Transform3D(Basis.from_euler(angles).scaled_local(size), at), stage.materials[material], true)
+
+static func _mesh_face(surface: SurfaceTool, points: Array, normal: Vector3) -> void:
+	for index in range(1, points.size() - 1):
+		var p1: Vector3 = points[index]
+		var p2: Vector3 = points[index + 1]
+		if (p1 - points[0]).cross(p2 - points[0]).dot(normal) > 0.0:
+			var swap := p1
+			p1 = p2
+			p2 = swap
+		for point: Vector3 in [points[0], p1, p2]:
+			surface.set_normal(normal)
+			surface.add_vertex(point)
 
 static func _colonnade(stage, side: int, z: float, damaged: bool) -> void:
 	for offset in [-7.5, -2.5, 2.5, 7.5]:
@@ -323,8 +483,9 @@ static func _notice_board(stage, at: Vector3, angle: float, title: String, body:
 	_rot_box(stage, Vector3(3.0, 1.8, 0.16), at + Vector3.UP * 1.9, Vector3(0, angle, 0), "dark")
 	_rot_box(stage, Vector3(2.7, 1.3, 0.03), at + facing * Vector3(0, 1.68, 0.1), Vector3(0, angle, 0), "paper")
 	_rot_box(stage, Vector3(3.2, 0.12, 0.8), at + Vector3.UP * 2.88, Vector3(0, angle, 0), "trim")
-	stage._sign(title, at + facing * Vector3(0, 2.48, 0.12), 0.007, Color("d9dcca"), Vector3(0, angle, 0))
-	stage._sign(body, at + facing * Vector3(0, 1.73, 0.14), 0.006, Color("39443f"), Vector3(0, angle, 0))
+	stage._sign(title, at + facing * Vector3(0, 2.48, 0.15), 0.007, Color("e5dfcd"), Vector3(0, angle, 0))
+	var copy = stage._sign(body, at + facing * Vector3(0, 1.73, 0.16), 0.007, Color("273a40"), Vector3(0, angle, 0))
+	copy.outline_size = 0
 	_contact(stage, at + Vector3(0, 0.008, 0), Vector2(3.8, 1.8), angle)
 
 static func _bench(stage, at: Vector3, angle: float) -> void:
@@ -485,7 +646,7 @@ static func _disc_mesh() -> CylinderMesh:
 		mesh.top_radius = 1.0
 		mesh.bottom_radius = 1.0
 		mesh.height = 1.0
-		mesh.radial_segments = 12
+		mesh.radial_segments = 16
 		_geometry["cylinder"] = mesh
 	return _geometry["cylinder"] as CylinderMesh
 
@@ -494,8 +655,8 @@ static func _sphere(stage, at: Vector3, size: Vector3, material: String) -> void
 		var mesh := SphereMesh.new()
 		mesh.radius = 1.0
 		mesh.height = 2.0
-		mesh.radial_segments = 10
-		mesh.rings = 5
+		mesh.radial_segments = 20
+		mesh.rings = 10
 		_geometry["sphere"] = mesh
 	stage._batch_instance(_geometry["sphere"], Transform3D(Basis.IDENTITY.scaled_local(size), at), stage.materials[material], true)
 
@@ -508,7 +669,7 @@ static func _ring_mesh() -> TorusMesh:
 		var mesh := TorusMesh.new()
 		mesh.inner_radius = 0.97
 		mesh.outer_radius = 1.0
-		mesh.rings = 40
+		mesh.rings = 64
 		mesh.ring_segments = 6
 		_geometry["ring"] = mesh
 	return _geometry["ring"] as TorusMesh

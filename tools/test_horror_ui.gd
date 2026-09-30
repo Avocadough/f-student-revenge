@@ -2,7 +2,7 @@ extends SceneTree
 ## Rendered UI fixtures only, not gameplay completion or a performance benchmark.
 ## Run without --headless after the render slot is free. Uses qa_no_save throughout.
 
-const OUTPUT_DIR := "res://evidence/horror_ui"
+const OUTPUT_DIR := "res://evidence/v05/ui"
 const SIZES := [Vector2i(1280, 720), Vector2i(960, 540), Vector2i(800, 720)]
 
 var game: Node
@@ -219,6 +219,12 @@ func run_resolution(size: Vector2i) -> void:
 			check(has_quality, "Settings includes at least two graphics choices")
 	await begin_game_fixture(2, 2)
 	await inspect_hud()
+	game.show_story_beat("สำเนาถูกต้อง... แต่ต้นฉบับเหนื่อยแล้ว", "นักศึกษา: ผมต้องยื่นคำร้องเพื่อยกเลิกคำร้องอีกทีเหรอครับ?\nอาจารย์: คราวนี้ไม่ต้อง เธอเพิ่งต่อยฝ่ายอนุมัติไปแล้ว")
+	await inspect_modal("story_payoff")
+	check(paused and game.paused and game.story_beat_open, "Safe story payoff pauses simulation")
+	check(not game.level.request_teacher_support(), "Teacher action is blocked during story payoff")
+	game._resume()
+	check(not paused and not game.story_beat_open, "Story payoff resumes without leaving a stale pause")
 	game._show_pause()
 	await inspect_modal("pause")
 	check(paused and game.paused, "Pause screen pauses simulation")

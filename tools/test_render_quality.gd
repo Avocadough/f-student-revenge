@@ -32,7 +32,7 @@ func _run() -> void:
 			game._apply_settings()
 			await settle()
 			var physical: Vector2 = root.get_texture().get_size()
-			var budget := Vector2(960, 540) if quality == 0 else Vector2(1280, 720)
+			var budget := Vector2(1280, 720) if quality == 0 else Vector2(1920, 1080)
 			var effective := physical * root.scaling_3d_scale
 			var pool := FX.prepare(game)
 			var active_slots := 0
@@ -48,7 +48,7 @@ func _run() -> void:
 			var label := "%s quality%d" % [str(window_size), quality]
 			check(physical.x > 0 and physical.y > 0 and effective.x <= budget.x + 1.0 and effective.y <= budget.y + 1.0, label + " respects physical render pixel budget")
 			check(game.level.render_quality == quality and active_slots == (6 if quality == 0 else 12) and particle_budget == (24 if quality == 0 else 84) and lights == (3 if quality == 0 else 4), label + " updates stage lights and FX through game settings")
-			check(root.msaa_3d == (Viewport.MSAA_DISABLED if quality == 0 else Viewport.MSAA_2X) and Engine.max_fps == 60 and Engine.physics_ticks_per_second == 60, label + " applies rendering options without changing physics rate")
+			check(root.msaa_3d == (Viewport.MSAA_2X if quality == 0 else Viewport.MSAA_4X) and Engine.max_fps == 60 and Engine.physics_ticks_per_second == 60, label + " applies rendering options without changing physics rate")
 			measurements.append({"requested_window": str(window_size), "physical_texture": str(physical), "logical_rect": str(root.get_visible_rect().size), "quality": quality, "render_scale": root.scaling_3d_scale, "effective_3d_pixels": str(effective), "active_room_lights": lights, "active_fx_slots": active_slots, "max_impact_particles": particle_budget})
 	var pool := FX.prepare(game)
 	for index in range(60): FX.burst(game, game.player.global_position, Color.ORANGE)

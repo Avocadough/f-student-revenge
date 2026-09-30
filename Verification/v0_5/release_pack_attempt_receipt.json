@@ -1,0 +1,11 @@
+{
+  "scope": "Attempted actual shipping PCK validation using native headless Godot, not browser/UI or Web FPS",
+  "pack": "docs/index.pck",
+  "executed": false,
+  "result": "Automatic approval rejected the tool command before it executed",
+  "automatic_approval_rejection_exact": "rejected: blocked by policy",
+  "attempted_action": "Prepare an external empty temporary directory with only the normal gameplay runner, then run Godot 4.7.2 --headless --main-pack docs/index.pck --script external runner with that empty directory as working directory, and save a pack hash/result receipt",
+  "reason_detail": "No further reason was supplied by the tool. No equivalent execution retry was attempted.",
+  "no_pack_test_claim": true,
+  "existing_evidence": "Source normal traversal passed 30 checks, all nine rooms and all six story payoffs with one naturally triggered stamp; evidence/v05/gameplay_integration.json. This does not establish actual shipping-pack runtime validation."
+}

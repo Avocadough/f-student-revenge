@@ -1,0 +1,22 @@
+{
+  "scope": "Source headless gameplay/stamp/story verification, not Web FPS or a human fun assessment",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "targeted_checks": 51,
+  "traversal_checks": 30,
+  "normal_traversal_rooms": 9,
+  "retries": 0,
+  "simulated_seconds": 134.316666666667,
+  "story_payoffs_seen": 6,
+  "stamp_warnings_seen": 1,
+  "stamp_impacts_seen": 1,
+  "sha256": {
+    "Scripts/campus_stage.gd": "5823e8dd8b0d085c35f89b65d3b2f453e9328bb87f0b12661ee8bd2b283b830f",
+    "Scripts/school_enemy.gd": "8b5013cf226d291ebb53ad9cb8818e6885aa0dffdbef2ae9c700afd6dc75e16a",
+    "Scripts/campaign_data.gd": "706273b00b655aea4e054d7a61f54e2f78a8b031f6a0bec931e7cf1f0f1f040b",
+    "Scripts/game.gd": "9dbe1dbdf026b29dc6a44db58242a22c0f8c85c92e8034712ce38e553deeba5e",
+    "Scripts/campus_environment.gd": "48551f16c30eef97e835a3ffe5acc4fcbe62ca69229191f955f5d99080c3b7fe",
+    "Scripts/world_label.gd": "639b149bbb43bdaa42be9e103a50aa29dd438518124a59d3676e4f575643b0ae",
+    "tools/test_registry_story.gd": "011778da4b0ca7f1c26af064b4283234b9f611b510b9c1c1de4aa755aa5b373a",
+    "evidence/v05/test_gameplay_v05.gd": "733d7884a8bf492e7fe0e735e4775de58a98445ca04afcafaad436688df189c9"
+  }
+}

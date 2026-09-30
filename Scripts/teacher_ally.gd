@@ -3,6 +3,7 @@ class_name TeacherAlly
 
 const Campaign = preload("res://Scripts/campaign_data.gd")
 const FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
+const WorldLabel = preload("res://Scripts/world_label.gd")
 
 var teacher_index := 0
 var rescued := false
@@ -28,12 +29,9 @@ func _ready() -> void:
 				clips[key] = clip
 			_play("idle")
 	caption = Label3D.new()
-	caption.font = FONT
-	caption.font_size = 42
-	caption.pixel_size = 0.003
-	caption.position.y = 2.25
+	WorldLabel.apply(caption, 64, 0.004)
+	caption.position.y = 2.45
 	caption.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	caption.outline_size = 8
 	add_child(caption)
 	indicator = MeshInstance3D.new()
 	var ring := TorusMesh.new()
@@ -54,7 +52,7 @@ func _ready() -> void:
 func set_rescued(value: bool) -> void:
 	rescued = value
 	if is_instance_valid(caption):
-		caption.text = "%s\n%s" % [Campaign.TEACHER_NAMES[teacher_index], "พันธมิตร • T ขอความช่วยเหลือ" if rescued else "ถูกล้อม • ช่วยกำจัดปีศาจ"]
+		caption.text = "%s\n%s" % [Campaign.TEACHER_NAMES[teacher_index].replace("อาจารย์", "อ."), "T • ช่วยสู้" if rescued else "ช่วยอาจารย์!"]
 		caption.modulate = Color("a5eff0") if rescued else Color("ffe2ad")
 
 func show_support() -> void:

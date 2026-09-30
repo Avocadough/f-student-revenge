@@ -1,6 +1,6 @@
 # Credits and licenses
 
-**การล้างแค้นของนักศึกษาติด F — demo 0.4, 1 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its cooperative demon campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
+**การล้างแค้นของนักศึกษาติด F — demo 0.5, 1 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its dark-comedy demon registrar campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
 
 ## Game foundations
 
@@ -38,7 +38,7 @@ See [Assets/ASSET_CREDITS.md](Assets/ASSET_CREDITS.md) and [asset_manifest.json]
 
 Exact download URLs, file sizes and SHA-256 values are in [texture_receipt.json](Assets/Textures/texture_receipt.json); the [preserved Poly Haven notice](Assets/Licenses/polyhaven_cc0.txt) records the asset license. Website preview images are not bundled.
 
-Campus architecture, signs, procedural contact shading, corruption forms and the animated portal shader were authored for this game. `Assets/Images/campus_invasion_cover.png` was generated with **OpenAI imagegen** for the menu. It is an illustrative cover, not a gameplay screenshot or third-party CC0 download.
+Campus architecture, signs, procedural contact shading, corruption forms and the animated portal shader were authored for this game. The 0.5 queue machines, copiers, paper arcs, CAPTCHA boards, file towers and stamps are original batched geometry. `Assets/Images/hell_registrar_cover.png` was generated with the built-in **OpenAI imagegen** tool for the 0.5 menu; the earlier `campus_invasion_cover.png` is retained for history. These are illustrative covers, not gameplay screenshots or third-party CC0 downloads. Prompts and saved asset paths are recorded in [Assets/Images/README.md](Assets/Images/README.md). `NotoSansThaiWorld.ttf` is a copy of the existing OFL font with separate MSDF import settings for world labels; its font design is unchanged.
 
 ## Audio and font
 

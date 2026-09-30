@@ -1,0 +1,17 @@
+{
+  "build_manifest": "evidence/v05/webqa/build_manifest.json",
+  "built": true,
+  "production_script_and_scene_hashes_match_manifest": true,
+  "verified_model_import_caches": 24,
+  "canvas": [1280, 720],
+  "qa_pack_bytes": 21148048,
+  "qa_pack_sha256": "6e71b0e4b67cf036caa00d6ff00cfffe0e7fc6337eaf65697a2e84a22cfb3083",
+  "intended_start_url": "http://127.0.0.1:8769/index.html",
+  "server_started": false,
+  "server_pid": null,
+  "browser_test_performed": false,
+  "automatic_approval_rejection_exact": "rejected: blocked by policy",
+  "attempted_action": "Start-Process hidden Python server .work/qa_http_server_v05.py bound to 127.0.0.1:8769",
+  "reason_detail": "No further reason was supplied by the tool. No equivalent launch retry was attempted.",
+  "root_decision": "Optional local browser QA skipped; root will inspect the public production export directly."
+}
