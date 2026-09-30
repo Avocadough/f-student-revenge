@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 from urllib.request import Request, urlopen
 
@@ -35,10 +36,24 @@ def main() -> None:
                         "working_tree_sha256": hashlib.sha256(local).hexdigest(),
                         "working_tree_matches_commit_allowing_text_crlf": local_matches,
                         "match": status == 200 and expected == received and local_matches})
+    # Verify the exact cache-key URL used by the shipping shell as well.
+    shell = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+    cache_key = re.search(r"const packUrl = packPath \+ '([^']+)';", shell)
+    if cache_key is None:
+        raise SystemExit("Missing versioned pack URL in the exported shell")
+    pack_url = URL + "index.pck" + cache_key.group(1)
+    with urlopen(Request(pack_url, headers={"Cache-Control": "no-cache"}), timeout=90) as response:
+        pack_bytes = response.read()
+        pack_status = response.status
+    versioned_pack = {"url": pack_url, "http_status": pack_status, "bytes": len(pack_bytes),
+                      "sha256": hashlib.sha256(pack_bytes).hexdigest()}
+    versioned_pack["match"] = pack_status == 200 and versioned_pack["sha256"] == next(
+        row["committed_sha256"] for row in results if row["file"] == "index.pck")
     record = {"version": "0.5", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "source_commit": revision, "url": URL,
               "scope": "Public HTTP bytes against committed production export, also checked against the local export allowing Git CRLF conversion for HTML/JS only. Binary PCK/WASM bytes must match exactly. Browser behavior is separately documented in VALIDATION.md.",
-              "passed": all(row["match"] for row in results), "files": results,
+              "passed": all(row["match"] for row in results) and versioned_pack["match"],
+              "files": results, "versioned_pack": versioned_pack,
               "rollback_commit": "8dddb42569aaf0cedf0f11130263e6e512fdbde7",
               "rollback_branch": "codex/pre-bureaucracy-v0.4.1"}
     path = ROOT / "Verification" / "publication_v0_5.json"

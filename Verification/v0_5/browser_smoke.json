@@ -1,0 +1,24 @@
+{
+  "date_local": "2026-10-01",
+  "browser": "Microsoft Edge via connected browser UI",
+  "url": "https://avocadough.github.io/f-student-revenge/",
+  "release_commit": "eacaeae3602e363b9fa280f35a1d592d34232443",
+  "pack_bytes": 21130280,
+  "pack_sha256": "38d3571aa3b17f4765ee262bb59d41d6a4df87ac283f6e6f680ebb45f47e485a",
+  "pack_url_suffix": "?v=0.5-captions3",
+  "menu_and_stage_entry_smoke_passed": true,
+  "observed": [
+    "Menu 0.5 and new original cover render on public URL",
+    "Old-save story revision notification appears; continue works",
+    "Intro and all three stage entry scenes render through real buttons",
+    "Active enemies approach and inflict ordinary damage",
+    "P pause, resume and return to menu work",
+    "After versioned pack loading, new smaller enemy names and Thai-only parry warnings visibly replace cached older English-suffixed warnings"
+  ],
+  "final_gameplay_screenshot": "pages_final_combat.jpg",
+  "pre_cache_fix_stage_entry_screenshots": ["pages_stage1.jpg", "pages_stage2.jpg", "pages_stage3.jpg"],
+  "full_web_traversal": false,
+  "browser_fps_benchmark": false,
+  "chrome_tested_separately": false,
+  "limitation": "Browser automation has a pointer-lock limitation; the production middle-mouse/R camera fallback appeared. Native source traversal and FPS fixtures are separate evidence."
+}

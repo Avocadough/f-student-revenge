@@ -6,14 +6,14 @@
 
 | ขอบเขต | หลักฐาน |
 |---|---|
-| เล่นครบสามด่าน | [30/30 checks](Verification/v0_5/gameplay_integration.json): คำสั่งตัวละครปกติครบ 9 checkpoint, retry 0, 134.32 วินาทีจำลอง; พบ payoff ครบ 6 จุดและตราปั๊มเตือน/กระแทกจริง ไม่แก้ HP ไม่ teleport ไม่ใช้ God Mode ใน traversal |
+| เล่นครบสามด่าน | [30/30 checks](Verification/v0_5/gameplay_integration.json): คำสั่งตัวละครปกติครบ 9 checkpoint, retry 0, 139.93 วินาทีจำลองในรอบสุดท้าย; พบ payoff ครบ 6 จุดและตราปั๊มเตือน/กระแทกจริง ไม่แก้ HP ไม่ teleport ไม่ใช้ God Mode ใน traversal |
 | ตราปั๊มและบทพัก | [51/51](Verification/v0_5/registry_story_checks.json): เตือน 1.2 วินาที ล็อกตำแหน่งเป้าหมาย หลบได้ โดนทั้งสองฝ่าย cooldown และล้างเมื่อพัก/ตาย/เริ่มใหม่/จบ/กลับเมนู |
 | เนื้อเรื่องและเซฟ | [40/40](Verification/v0_5/story_contract_checks.json), [เมนู/เซฟ 25/25](Verification/v0_5/menu_persistence_checks.json), [ย้ายเซฟ 8/8](Verification/v0_5/save_migration_v03.json); old v2 เก็บ progress/settings ได้ ไม่บังคับเริ่มใหม่ |
 | God Mode | [36/36](Verification/v0_5/god_mode_combat.json): กติกาต่อสู้และการใช้ E เดิมยังทำงาน |
 | UI จริง | [1,274 assertions / 62 ภาพ](Verification/v0_5/ui_checks.json) ที่ 1280×720, 960×540 และ 800×720; ตรวจเมนู บทนำ บทพัก ตั้งค่า HUD และบทจบด้วยตา ข้อความยาวเลื่อนถึงปุ่มได้ |
 | ภาพสามด่าน | [8 captures](Verification/v0_5/art/capture.json) ทั้งคมชัด/ประหยัดและมุมพื้น หยุด AI/แอนิเมชันเฉพาะ fixture; แสดงรูปทรง ป้ายไทย และพื้นผิวจริง ไม่ใช่หลักฐานการเล่นหรือ FPS |
 | การเรนเดอร์/พื้นผิว | [14/14](Verification/v0_5/render_quality_checks.json) และ [15/15](Verification/v0_5/surface_filtering_checks.json): งบ 1080p 4×MSAA / 720p 2×MSAA ตามขนาดจอ; mipmap จริงครบและ anisotropic 4× |
-| หน้าโหลดเว็บ | [14/14](Verification/v0_5/web_shell_checks.json): JavaScript parse และ stub lifecycle; แยกจากการทดสอบเบราว์เซอร์จริง |
+| หน้าโหลดเว็บ | [32/32](Verification/v0_5/web_shell_cache_checks.json): ตรวจลำดับ Engine init/preload/start, URL ตามรุ่น, ชื่อไฟล์ภายในแพ็ก, ขนาดดาวน์โหลด ความคืบหน้าและข้อผิดพลาด; แยกจากการทดสอบเบราว์เซอร์จริง ส่วน [14/14 เดิม](Verification/v0_5/web_shell_checks.json) เป็นหลักฐานก่อนแก้แคช |
 | Import/export | รอบสุดท้าย exit 0 ไม่มี ERROR/SCRIPT ERROR; PCK 21,130,280 bytes, WASM 39,514,754 bytes ตัดภาพปกรุ่นก่อนออกจากแพ็ก แต่เก็บต้นฉบับไว้ |
 
 การตรวจเล่นจากเว็บรอบแรกพบว่าชื่อและคำเตือนของศัตรูซ้อนกันเมื่อรุมประชิด จึงลดขนาดป้ายศัตรูและย่อเหลือ “! ปัดป้อง” / “! หลบ” คงป้ายฉากขนาดใหญ่ไว้ ตรวจ [ภาพจำลองระยะประชิด](Verification/v0_5/melee_captions.png) เพิ่มและรัน 30 gameplay / 51 story checks ผ่านอีกครั้งหลังแก้ ชุดภาพสามด่านและ UI ด้านบนถ่ายก่อนปรับตัวอักษรศัตรูครั้งนี้
@@ -27,13 +27,23 @@
 | [คมชัด](Verification/v0_5/performance_1.json) | 1920×1080 / 4×MSAA | 60.23 | 17.40 ms | 331 |
 | [ประหยัด](Verification/v0_5/performance_0.json) | 1280×720 / 2×MSAA | 60.23 | 17.45 ms | 153 |
 
-โหมดประหยัดลดจำนวนพิกเซลและคำสั่งวาด ส่วนโหมดคมชัดมีต้นทุนสูงกว่า 0.4.1 ไม่ใช้ตัวเลข native นี้รับรองเว็บหรือเครื่องสเปกต่ำ และยังไม่มีผลผู้เล่นใหม่เพื่อยืนยันเวลา 20–30 นาทีหรือความสนุก 134.32 วินาทีเป็นเวลา bot จำลองเท่านั้น ภาพเป็นฉาก 3D แบบ stylized ในขอบเขตเดโมรายวิชา ภาพปก imagegen ไม่ใช่คุณภาพภาพการเล่นที่รับรอง
+โหมดประหยัดลดจำนวนพิกเซลและคำสั่งวาด ส่วนโหมดคมชัดมีต้นทุนสูงกว่า 0.4.1 ไม่ใช้ตัวเลข native นี้รับรองเว็บหรือเครื่องสเปกต่ำ และยังไม่มีผลผู้เล่นใหม่เพื่อยืนยันเวลา 20–30 นาทีหรือความสนุก 139.93 วินาทีเป็นเวลา bot จำลองเท่านั้น ภาพเป็นฉาก 3D แบบ stylized ในขอบเขตเดโมรายวิชา ภาพปก imagegen ไม่ใช่คุณภาพภาพการเล่นที่รับรอง
 
 การเปิดเซิร์ฟเวอร์ QA ในเครื่องและการรัน PCK ในโฟลเดอร์ชั่วคราวถูก automatic approval review ปฏิเสธก่อนรัน โดยระบุเพียง `blocked by policy` จึงไม่มีผลใหม่สำหรับสองรายการนี้ และไม่มีการลองทางเลี่ยง ชุด browser QA แยกถูก build ได้แต่ยังไม่ได้รัน ผล source traversal ไม่ใช่ exported-PCK traversal หรือ manual web playthrough
 
 ## เผยแพร่ 0.5
 
-กำลังเผยแพร่และตรวจไฟล์สาธารณะ จุดย้อนกลับคือ `codex/pre-bureaucracy-v0.4.1` / `8dddb42569aaf0cedf0f11130263e6e512fdbde7` สถานะเว็บจริงจะบันทึกหลังตรวจสำเร็จ
+**เผยแพร่สำเร็จ:** [เล่นเดโม](https://avocadough.github.io/f-student-revenge/) จาก commit `eacaeae3602e363b9fa280f35a1d592d34232443`, [Pages run 36789482341](https://github.com/Avocadough/f-student-revenge/actions/runs/36789482341) สำเร็จ ตรวจ HTTP 200/SHA-256 ตรงครบเก้าไฟล์ใน [publication_v0_5.json](Verification/publication_v0_5.json) PCK SHA-256 `38d3571aa3b17f4765ee262bb59d41d6a4df87ac283f6e6f680ebb45f47e485a`
+
+จุดย้อนกลับรุ่น 0.4.1 คือ `codex/pre-bureaucracy-v0.4.1` / `8dddb42569aaf0cedf0f11130263e6e512fdbde7` เก็บบน GitHub แล้ว รุ่นแรกของ 0.5 (`2cb63ed`) ถูกแทนที่ด้วยรุ่นแก้คำเตือนประชิด (`59d44f6`) และรุ่นแก้การโหลดแคชข้างต้น
+
+พบว่า reload HTML แล้ว เบราว์เซอร์ยังแสดงคำเตือนเก่าแม้ไฟล์สาธารณะถูกต้อง จึงใช้ `index.pck?v=0.5-captions3` เป็น URL ดาวน์โหลด โดยเก็บชื่อ `index.pck` ภายใน Godot เดิม ตัวตรวจเผยแพร่ตรวจ SHA-256 ของ URL ตามรุ่นเพิ่มเติมด้วย ผู้พัฒนาต้องเปลี่ยนรหัสนี้เมื่อเผยแพร่แพ็กใหม่ครั้งถัดไป
+
+เปิดหน้าเว็บจริงด้วย Edge เข้าเมนู บทนำ และเลือกเข้าทั้งสามด่าน เห็น notification เซฟเดิม และใช้เล่นต่อ/พัก/กลับเมนูได้ [ด่าน 1](Verification/v0_5/pages_stage1.jpg), [ด่าน 2](Verification/v0_5/pages_stage2.jpg), [ด่าน 3](Verification/v0_5/pages_stage3.jpg) เป็นภาพระหว่างวินิจฉัยแคช ก่อนแก้เสร็จ
+
+หลังเผยแพร่ตัวโหลดใหม่ ยืนยัน HTML ใช้ URL รุ่น `0.5-captions3` และ PCK 21,130,280 bytes เข้าเล่นต่อด่าน 3 เห็นชื่อศัตรูขนาดใหม่และคำเตือน “! ปัดป้อง” ทั้งสองตัวแยกกันชัด ไม่มี `/ PARRY` แบบเดิม ดู [ภาพเว็บรุ่นสุดท้าย](Verification/v0_5/pages_final_combat.jpg) และ [บันทึกขอบเขตการตรวจเว็บ](Verification/v0_5/browser_smoke.json) จึงยืนยันผลแก้แคชจากการแสดงผลจริงได้
+
+การตรวจนี้ยังไม่ใช่การเล่นเว็บจนจบทุกด่านหรือ browser FPS benchmark และยังไม่ได้ตรวจ Chrome แยกในรอบนี้ ระบบควบคุมเบราว์เซอร์มีข้อจำกัด pointer lock; ทางสำรองลากเมาส์กลาง/R แสดงและเข้าเล่นได้
 
 ---
 
