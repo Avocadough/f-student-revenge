@@ -38,7 +38,11 @@
 
 ## การเผยแพร่ 0.4.1
 
-แพ็กที่เตรียมเผยแพร่มี SHA-256 `70ae587d04a708e1c030d631c593a3a00e445330b46f6793fefe15961872a823` กำลังตรวจจากลิงก์จริง เก็บจุดย้อนกลับรุ่น 0.4 ที่ `codex/pre-smoothing-v0.4`, commit `d38e3fe84451509a127d20fbbf07fb19e154928d`
+**เผยแพร่สำเร็จ:** [เล่นเดโม 0.4.1](https://avocadough.github.io/f-student-revenge/) จาก commit `2404dd606ebb4f05f0061ca1540ec710964f9045`, [Pages run 36783887414](https://github.com/Avocadough/f-student-revenge/actions/runs/36783887414) สำเร็จ ตรวจ HTTP 200/SHA-256 ตรงครบเก้าไฟล์ใน [publication_v0_4_1.json](Verification/publication_v0_4_1.json)
+
+แพ็กมี SHA-256 `70ae587d04a708e1c030d631c593a3a00e445330b46f6793fefe15961872a823` เก็บจุดย้อนกลับรุ่น 0.4 ที่ `codex/pre-smoothing-v0.4`, commit `d38e3fe84451509a127d20fbbf07fb19e154928d` บน GitHub แล้ว
+
+เปิดลิงก์สาธารณะด้วย Edge หลัง reload ยืนยัน HTML อ้างอิงขนาด PCK ใหม่ 20,801,464 bytes และเลือกเข้าเล่นด่าน AI เห็นพื้น/เพดานใหม่จริง ดู [ภาพจาก GitHub Pages](Verification/v0_4_1/pages_gameplay.jpg) แท็บที่ค้างจากรุ่นก่อนยังแสดงค่าเก่าจน reload จึงควรรีเฟรชหน้าเว็บก่อนสาธิต
 
 ---
 
