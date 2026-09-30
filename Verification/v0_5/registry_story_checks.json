@@ -214,7 +214,7 @@
 		"Scripts/campaign_data.gd": "706273b00b655aea4e054d7a61f54e2f78a8b031f6a0bec931e7cf1f0f1f040b",
 		"Scripts/campus_stage.gd": "5823e8dd8b0d085c35f89b65d3b2f453e9328bb87f0b12661ee8bd2b283b830f",
 		"Scripts/game.gd": "9dbe1dbdf026b29dc6a44db58242a22c0f8c85c92e8034712ce38e553deeba5e",
-		"Scripts/school_enemy.gd": "8b5013cf226d291ebb53ad9cb8818e6885aa0dffdbef2ae9c700afd6dc75e16a",
-		"tools/test_registry_story.gd": "011778da4b0ca7f1c26af064b4283234b9f611b510b9c1c1de4aa755aa5b373a"
+		"Scripts/school_enemy.gd": "b615bb2f4f9b041ae88cf7771e4663a9f8032865f71a1916da01514cc4abc9f5",
+		"tools/test_registry_story.gd": "74ae25cae2ca081a94c22462a4014ab9f2c2bd916ef246a3d8fde75b278614ca"
 	}
 }

@@ -173,6 +173,7 @@ func _build_visual() -> void:
 	name_label.position.y = 2.2 if is_boss else 1.65
 	add_child(name_label)
 	hint = _label("", 30, Color("ffd568"))
+	hint.pixel_size = 0.0024
 	hint.position.y = 2.55 if is_boss else 2.0
 	add_child(hint)
 	telegraph = MeshInstance3D.new()
@@ -208,7 +209,8 @@ func _build_visual() -> void:
 func _label(text_value: String, size: int, color: Color) -> Label3D:
 	var label := Label3D.new()
 	label.text = text_value
-	WorldLabel.apply(label, size * 2, 0.0035)
+	# Keep the MSDF atlas crisp without doubling captions at melee distance.
+	WorldLabel.apply(label, size * 2, 0.0018)
 	label.modulate = color
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.no_depth_test = false
@@ -397,7 +399,7 @@ func _begin_attack(direction: Vector3) -> void:
 	var danger := attack_id in ["spin", "ai_zone", "web_error", "layout"]
 	telegraph_material.albedo_color = Color("ff5067") if danger else Color("ffcc66")
 	telegraph_material.emission = Color("ff234f") if danger else Color("ffc34d")
-	hint.text = "!  หลบ / DODGE" if danger else "!  ปัดป้อง / PARRY"
+	hint.text = "! หลบ" if danger else "! ปัดป้อง"
 	hint.modulate = Color("ff657a") if danger else Color("ffe18f")
 	_play("Guard")
 	if attack_id in ["ai_zone", "web_error", "layout"]:

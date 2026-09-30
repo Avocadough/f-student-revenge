@@ -14,7 +14,9 @@
 | ภาพสามด่าน | [8 captures](Verification/v0_5/art/capture.json) ทั้งคมชัด/ประหยัดและมุมพื้น หยุด AI/แอนิเมชันเฉพาะ fixture; แสดงรูปทรง ป้ายไทย และพื้นผิวจริง ไม่ใช่หลักฐานการเล่นหรือ FPS |
 | การเรนเดอร์/พื้นผิว | [14/14](Verification/v0_5/render_quality_checks.json) และ [15/15](Verification/v0_5/surface_filtering_checks.json): งบ 1080p 4×MSAA / 720p 2×MSAA ตามขนาดจอ; mipmap จริงครบและ anisotropic 4× |
 | หน้าโหลดเว็บ | [14/14](Verification/v0_5/web_shell_checks.json): JavaScript parse และ stub lifecycle; แยกจากการทดสอบเบราว์เซอร์จริง |
-| Import/export | รอบสุดท้าย exit 0 ไม่มี ERROR/SCRIPT ERROR; PCK 21,130,184 bytes, WASM 39,514,754 bytes ตัดภาพปกรุ่นก่อนออกจากแพ็ก แต่เก็บต้นฉบับไว้ |
+| Import/export | รอบสุดท้าย exit 0 ไม่มี ERROR/SCRIPT ERROR; PCK 21,130,280 bytes, WASM 39,514,754 bytes ตัดภาพปกรุ่นก่อนออกจากแพ็ก แต่เก็บต้นฉบับไว้ |
+
+การตรวจเล่นจากเว็บรอบแรกพบว่าชื่อและคำเตือนของศัตรูซ้อนกันเมื่อรุมประชิด จึงลดขนาดป้ายศัตรูและย่อเหลือ “! ปัดป้อง” / “! หลบ” คงป้ายฉากขนาดใหญ่ไว้ ตรวจ [ภาพจำลองระยะประชิด](Verification/v0_5/melee_captions.png) เพิ่มและรัน 30 gameplay / 51 story checks ผ่านอีกครั้งหลังแก้ ชุดภาพสามด่านและ UI ด้านบนถ่ายก่อนปรับตัวอักษรศัตรูครั้งนี้
 
 ## ประสิทธิภาพและข้อจำกัด
 
