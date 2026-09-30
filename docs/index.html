@@ -79,7 +79,7 @@ noscript { position: fixed; inset: 0; z-index: 2; display: grid; place-items: ce
 		<script>
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":21130280,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
-const engine = typeof Engine === 'undefined' ? null : new Engine(GODOT_CONFIG);
+let engine = null;
 
 (function () {
 	const statusOverlay = document.getElementById('status');
@@ -136,11 +136,34 @@ const engine = typeof Engine === 'undefined' ? null : new Engine(GODOT_CONFIG);
 		initializing = false;
 	}
 
+	function updateProgress(current, total) {
+		if (current > 0 && total > 0) {
+			statusProgress.value = current;
+			statusProgress.max = total;
+			const percent = Math.min(100, Math.floor(current / total * 100));
+			progressText.textContent = percent === 100 ? 'ดาวน์โหลดครบแล้ว • กำลังเตรียมฉาก…' : 'กำลังดาวน์โหลดเกม • ' + percent + '%';
+		} else {
+			statusProgress.removeAttribute('value');
+			statusProgress.removeAttribute('max');
+			progressText.textContent = 'กำลังเตรียมไฟล์เกม…';
+		}
+	}
+
 	// A failed engine-script download must also leave a usable recovery screen.
-	if (!engine) {
+	if (typeof Engine === 'undefined') {
 		displayFailureNotice('ดาวน์โหลดส่วนเริ่มเกมไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อแล้วลองใหม่');
 		return;
 	}
+	const packPath = GODOT_CONFIG.mainPack || GODOT_CONFIG.executable + '.pck';
+	// Change this release marker when publishing a new pack at the same URL.
+	// The cache key belongs only to the download URL, never to Godot's VFS path.
+	const packUrl = packPath + '?v=0.5-captions3';
+	const fileSizes = Object.assign({}, GODOT_CONFIG.fileSizes);
+	fileSizes[packUrl] = fileSizes[packPath] || 0;
+	engine = new Engine(Object.assign({}, GODOT_CONFIG, {
+		fileSizes: fileSizes,
+		onProgress: updateProgress,
+	}));
 	const missing = Engine.getMissingFeatures({
 		threads: GODOT_THREADS_ENABLED,
 	});
@@ -173,20 +196,13 @@ const engine = typeof Engine === 'undefined' ? null : new Engine(GODOT_CONFIG);
 		}
 	} else {
 		setStatusMode('progress');
-		engine.startGame({
-			'onProgress': function (current, total) {
-				if (current > 0 && total > 0) {
-					statusProgress.value = current;
-					statusProgress.max = total;
-					const percent = Math.min(100, Math.floor(current / total * 100));
-					progressText.textContent = percent === 100 ? 'ดาวน์โหลดครบแล้ว • กำลังเตรียมฉาก…' : 'กำลังดาวน์โหลดเกม • ' + percent + '%';
-				} else {
-					statusProgress.removeAttribute('value');
-					statusProgress.removeAttribute('max');
-					progressText.textContent = 'กำลังเตรียมไฟล์เกม…';
-				}
-			},
-		}).then(() => {
+		// Same documented startup stages as startGame(), with an explicit URL/FS split.
+		Promise.all([
+			engine.init(GODOT_CONFIG.executable),
+			engine.preloadFile(packUrl, packPath),
+		]).then(() => engine.start({
+			args: ['--main-pack', packPath].concat(GODOT_CONFIG.args || []),
+		})).then(() => {
 			setStatusMode('hidden');
 		}, displayFailureNotice);
 	}
