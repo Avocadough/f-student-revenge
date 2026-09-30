@@ -4,27 +4,21 @@ class_name CampusStage
 signal encounter_changed(checkpoint: int, title: String)
 signal stage_completed
 
+const Campaign = preload("res://Scripts/campaign_data.gd")
+const CampusEnvironmentBuilder = preload("res://Scripts/campus_environment.gd")
+const TeacherScript = preload("res://Scripts/teacher_ally.gd")
 const EnemyScript = preload("res://Scripts/school_enemy.gd")
 const PropScript = preload("res://Scripts/interactable_prop.gd")
 const CAMPUS_FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
 static var _model_scenes: Dictionary = {}
 
-const STAGE_TITLES := ["เช็คชื่อครั้งสุดท้าย", "ห้องแล็บที่รู้ทันทุกอย่าง", "Final Deployment"]
-const ROOM_TITLES := [
-	["01 • CHECK IN / ลานเช็คชื่อ", "02 • LAST ASSIGNMENT / ทางเดินส่งงาน", "03 • SEMICOLON / ห้องเขียนโปรแกรม"],
-	["01 • DATA HALL / ทางเดินห้องแล็บ", "02 • TRAINING ROOM / ห้องคอมพิวเตอร์", "03 • OVERFIT / ห้องทดลอง AI"],
-	["01 • REQUEST GATE / จุดตรวจหน้าห้อง", "02 • DEMO DAY / ห้องรอนำเสนอ", "03 • FINAL DEPLOY / ห้องสอบ Web App"]
-]
-const ENCOUNTERS := [
-	[["paper", "paper", "pencil"], ["paper", "pencil", "pen", "book", "paper"], ["programming"]],
-	[["pencil", "pencil", "book", "phone"], ["pen", "book", "phone", "tablet", "computer", "phone"], ["ai"]],
-	[["phone", "phone", "tablet", "computer", "book"], ["pen", "book", "phone", "tablet", "computer", "book"], ["web"]]
-]
-const INTRO_LINES := [
-	"ในห้องไม่เห็นหน้า แต่ในใบเกรดเห็น F ชัดมาก",
-	"Accuracy บนข้อมูลฝึก 100% …แล้วข้อมูลใหม่ล่ะ?",
-	"เปิดเว็บได้ ไม่ได้แปลว่างานเสร็จ"
-]
+const STAGE_TITLES = Campaign.STAGE_NAMES
+const ROOM_TITLES = Campaign.ROOM_TITLES
+const ENCOUNTERS = Campaign.ENCOUNTERS
+const INTRO_LINES = Campaign.INTRO_LINES
+const OBJECTIVE_TITLES = Campaign.OBJECTIVE_TITLES
+const SUPPORT_COOLDOWN := 15.0
+const WEB_SECOND_WAVE := ["demon_imp", "demon_brute", "demon_caster"]
 
 var stage_index := 0
 var checkpoint_index := 0
@@ -56,6 +50,25 @@ var _static_batches: Dictionary = {}
 var _unit_cube: BoxMesh
 var static_instance_count := 0
 var static_batch_count := 0
+
+# Geometry supplies local-space markers; progression never relies on a fixed axis.
+var room_centers: Array[Vector3] = [Vector3.ZERO, Vector3(0, 0, -24), Vector3(0, 0, -48)]
+var spawn_markers: Array[Vector3] = [Vector3(0, 0.12, 6), Vector3(0, 0.12, -18), Vector3(0, 0.12, -42)]
+var exit_markers: Array[Vector3] = [Vector3(0, 0, -10), Vector3(0, 0, -34), Vector3(0, 0, -58)]
+var objective_markers: Array[Vector3] = [Vector3(3, 0, -5.5), Vector3(3, 0, -29.5), Vector3(3, 0, -53.5)]
+var ally_markers: Array[Vector3] = [Vector3(-4, 0, 3.5), Vector3(-4, 0, -20.5), Vector3(-4, 0, -44.5)]
+var teacher: Node3D
+var teacher_rescued := false
+var support_cooldown := 0.0
+var support_time := 0.0
+var support_center := Vector3.ZERO
+var support_visual: MeshInstance3D
+var objective_node: Node3D
+var objective_label: Label3D
+var combat_cleared := false
+var objective_completed := false
+var wave_index := 1
+var defeated_ids: Dictionary = {}
 
 func _ready() -> void:
 	stage_index = clampi(stage_index, 0, 2)
@@ -90,20 +103,21 @@ func start(new_player: Node3D) -> void:
 	_start_encounter(checkpoint_index)
 
 func get_spawn_position() -> Vector3:
-	return global_position + Vector3(0, 0.12, 6.0 - checkpoint_index * 24.0)
+	return to_global(spawn_markers[checkpoint_index])
 
 func get_objective() -> String:
 	if completed:
-		return "ระบบ F ถูกทำลายแล้ว"
-	if final_core_created:
-		return "ชนะอาจารย์แล้ว! โจมตีแกนระบบ F กลางเพื่อจบเกม"
+		return "ผนึกประตูมิติสำเร็จ • มหาวิทยาลัยปลอดภัย"
 	if room_clear[checkpoint_index]:
-		return "ผ่านประตูสีเขียวไปด่านถัดไป" if checkpoint_index == 2 else "เคลียร์แล้ว • เดินผ่านประตูสีเขียวไปห้องถัดไป"
+		return "เดินผ่านประตูสีเขียวไปพื้นที่ถัดไป"
+	if combat_cleared:
+		return "E ใกล้จุดสีฟ้า • %s" % OBJECTIVE_TITLES[stage_index][checkpoint_index]
 	if checkpoint_index == 2:
 		if is_instance_valid(boss) and boss.shielded:
-			return "ทำลาย SERVER CORE ที่ส่องแสงเพื่อปิดโล่บอส"
-		return "เอาชนะ %s" % ["อาจารย์เซมิโคลอน", "อาจารย์โอเวอร์ฟิต", "อาจารย์ Web App"][stage_index]
-	return "กำจัดอุปกรณ์การเรียน • เหลือ %d ตัว" % get_remaining()
+			return "ทำลายเสาคำสาปสีม่วง เพื่อเปิดโล่บอส"
+		return "ร่วมกับอาจารย์กำจัด %s" % Campaign.BOSS_NAMES[stage_index]
+	var wave := " • ระลอก %d/2" % wave_index if stage_index == 2 and checkpoint_index == 1 else ""
+	return "กำจัดปีศาจ • เหลือ %d ตัว%s" % [get_remaining(), wave]
 
 func get_boss() -> Node:
 	if is_instance_valid(boss) and not boss.dead:
@@ -132,13 +146,11 @@ func request_attack(requester: Node, wants_ranged: bool) -> bool:
 func restart_encounter() -> void:
 	encounter_started = false
 	for enemy in active_enemies:
-		if is_instance_valid(enemy):
-			enemy.queue_free()
+		if is_instance_valid(enemy): enemy.queue_free()
 	active_enemies.clear()
 	_clear_projectiles()
 	pending_enemies.clear()
 	boss = null
-	final_core_created = false
 	completed = false
 	room_clear[checkpoint_index] = false
 	_close_gate(checkpoint_index)
@@ -153,46 +165,220 @@ func _start_encounter(index: int) -> void:
 	spawn_serial = 0
 	next_spawn_delay = 0.1
 	room_clear[index] = false
+	combat_cleared = false
+	objective_completed = false
+	final_core_created = false
+	wave_index = 1
+	defeated_ids.clear()
 	active_enemies.clear()
 	pending_enemies.clear()
-	for enemy_kind in ENCOUNTERS[stage_index][index]:
-		pending_enemies.append(enemy_kind)
+	for enemy_kind in ENCOUNTERS[stage_index][index]: pending_enemies.append(enemy_kind)
 	_setup_props(index)
+	_setup_mission(index)
 	for region_index in range(3):
 		_visual_regions[region_index].visible = absi(region_index - index) <= 1
 	encounter_changed.emit(index, ROOM_TITLES[stage_index][index])
 	if index == 2:
-		_toast("%s: “%s”" % [["อาจารย์เซมิโคลอน", "อาจารย์โอเวอร์ฟิต", "อาจารย์ Web App"][stage_index], INTRO_LINES[stage_index]], 4.0)
+		_toast("%s: “%s”" % [Campaign.TEACHER_NAMES[stage_index], INTRO_LINES[stage_index]], 4.0)
 	elif stage_index == 0 and index == 0:
-		_toast("WASD เดิน • คลิกซ้าย 3 ครั้งต่อคอมโบ • Shift ปัดป้อง • Space หลบ", 5.0)
-	elif stage_index == 0 and index == 1:
-		_toast("หนังสือตั้งรับ: ใช้ L–L–H หรือ L–H–L • E หยิบของขว้าง", 4.0)
-	elif stage_index == 1 and index == 1:
-		_toast("iPad ช่วยเพื่อนตั้งรับ • กำจัดก่อน แล้วเปลี่ยนคอมโบให้หลากหลาย", 4.0)
+		_toast("ช่วยอาจารย์ที่ถูกล้อม! WASD เดิน • คลิกซ้ายต่อคอมโบ • Shift ปัดป้อง • Space หลบ", 5.0)
+	elif stage_index == 2 and index == 1:
+		_toast("อาจารย์กำลังเปิดเครื่องผนึก! ป้องกันปีศาจ 2 ระลอก • T กางกำแพง", 5.0)
+	else:
+		_toast("%s • T ขอแรงอาจารย์ • E ใช้อุปกรณ์เมื่อพื้นที่ปลอดภัย" % OBJECTIVE_TITLES[stage_index][index], 4.5)
 
 func _physics_process(delta: float) -> void:
-	if not encounter_started or completed or not is_instance_valid(player):
+	if not encounter_started or completed or not is_instance_valid(player) or get_tree().paused:
 		return
 	elapsed += delta
+	support_cooldown = maxf(0.0, support_cooldown - delta)
+	support_time = maxf(0.0, support_time - delta)
+	if is_instance_valid(support_visual):
+		support_visual.visible = support_time > 0.0
+		if support_time > 0.0: support_visual.rotate_y(delta * 0.35)
 	next_spawn_delay -= delta
 	if next_spawn_delay <= 0 and not pending_enemies.is_empty() and _alive_count() < 4:
 		_spawn_enemy(pending_enemies.pop_front())
 		next_spawn_delay = 0.65
 	if room_clear[checkpoint_index]:
-		if checkpoint_index < 2:
-			var threshold := -float(checkpoint_index + 1) * 24.0 + 8.0
-			if player.global_position.z - global_position.z < threshold:
-				_start_encounter(checkpoint_index + 1)
-		elif stage_index < 2 and player.global_position.z - global_position.z < -60.0:
-			completed = true
-			stage_completed.emit()
-	# The support visual is a clear turquoise floor ring, only while a tablet is alive.
+		var point := to_local(player.global_position)
+		var exit := exit_markers[checkpoint_index]
+		var forward := (exit - room_centers[checkpoint_index]).normalized()
+		var offset := point - exit
+		var across: float = offset.dot(forward)
+		var lateral: float = (offset - forward * across).length()
+		if across > 1.0 and lateral < 2.6:
+			if checkpoint_index < 2: _start_encounter(checkpoint_index + 1)
+			elif stage_index < 2: _complete_stage()
 	for enemy in active_enemies:
 		if is_instance_valid(enemy) and not enemy.dead and not enemy.broken and enemy.kind == "tablet" and enemy.mode not in ["telegraph", "attack"]:
 			enemy.telegraph.visible = true
 			enemy.telegraph.scale.x = 1.5
 			enemy.telegraph.scale.z = 1.5
-			enemy.telegraph_material.albedo_color = Color("57d7c3")
+			enemy.telegraph_material.albedo_color = Color("bd69e5")
+
+func _setup_mission(index: int) -> void:
+	if is_instance_valid(teacher): teacher.queue_free()
+	if is_instance_valid(objective_node): objective_node.queue_free()
+	if is_instance_valid(support_visual): support_visual.queue_free()
+	support_visual = null
+	support_cooldown = 0.0
+	support_time = 0.0
+	teacher_rescued = stage_index > 0 or index > 0
+	teacher = TeacherScript.new()
+	teacher.teacher_index = stage_index
+	teacher.rescued = teacher_rescued
+	teacher.position = ally_markers[index]
+	teacher.rotation.y = PI
+	add_child(teacher)
+	objective_node = Node3D.new()
+	objective_node.name = "MissionDevice"
+	objective_node.position = objective_markers[index]
+	add_child(objective_node)
+	var device_kind := "cabinet" if stage_index == 0 else "terminal"
+	if checkpoint_index == 2 and stage_index > 0 or stage_index == 2 and checkpoint_index == 1: device_kind = "seal"
+	_build_objective_device(device_kind)
+	var ring := MeshInstance3D.new()
+	var ring_shape := TorusMesh.new()
+	ring_shape.inner_radius = 0.9
+	ring_shape.outer_radius = 1.03
+	ring_shape.rings = 32
+	ring_shape.ring_segments = 6
+	ring.mesh = ring_shape
+	ring.scale.y = 0.13
+	ring.position.y = 0.04
+	ring.material_override = _material(Color("61def0"), 0.4, 0.9)
+	objective_node.add_child(ring)
+	objective_label = Label3D.new()
+	objective_label.font = CAMPUS_FONT
+	objective_label.font_size = 38
+	objective_label.pixel_size = 0.003
+	objective_label.position.y = 1.6
+	objective_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	objective_label.modulate = Color("a0f0ef")
+	objective_label.text = OBJECTIVE_TITLES[stage_index][index] + "\nกำจัดปีศาจก่อน"
+	objective_node.add_child(objective_label)
+
+func _device_mesh(shape: Mesh, at: Vector3, color: Color, glow: float = 0.0) -> MeshInstance3D:
+	var item := MeshInstance3D.new()
+	item.mesh = shape
+	item.position = at
+	item.material_override = _material(color, 0.65, glow)
+	objective_node.add_child(item)
+	return item
+
+func _device_box(size: Vector3, at: Vector3, color: Color, glow: float = 0.0) -> void:
+	var shape := BoxMesh.new()
+	shape.size = size
+	_device_mesh(shape, at, color, glow)
+
+func _build_objective_device(device_kind: String) -> void:
+	# Distinct visual affordances share E interaction and never obstruct a combat lane.
+	match device_kind:
+		"cabinet":
+			_device_box(Vector3(0.9, 1.35, 0.55), Vector3(0, 0.675, 0), Color("4b656e"))
+			_device_box(Vector3(0.72, 0.82, 0.04), Vector3(0, 0.76, 0.3), Color("233845"))
+			for index in range(3):
+				_device_box(Vector3(0.13, 0.23, 0.07), Vector3(-0.23 + index * 0.23, 0.73, 0.34), Color("83d7e1"), 0.4)
+			_device_box(Vector3(0.62, 0.09, 0.05), Vector3(0, 1.22, 0.31), Color("e2c176"), 0.3)
+		"terminal":
+			_device_box(Vector3(0.68, 0.7, 0.65), Vector3(0, 0.35, 0), Color("35434c"))
+			_device_box(Vector3(1.0, 0.64, 0.12), Vector3(0, 1.04, -0.16), Color("304b58"))
+			_device_box(Vector3(0.85, 0.47, 0.025), Vector3(0, 1.05, -0.083), Color("78ccd9"), 0.6)
+			_device_box(Vector3(0.76, 0.055, 0.35), Vector3(0, 0.74, 0.14), Color("688c97"))
+		"seal":
+			var stone := CylinderMesh.new()
+			stone.top_radius = 0.72
+			stone.bottom_radius = 0.86
+			stone.height = 0.55
+			stone.radial_segments = 8
+			_device_mesh(stone, Vector3(0, 0.275, 0), Color("6e747b"))
+			var seal := TorusMesh.new()
+			seal.inner_radius = 0.35
+			seal.outer_radius = 0.43
+			seal.rings = 24
+			seal.ring_segments = 6
+			_device_mesh(seal, Vector3(0, 0.61, 0), Color("8ae4ea"), 1.2)
+			for index in range(4):
+				var angle := float(index) * PI / 2.0
+				_device_box(Vector3(0.12, 0.3, 0.12), Vector3(sin(angle) * 0.61, 0.67, cos(angle) * 0.61), Color("bcdbc9"), 0.4)
+
+func _player_can_act() -> bool:
+	if get_tree().paused or completed or not is_instance_valid(player): return false
+	if player.get("dead") == true or player.get("active") == false or player.get("health") == 0: return false
+	var game := get_tree().get_first_node_in_group("game")
+	if game and game.get("modal") is Control and game.modal.visible: return false
+	return true
+
+func request_teacher_support() -> bool:
+	if not _player_can_act() or not teacher_rescued or support_cooldown > 0.0: return false
+	support_cooldown = SUPPORT_COOLDOWN
+	teacher.show_support()
+	_play_audio("support")
+	support_center = player.global_position
+	if stage_index < 2:
+		var radius := 6.0 if stage_index == 0 else 9.0
+		for enemy in active_enemies:
+			if is_instance_valid(enemy) and not enemy.dead and enemy.global_position.distance_to(support_center) <= radius:
+				enemy.apply_teacher_support(stage_index)
+		support_time = 1.0
+		_show_support_ring(radius, Color("69ddec") if stage_index == 0 else Color("94dba8"))
+	else:
+		support_time = 6.0
+		_show_support_ring(3.4, Color("76beff"))
+	_toast("%s: %s!" % [Campaign.TEACHER_NAMES[stage_index], Campaign.SUPPORT_NAMES[stage_index]], 2.5)
+	return true
+
+func _show_support_ring(radius: float, color: Color) -> void:
+	if is_instance_valid(support_visual): support_visual.queue_free()
+	support_visual = MeshInstance3D.new()
+	var ring := TorusMesh.new()
+	ring.inner_radius = radius - 0.09
+	ring.outer_radius = radius
+	ring.rings = 48
+	ring.ring_segments = 6
+	support_visual.mesh = ring
+	support_visual.scale.y = 0.18
+	support_visual.material_override = _material(color, 0.4, 1.2)
+	add_child(support_visual)
+	support_visual.global_position = support_center + Vector3.UP * 0.08
+
+func get_support_status() -> String:
+	if not teacher_rescued: return "T • ช่วยอาจารย์ก่อน"
+	if support_cooldown > 0.0: return "T • %s (%d วิ)" % [Campaign.SUPPORT_NAMES[stage_index], ceili(support_cooldown)]
+	return "T • %s พร้อม" % Campaign.SUPPORT_NAMES[stage_index]
+
+func support_block_projectile(at: Vector3) -> bool:
+	if stage_index != 2 or support_time <= 0.0 or not _player_can_act(): return false
+	return Vector2(at.x, at.z).distance_to(Vector2(support_center.x, support_center.z)) <= 3.4 and absf(at.y - support_center.y) < 3.0
+
+func interact_objective(user: Node3D) -> bool:
+	if user != player or not _player_can_act() or not combat_cleared or objective_completed: return false
+	if not is_instance_valid(objective_node) or user.global_position.distance_to(objective_node.global_position) > 2.5: return false
+	var sight := PhysicsRayQueryParameters3D.create(user.global_position + Vector3.UP, objective_node.global_position + Vector3.UP, 1)
+	if not get_world_3d().direct_space_state.intersect_ray(sight).is_empty(): return false
+	objective_completed = true
+	room_clear[checkpoint_index] = true
+	objective_label.text = "สำเร็จ • " + OBJECTIVE_TITLES[stage_index][checkpoint_index]
+	_clear_projectiles()
+	if stage_index == 2 and checkpoint_index == 2:
+		_play_audio("seal")
+		var portal = get_meta("final_portal_visual", null)
+		if is_instance_valid(portal) and portal is Node3D: portal.hide()
+		_show_support_ring(2.5, Color("b2f2e3"))
+		support_visual.global_position = objective_node.global_position + Vector3.UP * 0.1
+		support_time = 2.0
+		_complete_stage()
+	else:
+		_open_gate(checkpoint_index)
+		_toast("ภารกิจสำเร็จ! ผ่านประตูสีเขียวไปพื้นที่ถัดไป", 3.5)
+	return true
+
+func _complete_stage() -> void:
+	if completed: return
+	completed = true
+	_clear_projectiles()
+	stage_completed.emit()
 
 func _alive_count() -> int:
 	var result := 0
@@ -206,14 +392,14 @@ func _spawn_enemy(enemy_kind: String, at: Vector3 = Vector3.INF) -> Node:
 	enemy.kind = enemy_kind
 	enemy.stage = self
 	enemy.player = player
-	enemy.arena_center = global_position + Vector3(0, 0, -checkpoint_index * 24.0)
+	enemy.arena_center = to_global(room_centers[checkpoint_index])
 	var positions := [Vector3(-3.8, 0.08, -2.5), Vector3(3.8, 0.08, -3.7), Vector3(0, 0.08, -5.0), Vector3(-2.0, 0.08, 0), Vector3(3.6, 0.08, -5.4), Vector3(-4.2, 0.08, -4.5)]
-	var spawn_at: Vector3 = positions[spawn_serial % positions.size()] + Vector3(0, 0, -checkpoint_index * 24.0)
+	var spawn_at: Vector3 = positions[spawn_serial % positions.size()] + room_centers[checkpoint_index]
 	if enemy_kind in ["programming", "ai", "web"]:
-		spawn_at = Vector3(0, 0.08, -checkpoint_index * 24.0 - 3.4)
+		spawn_at = room_centers[checkpoint_index] + Vector3(0, 0.08, -3.4)
 	if enemy_kind == "computer":
 		spawn_at.x = 4.0
-		spawn_at.z = -checkpoint_index * 24.0 - 5.8
+		spawn_at.z = room_centers[checkpoint_index].z - 5.8
 	if at != Vector3.INF:
 		spawn_at = at
 	enemy.position = spawn_at
@@ -227,15 +413,11 @@ func _spawn_enemy(enemy_kind: String, at: Vector3 = Vector3.INF) -> Node:
 	return enemy
 
 func _on_enemy_defeated(enemy: Node) -> void:
+	if completed or defeated_ids.has(enemy.get_instance_id()): return
+	defeated_ids[enemy.get_instance_id()] = true
 	total_defeated += 1
 	if enemy.kind == "server_core":
-		if is_instance_valid(boss) and not boss.dead:
-			boss.disable_shield()
-		return
-	if enemy.kind == "final_core":
-		completed = true
-		_clear_projectiles()
-		stage_completed.emit()
+		if is_instance_valid(boss) and not boss.dead: boss.disable_shield()
 		return
 	if enemy.kind == "web":
 		_clear_projectiles()
@@ -244,22 +426,26 @@ func _on_enemy_defeated(enemy: Node) -> void:
 				other.dead = true
 				other.queue_free()
 		pending_enemies.clear()
-		final_core_created = true
-		var core := _spawn_enemy("final_core", Vector3(0, 0.08, -54.5))
-		core.rotation.y = PI
-		_toast("อาจารย์ Web App แพ้แล้ว! ทำลายแกน F กลาง แล้วจบการล้างแค้น", 5.0)
+		final_core_created = true # Compatibility name now means the seal objective is available.
+	if get_remaining() > 0: return
+	if stage_index == 2 and checkpoint_index == 1 and wave_index == 1:
+		wave_index = 2
+		for enemy_kind in WEB_SECOND_WAVE: pending_enemies.append(enemy_kind)
+		next_spawn_delay = 1.1
+		_toast("ระลอกที่ 2/2 • ป้องกันอาจารย์ระหว่างเปิดเครื่องผนึก!", 4.0)
 		return
-	if get_remaining() == 0:
-		room_clear[checkpoint_index] = true
-		_open_gate(checkpoint_index)
-		_clear_projectiles()
-		if checkpoint_index == 2:
-			_toast("Generalization Failed • ประตูขึ้นชั้นถัดไปเปิดแล้ว" if stage_index == 1 else "ส่งงานผ่าน! เดินผ่านประตูไปชั้นถัดไป", 4.0)
-		else:
-			_toast("เคลียร์แล้ว! เดินผ่านประตูสีเขียว • จุดเริ่มใหม่อยู่ห้องถัดไป", 3.0)
+	combat_cleared = true
+	_clear_projectiles()
+	if not teacher_rescued:
+		teacher_rescued = true
+		teacher.set_rescued(true)
+		_toast("อาจารย์: ขอบใจ! เรื่องเกรดไว้ก่อน ช่วยมหาลัยให้รอด! • T ขอแรงอาจารย์", 5.0)
+	else:
+		_toast("พื้นที่ปลอดภัยแล้ว! ไปจุดสีฟ้าแล้วกด E • " + OBJECTIVE_TITLES[stage_index][checkpoint_index], 4.5)
+	objective_label.text = "E • " + OBJECTIVE_TITLES[stage_index][checkpoint_index]
 
 func spawn_web_core(_owner: Node) -> Node:
-	return _spawn_enemy("server_core", Vector3(-4.5, 0.08, -51.5))
+	return _spawn_enemy("server_core", room_centers[checkpoint_index] + Vector3(-4.5, 0.08, -3.5))
 
 func _clear_projectiles() -> void:
 	for projectile in get_tree().get_nodes_in_group("school_projectiles"):
@@ -309,7 +495,7 @@ func _setup_props(index: int) -> void:
 		prop.prop_kind = "chair"
 		prop.player = player
 		prop.stage = self
-		prop.position = offset + Vector3(0, 0, -index * 24.0)
+		prop.position = offset + room_centers[index]
 		prop.rotation.y = float(props.size()) * 1.2
 		checkpoint_props.add_child(prop)
 		prop.reset_physics_interpolation()
@@ -330,121 +516,7 @@ func _build_campus() -> void:
 	materials["paper"] = _material(Color("d5c6a8"), 0.9)
 	materials["code"] = _material(accent.lightened(0.18), 0.6, 0.65)
 	materials["inset"] = _material([Color("a79c84"), Color("34494f"), Color("493c50")][stage_index], 0.93)
-	for room in range(3):
-		_build_room(room)
-	_batch_region = 0
-	# The entrance closes the playable boundary, so backing out never drops into the void.
-	_box("CampusEntranceBarrier", Vector3(5.2, 3.2, 0.24), Vector3(0, 1.6, 10.0), materials["glass"], true)
-	_sign("ทางออกปิด • ต้องผ่านอาจารย์ก่อน", Vector3(0, 2.2, 9.82), 0.004, Color("f0d7aa"), Vector3(0, PI, 0))
-	for room in range(3):
-		_batch_region = room
-		var z := -float(room) * 24.0 - 12.0
-		_box("ConnectorFloor", Vector3(6.2, 0.3, 4.3), Vector3(0, -0.16, z), materials["floor"], true)
-		_box("ConnectorWallL", Vector3(0.25, 3.4, 4.0), Vector3(-3.15, 1.7, z), materials["wall"], true)
-		_box("ConnectorWallR", Vector3(0.25, 3.4, 4.0), Vector3(3.15, 1.7, z), materials["wall"], true)
-		_box("ConnectorLight", Vector3(2.8, 0.045, 0.16), Vector3(0, 3.0, z), materials["light"])
-		_sign("↑ NEXT FLOOR" if room == 2 else "↑ NEXT ROOM", Vector3(0, 0.025, z), 0.0035, accent, Vector3(-PI / 2.0, 0, 0))
-	_box("ExitFloor", Vector3(6.2, 0.3, 5), Vector3(0, -0.16, -63.5), materials["floor"], true)
-	_batch_region = 3
-	# Long exterior masses give every window a visible campus backdrop.
-	for side in [-1, 1]:
-		for block in range(6):
-			_box("CampusExterior", Vector3(5, 9, 7), Vector3(side * 18.0, 2.5, 6 - block * 13.0), materials["dark"])
-			for pane in range(3):
-				_box("ExteriorWindow", Vector3(0.05, 1.0, 1.3), Vector3(side * 15.45, 3.5, 4.5 - block * 13.0 + pane * 1.8), materials["screen"])
-
-func _build_room(index: int) -> void:
-	_batch_region = index
-	var z := -float(index) * 24.0
-	_box("RoomFloor", Vector3(18, 0.3, 20), Vector3(0, -0.16, z), materials["floor"], true)
-	_box("FloorInset", Vector3(12.8, 0.012, 14.4), Vector3(0, 0.003, z), materials["inset"])
-	# Simple tile joints are geometry, keeping this readable without large texture downloads.
-	for tile_x in range(-8, 9, 2):
-		_box("TileJoint", Vector3(0.022, 0.012, 19.7), Vector3(tile_x, 0.001, z), materials["tileline"])
-	for tile_z in range(-8, 10, 2):
-		_box("TileJoint", Vector3(17.8, 0.012, 0.022), Vector3(0, 0.001, z + tile_z), materials["tileline"])
-	for side in [-1, 1]:
-		_box("WallBase", Vector3(0.24, 0.95, 20), Vector3(side * 9.0, 0.475, z), materials["wall"], true)
-		_box("WallTop", Vector3(0.24, 0.7, 20), Vector3(side * 9.0, 3.45, z), materials["wall"], true)
-		_box("WindowGlass", Vector3(0.12, 2.15, 20), Vector3(side * 9.0, 2.02, z), materials["glass"], true)
-		for column_z in range(-9, 11, 4):
-			_box("Pillar", Vector3(0.45, 3.8, 0.45), Vector3(side * 8.9, 1.9, z + column_z), materials["wall"], true)
-		_box("WallTrim", Vector3(0.06, 0.08, 20), Vector3(side * 8.84, 0.98, z), materials["accent"])
-		_place_model("cabinet", Vector3(side * 7.65, 0, z + 8.1), Vector3.ONE * 1.15, PI / 2.0 * side)
-		if stage_index != 1:
-			_place_model("plant", Vector3(side * 7.7, 0, z - 8.3), Vector3.ONE * 1.1, 0)
-		for desk_z in [-5.5, 0.0, 5.5]:
-			_place_model("desk", Vector3(side * 7.2, 0, z + desk_z), Vector3.ONE * 1.1, PI / 2.0 * side)
-			if stage_index > 0:
-				_place_model("laptop", Vector3(side * 7.15, 0.86, z + desk_z), Vector3.ONE * 0.58, PI / 2.0 * side)
-			else:
-				_box("ExerciseBooks", Vector3(0.35, 0.08, 0.5), Vector3(side * 7.2, 0.91, z + desk_z), materials["accent"])
-	for front in [-1, 1]:
-		var wall_z: float = z + front * 10.0
-		for side in [-1, 1]:
-			_box("DoorWall", Vector3(6.4, 3.8, 0.28), Vector3(side * 5.8, 1.9, wall_z), materials["wall"], true)
-		_box("DoorLintel", Vector3(5.2, 0.65, 0.35), Vector3(0, 3.5, wall_z), materials["dark"], true)
-		_box("DoorTrim", Vector3(5.3, 0.07, 0.39), Vector3(0, 3.78 if front == 1 else 3.12, wall_z), materials["accent"])
-	for beam_z in [-6, 2, 8]:
-		_box("RoofBeam", Vector3(18, 0.25, 0.28), Vector3(0, 3.8, z + beam_z), materials["wall"])
-		_box("CeilingStrip", Vector3(4.4, 0.035, 0.19), Vector3(0, 3.65, z + beam_z), materials["light"])
-	var lamp := OmniLight3D.new()
-	lamp.position = Vector3(0, 4.6, z)
-	lamp.light_color = Color("ffdcb6") if stage_index == 0 else Color("c5e4ff") if stage_index == 1 else Color("f3c8dc")
-	lamp.light_energy = 0.35
-	lamp.omni_range = 17.0
-	lamp.shadow_enabled = false
-	add_child(lamp)
-	var short_titles := [["CHECK IN", "LAST ASSIGNMENT", "SEMICOLON"], ["DATA HALL", "TRAINING ROOM", "OVERFIT LAB"], ["REQUEST GATE", "DEMO DAY", "FINAL DEPLOY"]]
-	_sign("%02d  /  %s" % [index + 1, short_titles[stage_index][index]], Vector3(0, 3.53, z - 9.70), 0.008, Color("f8e7cc"))
-	_sign("CP410844 / GROUP 03", Vector3(5.6, 2.7, z - 9.70), 0.0042, Color("26343b"))
-	var board_text := "ATTENDANCE\nPresent: 0   Grade: F\nเช็คชื่อแล้วไม่เคยอยู่" if stage_index == 0 else "TRAINING STATUS\nAccuracy 100%\nGeneralization ???" if stage_index == 1 else "DEPLOYMENT\nGET /grades : 500\nWorks on my machine."
-	_box("NoticeBoard", Vector3(3.6, 1.8, 0.12), Vector3(-5.4, 2.0, z - 9.7), materials["dark"])
-	_sign(board_text, Vector3(-5.4, 2.0, z - 9.58), 0.006, Color("e8e7dc"))
-	_box("WallClock", Vector3(0.5, 0.5, 0.08), Vector3(5.9, 3.25, z - 9.7), materials["accent"])
-	_sign("23:59", Vector3(5.9, 3.25, z - 9.63), 0.003, Color("1a2630"))
-	if index == 2:
-		# Above the exit, never across the walking route through the doorway.
-		_box("PresentationScreen", Vector3(6.3, 1.7, 0.16), Vector3(0, 4.8, z - 9.7), materials["screen"])
-		var screen := ["SYNTAX ERROR\nmissing student;", "OVERFIT LAB\nTrain ≠ Test", "FINAL PROJECT\nWEB APPLICATION"]
-		_sign(screen[stage_index], Vector3(0, 4.8, z - 9.56), 0.009, accent)
-	_build_room_identity(index, z)
-	_create_gate(index, z - 10)
-
-func _build_room_identity(index: int, z: float) -> void:
-	# Repeated trim/details join existing static batches instead of adding draw calls.
-	for side in [-1, 1]:
-		_box("FloorBorder", Vector3(0.07, 0.014, 14.5), Vector3(side * 6.4, 0.016, z), materials["accent"])
-		if stage_index == 0:
-			_box("WoodWainscot", Vector3(0.10, 0.7, 18.5), Vector3(side * 8.82, 0.42, z), materials["wood"])
-			for slat in range(9):
-				_box("LectureSlat", Vector3(0.12, 0.8, 0.045), Vector3(side * 8.73, 0.43, z - 8 + slat * 2), materials["trim"])
-			_box("PinBoard", Vector3(2.3, 1.7, 0.12), Vector3(side * 5.55, 1.75, z + 9.65), materials["wood"])
-			for paper_index in range(3):
-				_box("PinnedPaper", Vector3(0.52, 0.88, 0.015), Vector3(side * 5.55 - 0.72 + paper_index * 0.72, 1.76, z + 9.56), materials["paper"])
-		elif stage_index == 1:
-			_box("ServerRack", Vector3(1.15, 2.8, 1.0), Vector3(side * 7.65, 1.4, z - 8.35), materials["dark"], true)
-			for unit in range(6):
-				_box("ServerUnit", Vector3(0.94, 0.24, 0.055), Vector3(side * 7.65, 0.40 + unit * 0.38, z - 7.81), materials["trim"])
-				_box("ServerLED", Vector3(0.21, 0.06, 0.02), Vector3(side * 7.9, 0.40 + unit * 0.38, z - 7.77), materials["code"])
-			_box("LabFascia", Vector3(0.11, 0.48, 18.5), Vector3(side * 8.80, 2.97, z), materials["dark"])
-			_box("LabTrace", Vector3(0.12, 0.035, 17.5), Vector3(side * 8.72, 2.99, z), materials["code"])
-		else:
-			_box("ShowcaseFascia", Vector3(0.14, 1.0, 18.5), Vector3(side * 8.79, 2.92, z), materials["dark"])
-			for band in [-1, 1]:
-				_box("ShowcaseTrace", Vector3(0.17, 0.04, 18.5), Vector3(side * 8.70, 2.92 + band * 0.4, z), materials["code"])
-			_box("PortalPost", Vector3(0.35, 3.0, 0.48), Vector3(side * 2.92, 1.5, z - 9.65), materials["dark"])
-			_box("PortalEdge", Vector3(0.06, 2.9, 0.025), Vector3(side * 2.73, 1.5, z - 9.38), materials["code"])
-			_box("ExhibitPanel", Vector3(2.15, 1.4, 0.10), Vector3(side * 5.65, 1.7, z + 9.65), materials["screen"])
-			for line in range(4):
-				_box("CodeLine", Vector3(0.5 + line * 0.23, 0.075, 0.015), Vector3(side * 5.65, 2.05 - line * 0.22, z + 9.58), materials["code"])
-	# A large restrained room numeral supplies orientation without more UI clutter.
-	_sign("%02d" % (index + 1), Vector3(-4.7, 0.034, z + 4.8), 0.048, accent, Vector3(-PI / 2.0, 0, 0))
-	if stage_index == 1:
-		_sign("GPU 01", Vector3(7.65, 2.56, z - 7.76), 0.005, accent)
-		_sign("GPU 02", Vector3(-7.65, 2.56, z - 7.76), 0.005, accent)
-	if stage_index == 2:
-		_sign("DEMO\nDAY", Vector3(5.6, 1.75, z - 9.66), 0.010, accent)
+	CampusEnvironmentBuilder.build(self)
 
 func _create_gate(index: int, z: float) -> void:
 	var gate := Node3D.new()
@@ -472,7 +544,7 @@ func _create_gate(index: int, z: float) -> void:
 	mesh.multimesh = bars
 	mesh.material_override = materials["gate"]
 	gate.add_child(mesh)
-	var sign_label := _sign("LOCKED • กำจัดศัตรูก่อน", Vector3(0, 2.82, z + 0.17), 0.004, Color("ffb5b5"))
+	var sign_label := _sign("LOCKED • ทำภารกิจให้สำเร็จ", Vector3(0, 2.82, z + 0.17), 0.004, Color("ffb5b5"))
 	exit_labels.append(sign_label)
 	gates.append(gate)
 	gate_tweens.append(null)
@@ -498,11 +570,11 @@ func _close_gate(index: int) -> void:
 	gates[index].position.y = 0
 	gates[index].reset_physics_interpolation()
 	gate_colliders[index].set_deferred("disabled", false)
-	exit_labels[index].text = "LOCKED • กำจัดศัตรูก่อน"
+	exit_labels[index].text = "LOCKED • ทำภารกิจให้สำเร็จ"
 	exit_labels[index].modulate = Color("ffb5b5")
 
 func _box(node_name: String, size: Vector3, at: Vector3, material: Material, collision: bool = false) -> void:
-	var shadow := node_name in ["WallBase", "WallTop", "DoorWall", "DoorLintel", "Pillar", "RoofBeam", "ServerRack", "CampusExterior"]
+	var shadow := node_name in ["WallBase", "WallTop", "DoorWall", "DoorLintel", "Pillar", "RoofBeam", "ServerRack", "CampusExterior", "RoofSlab", "CeilingPanel", "ArchWall", "CampusMonument", "PortalDais", "Rubble", "AuditoriumStage"]
 	_batch_instance(_unit_cube, Transform3D(Basis.IDENTITY.scaled(size), at), material, shadow)
 	if collision:
 		var body := StaticBody3D.new()
@@ -611,3 +683,7 @@ func _toast(message: String, duration: float = 2.0) -> void:
 	var game := get_tree().get_first_node_in_group("game")
 	if game != null and game.has_method("notify"):
 		game.notify(message, duration)
+
+func _play_audio(effect: String) -> void:
+	var audio := get_tree().get_first_node_in_group("game_audio")
+	if audio and audio.has_method("play_effect"): audio.play_effect(effect)

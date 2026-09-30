@@ -1,0 +1,6 @@
+Poly Haven textures: Concrete Floor by eye-candy.xyz and Painted Plaster Wall by Amal Kumar.
+License: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+https://polyhaven.com/license
+Verified 2026-10-01: all Poly Haven assets are CC0; use, modification, commercial use, and redistribution are permitted; attribution is not required. Website preview images and other website content are not included.
+Exact source/download URLs and SHA-256 values: Assets/Textures/texture_receipt.json

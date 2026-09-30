@@ -1,0 +1,250 @@
+{
+  "engine": {
+    "build": "official",
+    "hash": "ed1daf0bf001b61586d9930840f2f1394092c079",
+    "hex": 263938,
+    "major": 4,
+    "minor": 7,
+    "patch": 2,
+    "status": "stable",
+    "string": "4.7.2-stable (official)",
+    "timestamp": 0
+  },
+  "samples": [
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "student",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "teacher_programming",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "teacher_ai",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "teacher_web",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_imp",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_brute",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_caster",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_warden",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_mirror",
+      "time": 0.39913
+    },
+    {
+      "clip": "Idle",
+      "hand_tip_motion_m": 0.0240306761115789,
+      "model": "demon_archon",
+      "time": 0.39913
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "student",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "teacher_programming",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "teacher_ai",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "teacher_web",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_imp",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_brute",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_caster",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_warden",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_mirror",
+      "time": 0.301549
+    },
+    {
+      "clip": "Run",
+      "hand_tip_motion_m": 0.624513030052185,
+      "model": "demon_archon",
+      "time": 0.301549
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "student",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "teacher_programming",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "teacher_ai",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "teacher_web",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_imp",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_brute",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_caster",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_warden",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_mirror",
+      "time": 0.30637
+    },
+    {
+      "clip": "Hook",
+      "hand_tip_motion_m": 1.48513722419739,
+      "model": "demon_archon",
+      "time": 0.30637
+    }
+  ],
+  "scope": "Actual Compatibility rendered viewport, imported final GLBs, animation playback sampled at two wall-clock times; not full game behavior or browser performance.",
+  "status": "PASS",
+  "source_checks": [
+    {
+      "model": "demon_archon",
+      "sha256": "3fa2d9a4e13823565f7c41e6b5ea40da101108dec85f4bd0367e8e6208411d08",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "demon_brute",
+      "sha256": "f8fd687ffdfa1470324cda755851dea3d2cb56b6fd93067dd7f431c285ba5829",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "demon_caster",
+      "sha256": "6dc84cc613af9ed9ae6bfdf034535bf8067252a6e0e8120bd5902f57cbf99493",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "demon_imp",
+      "sha256": "beec27ce97bce5262ffa925895f4143028227a3eb1247f7b7633adb005893c1c",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "demon_mirror",
+      "sha256": "4b4761049004857b3c6816f76fa2fe38c7c221e7bc32a3e11b7ed34fb39af9df",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "demon_warden",
+      "sha256": "7f8300a3b794be39b64a7882c88e046005f0ae5092e80108b2629d4f811cf578",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "student",
+      "sha256": "2d58a013f884459e7c2518508e98d3752512cfd62d5f1fe96a1645f62806d7e4",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "teacher_ai",
+      "sha256": "3437f84523a94a5920cb01e427d5eaf8cf1333999a77a7647c941c65e0885a07",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "teacher_programming",
+      "sha256": "7135315e99929a146d7c85c302ef70e8c2f61732fcde4cc39d3c31b04d712506",
+      "source_md5_matches_import": true
+    },
+    {
+      "model": "teacher_web",
+      "sha256": "a96b24fced9d258e9b52c79f93379049644afa6c91702fea8ae06f8ab27e958f",
+      "source_md5_matches_import": true
+    }
+  ],
+  "visual_review": "Inspected final imported Idle/Run/Hook screenshots after a fresh editor import. Models visibly use continuous bodies, connected joints and original role accessories. Animation samples advance for all 10 models. This is a rendered model fixture, not a browser FPS test."
+}

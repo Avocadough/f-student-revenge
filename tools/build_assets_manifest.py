@@ -1,6 +1,10 @@
 from pathlib import Path
 import json,struct,hashlib,shutil
 ROOT=Path(__file__).resolve().parents[1]
+if (ROOT/'.work/assets/campus_character_receipt.json').exists():
+ import runpy
+ runpy.run_path(str(ROOT/'tools/verify_campus_assets.py'),run_name='__main__')
+ raise SystemExit(0)
 WORK=ROOT/'.work/assets';ASSET=ROOT/'Assets'
 licenses=ASSET/'Licenses';licenses.mkdir(exist_ok=True,parents=True)
 sources=[

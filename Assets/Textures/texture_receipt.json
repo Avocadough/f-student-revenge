@@ -1,0 +1,77 @@
+{
+  "download_date": "2026-10-01",
+  "assets": [
+    {
+      "path": "Assets/Textures/concrete_floor_diff.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_diff_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "5e06d0fb226f671470f59bf7798954b6965c9ed56dd45084dfd012e15737e444",
+      "bytes": 927975,
+      "resolution": "1K",
+      "channel": "diff"
+    },
+    {
+      "path": "Assets/Textures/concrete_floor_normal.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_nor_gl_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "5a403c176361193b785198ab363d3dc3755773ca5b023f19e05874e50caea302",
+      "bytes": 883889,
+      "resolution": "1K",
+      "channel": "nor_gl"
+    },
+    {
+      "path": "Assets/Textures/concrete_floor_rough.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_rough_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "342110e685c07af2c56194662a796b2ab4f2a4d992a9745b8fc55943414faead",
+      "bytes": 503981,
+      "resolution": "1K",
+      "channel": "rough"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_diff.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_diff_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "440310f05af089f2c93353167573403cbc3f805948203237b5d26431eeb9e19c",
+      "bytes": 686726,
+      "resolution": "1K",
+      "channel": "diff"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_normal.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_nor_gl_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "8eb01647d126eb5341e2c325821ad48c8ca11349dbef53447c95422c5d91cc9d",
+      "bytes": 900461,
+      "resolution": "1K",
+      "channel": "nor_gl"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_rough.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_rough_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "e0564c297b22ab1cf4ef02a82157b84ce3b92eb4fd49d9c64b7256a8b300af82",
+      "bytes": 354762,
+      "resolution": "1K",
+      "channel": "rough"
+    }
+  ]
+}

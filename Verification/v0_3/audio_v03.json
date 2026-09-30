@@ -1,0 +1,51 @@
+{
+	"checks": [
+		{
+			"case": "Loads original warning cue",
+			"passed": true
+		},
+		{
+			"case": "Loads original support cue",
+			"passed": true
+		},
+		{
+			"case": "Loads original seal cue",
+			"passed": true
+		},
+		{
+			"case": "Ambience loads as a looping OGG",
+			"passed": true
+		},
+		{
+			"case": "Combat starts ambience",
+			"passed": true
+		},
+		{
+			"case": "Warnings/dialogue duck ambience by at least five decibels",
+			"passed": true
+		},
+		{
+			"case": "Pause suspends ambience",
+			"passed": true
+		},
+		{
+			"case": "Resume restores ambience",
+			"passed": true
+		},
+		{
+			"case": "Repeated support cues keep the bounded eight-voice pool",
+			"passed": true
+		},
+		{
+			"case": "Menu boundary stops the ambient stream",
+			"passed": true
+		},
+		{
+			"case": "Seal finishes once across ending pause, obeys mute, stops naturally, and other combat sounds stop",
+			"passed": true
+		}
+	],
+	"failures": [],
+	"passed": true,
+	"scope": "Automated sound loading, ducking and lifecycle checks; no subjective listening assessment."
+}

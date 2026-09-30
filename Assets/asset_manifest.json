@@ -14,7 +14,8 @@
       "license_file": "License_Standard.txt",
       "used": "Superhero Male head, eyes, eyebrows, SimpleParted hairstyle",
       "sha256_archive": "fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40",
-      "license_local": "Assets/Licenses/quaternius_base.txt"
+      "license_local": "Assets/Licenses/quaternius_base.txt",
+      "used_in_campus_remake": "Full continuous Superhero Male mesh adapted at mesh bind pose to the existing outfit rig; eyes, eyebrows and hairstyle retained where used."
     },
     {
       "id": "quaternius_outfits",
@@ -27,7 +28,8 @@
       "license_file": "License_Standard.txt",
       "used": "Male Peasant body, arms, legs and boots; shared humanoid rig",
       "sha256_archive": "c3468b18871cc8c8f05ab14df7712baf22cb9f389cbd870babf130e595187f70",
-      "license_local": "Assets/Licenses/quaternius_outfits.txt"
+      "license_local": "Assets/Licenses/quaternius_outfits.txt",
+      "used_in_campus_remake": "Existing campus skeleton and bind pose only. Old fantasy clothing mesh is replaced in the current ten characters."
     },
     {
       "id": "quaternius_ual1",
@@ -207,9 +209,9 @@
     {
       "path": "Assets/Models/student.glb",
       "source_blend": "Art/student.blend",
-      "bytes": 2158568,
-      "sha256": "4d1243eb6caaac6f8346e4d83394cbb07fef6c6b71cae86ef311aaa132f3c911",
-      "mesh_count": 22,
+      "bytes": 1987464,
+      "sha256": "2d58a013f884459e7c2518508e98d3752512cfd62d5f1fe96a1645f62806d7e4",
+      "mesh_count": 1,
       "clips": [
         "Cross",
         "Death",
@@ -236,7 +238,10 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
+      "modifications": "Continuous CC0 full body adapted to the existing rig bind pose using skin weights. Smoothed campus cloth, ordinary trousers/shoes and distinct faculty build/hair/accessories replace fantasy silhouette; consolidated <=6 materials. Existing skeleton and all 18 actions retained.",
+      "surfaces": 6,
+      "triangles": 18007,
+      "updated_date": "2026-10-01"
     },
     {
       "path": "Assets/Models/tablet.glb",
@@ -253,9 +258,9 @@
     {
       "path": "Assets/Models/teacher_ai.glb",
       "source_blend": "Art/teacher_ai.blend",
-      "bytes": 2167452,
-      "sha256": "74485a68f4113bd689b5c26394cb7aa99da654fd9117bfe5d177959f95307d03",
-      "mesh_count": 25,
+      "bytes": 1998116,
+      "sha256": "3437f84523a94a5920cb01e427d5eaf8cf1333999a77a7647c941c65e0885a07",
+      "mesh_count": 1,
       "clips": [
         "Cross",
         "Death",
@@ -282,14 +287,17 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
+      "modifications": "Continuous CC0 full body adapted to the existing rig bind pose using skin weights. Smoothed campus cloth, ordinary trousers/shoes and distinct faculty build/hair/accessories replace fantasy silhouette; consolidated <=6 materials. Existing skeleton and all 18 actions retained.",
+      "surfaces": 6,
+      "triangles": 18183,
+      "updated_date": "2026-10-01"
     },
     {
       "path": "Assets/Models/teacher_programming.glb",
       "source_blend": "Art/teacher_programming.blend",
-      "bytes": 2167444,
-      "sha256": "12716137b0e87d855a332dbeea5df0bacf95d37225712921d91be29f65cc65bb",
-      "mesh_count": 25,
+      "bytes": 1985372,
+      "sha256": "7135315e99929a146d7c85c302ef70e8c2f61732fcde4cc39d3c31b04d712506",
+      "mesh_count": 1,
       "clips": [
         "Cross",
         "Death",
@@ -316,14 +324,17 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
+      "modifications": "Continuous CC0 full body adapted to the existing rig bind pose using skin weights. Smoothed campus cloth, ordinary trousers/shoes and distinct faculty build/hair/accessories replace fantasy silhouette; consolidated <=6 materials. Existing skeleton and all 18 actions retained.",
+      "surfaces": 6,
+      "triangles": 17877,
+      "updated_date": "2026-10-01"
     },
     {
       "path": "Assets/Models/teacher_web.glb",
       "source_blend": "Art/teacher_web.blend",
-      "bytes": 2167456,
-      "sha256": "2dee54145a4bd164259de751569470e94ceb69f6d1c69ccaaa5eea2c0f81966b",
-      "mesh_count": 25,
+      "bytes": 2012352,
+      "sha256": "a96b24fced9d258e9b52c79f93379049644afa6c91702fea8ae06f8ab27e958f",
+      "mesh_count": 1,
       "clips": [
         "Cross",
         "Death",
@@ -350,13 +361,313 @@
         "quaternius_ual1",
         "quaternius_ual2"
       ],
-      "modifications": "Cut/combined downloaded head and clothing, straightened shirt hem, assigned campus fabric/skin materials, added shirt collar/buttons/pocket/ID lanyard, rigged hairstyle, lecturer glasses, reduced unused data, authored Guard/Parry/Kick/Sweep/Dodge clips, unified engine orientation. One symmetric three-sample smoothing pass on Run (cyclic, exact loop seam) and Hook upper body only; original clip lengths and Hook impact phase retained. Hook pelvis and legs are unchanged."
+      "modifications": "Continuous CC0 full body adapted to the existing rig bind pose using skin weights. Smoothed campus cloth, ordinary trousers/shoes and distinct faculty build/hair/accessories replace fantasy silhouette; consolidated <=6 materials. Existing skeleton and all 18 actions retained.",
+      "surfaces": 6,
+      "triangles": 18439,
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_imp.glb",
+      "source_blend": "Art/demon_imp.blend",
+      "bytes": 1659676,
+      "sha256": "beec27ce97bce5262ffa925895f4143028227a3eb1247f7b7633adb005893c1c",
+      "mesh_count": 1,
+      "surfaces": 4,
+      "triangles": 14741,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_imp deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_brute.glb",
+      "source_blend": "Art/demon_brute.blend",
+      "bytes": 1713812,
+      "sha256": "f8fd687ffdfa1470324cda755851dea3d2cb56b6fd93067dd7f431c285ba5829",
+      "mesh_count": 1,
+      "surfaces": 5,
+      "triangles": 15869,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_brute deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_caster.glb",
+      "source_blend": "Art/demon_caster.blend",
+      "bytes": 1721820,
+      "sha256": "6dc84cc613af9ed9ae6bfdf034535bf8067252a6e0e8120bd5902f57cbf99493",
+      "mesh_count": 1,
+      "surfaces": 5,
+      "triangles": 15813,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_caster deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_warden.glb",
+      "source_blend": "Art/demon_warden.blend",
+      "bytes": 1718536,
+      "sha256": "7f8300a3b794be39b64a7882c88e046005f0ae5092e80108b2629d4f811cf578",
+      "mesh_count": 1,
+      "surfaces": 5,
+      "triangles": 15969,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_warden deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_mirror.glb",
+      "source_blend": "Art/demon_mirror.blend",
+      "bytes": 1667996,
+      "sha256": "4b4761049004857b3c6816f76fa2fe38c7c221e7bc32a3e11b7ed34fb39af9df",
+      "mesh_count": 1,
+      "surfaces": 4,
+      "triangles": 14893,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_mirror deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
+    },
+    {
+      "path": "Assets/Models/demon_archon.glb",
+      "source_blend": "Art/demon_archon.blend",
+      "bytes": 1740812,
+      "sha256": "3fa2d9a4e13823565f7c41e6b5ea40da101108dec85f4bd0367e8e6208411d08",
+      "mesh_count": 1,
+      "surfaces": 5,
+      "triangles": 16497,
+      "clips": [
+        "Cross",
+        "Death",
+        "Dodge",
+        "FoldArms",
+        "Guard",
+        "Hit",
+        "Hook",
+        "Idle",
+        "Jab",
+        "Kick",
+        "Knockback",
+        "Parry",
+        "Roll",
+        "Run",
+        "Sprint",
+        "Sweep",
+        "Throw",
+        "Walk"
+      ],
+      "sources": [
+        "quaternius_base",
+        "quaternius_outfits",
+        "quaternius_ual1",
+        "quaternius_ual2"
+      ],
+      "modifications": "Continuous CC0 full-body foundation fitted to existing rig rest pose; project-authored demon_archon deformation, mottled hide, angular skull, swept horns, claws, scars and role-specific armour/crystals/crown. Existing 18 actions unchanged; no new external monster source.",
+      "updated_date": "2026-10-01"
     }
   ],
   "limitations": [
-    "Stylized humanoids adapted from free Peasant clothing: combat trousers/boots retained rather than photorealistic uniforms.",
     "ScreenLoop is original animated graphic content, not copied social-media or tutorial videos.",
     "Poly Pizza pages were inspected but CDN download timed out; no Poly Pizza assets are included or credited as used.",
-    "Free Standard tiers only. No paid or Source tiers downloaded."
+    "Free Standard tiers only. No paid or Source tiers downloaded.",
+    "Campus remake uses deliberately modest real-time humanoid meshes, not photoreal scans. Demon accessories and garments are newly authored on the existing licensed rig."
+  ],
+  "updated_date": "2026-10-01",
+  "textures": [
+    {
+      "path": "Assets/Textures/concrete_floor_diff.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_diff_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "5e06d0fb226f671470f59bf7798954b6965c9ed56dd45084dfd012e15737e444",
+      "bytes": 927975,
+      "resolution": "1K",
+      "channel": "diff"
+    },
+    {
+      "path": "Assets/Textures/concrete_floor_normal.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_nor_gl_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "5a403c176361193b785198ab363d3dc3755773ca5b023f19e05874e50caea302",
+      "bytes": 883889,
+      "resolution": "1K",
+      "channel": "nor_gl"
+    },
+    {
+      "path": "Assets/Textures/concrete_floor_rough.jpg",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/concrete_floor",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/concrete_floor/concrete_floor_rough_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "342110e685c07af2c56194662a796b2ab4f2a4d992a9745b8fc55943414faead",
+      "bytes": 503981,
+      "resolution": "1K",
+      "channel": "rough"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_diff.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_diff_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "440310f05af089f2c93353167573403cbc3f805948203237b5d26431eeb9e19c",
+      "bytes": 686726,
+      "resolution": "1K",
+      "channel": "diff"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_normal.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_nor_gl_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "8eb01647d126eb5341e2c325821ad48c8ca11349dbef53447c95422c5d91cc9d",
+      "bytes": 900461,
+      "resolution": "1K",
+      "channel": "nor_gl"
+    },
+    {
+      "path": "Assets/Textures/painted_plaster_wall_rough.jpg",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/painted_plaster_wall",
+      "download_url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/painted_plaster_wall/painted_plaster_wall_rough_1k.jpg",
+      "license": "CC0-1.0",
+      "license_url": "https://polyhaven.com/license",
+      "sha256": "e0564c297b22ab1cf4ef02a82157b84ce3b92eb4fd49d9c64b7256a8b300af82",
+      "bytes": 354762,
+      "resolution": "1K",
+      "channel": "rough"
+    }
   ]
 }

@@ -56,7 +56,15 @@ func _physics_process(delta: float) -> void:
 	var segment := next - prior
 	var target_fraction := segment_hit_fraction(prior, next, target_center, 0.61)
 	var obstacle_fraction: float = INF if obstacle.is_empty() else prior.distance_to(obstacle.position) / maxf(segment.length(), 0.0001)
+	# A teacher firewall catches hostile shots only; melee and world collisions retain their rules.
+	var stage := get_parent()
+	if stage and stage.has_method("support_block_projectile") and stage.support_block_projectile(next):
+		queue_free()
+		return
 	if target_fraction <= 1.0 and target_fraction < obstacle_fraction:
+		if stage and stage.has_method("support_block_projectile") and stage.support_block_projectile(prior + segment * target_fraction):
+			queue_free()
+			return
 		if target.has_method("receive_hit"):
 			var outcome: String = target.receive_hit(damage, structure, source_position, false)
 			if outcome == "parried" and is_instance_valid(attacker) and not attacker.dead:

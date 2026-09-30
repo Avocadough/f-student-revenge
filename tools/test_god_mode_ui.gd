@@ -16,12 +16,12 @@ func check(ok: bool, label: String) -> void:
 		print("FAIL: ", label)
 
 func read_save() -> Dictionary:
-	var file := FileAccess.open("user://progress.json", FileAccess.READ)
+	var file := FileAccess.open("user://progress_v2.json", FileAccess.READ)
 	return JSON.parse_string(file.get_as_text()) if file else {}
 
 func write_fixture(god_value: Variant) -> void:
-	var file := FileAccess.open("user://progress.json", FileAccess.WRITE)
-	file.store_string(JSON.stringify({"version": 1, "progress": {"stage": 1, "checkpoint": 1, "complete": false}, "settings": {"god_mode": god_value}}))
+	var file := FileAccess.open("user://progress_v2.json", FileAccess.WRITE)
+	file.store_string(JSON.stringify({"version": 2, "progress": {"stage": 1, "checkpoint": 1, "complete": false}, "settings": {"god_mode": god_value}}))
 	file.close()
 
 func press_modal(fragment: String) -> bool:

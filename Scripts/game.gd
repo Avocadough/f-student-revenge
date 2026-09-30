@@ -5,8 +5,11 @@ extends Node3D
 const Player = preload("res://Scripts/student_player.gd")
 const Stage = preload("res://Scripts/campus_stage.gd")
 const GameAudio = preload("res://Scripts/game_audio.gd")
+const Campaign = preload("res://Scripts/campaign_data.gd")
 const FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
-const STAGE_NAMES := ["เช็คชื่อครั้งสุดท้าย", "ห้องแล็บที่รู้ทันทุกอย่าง", "Final Deployment"]
+const STAGE_NAMES := Campaign.STAGE_NAMES
+const SAVE_PATH := "user://progress_v2.json"
+const LEGACY_SAVE_PATH := "user://progress.json"
 const STAGE_SUBTITLES := ["01 / PROGRAMMING", "02 / ARTIFICIAL INTELLIGENCE", "03 / WEB APPLICATION"]
 const INK := Color("151b24")
 const CREAM := Color("f3ecda")
@@ -66,6 +69,9 @@ var stats_panel: PanelContainer
 var _hud_tick: float = 0.0
 var _modal_return_focus: Control
 var _run_id: int = 0
+var menu_cover: TextureRect
+var support_label: Label
+var legacy_progress_found := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -78,13 +84,15 @@ func _ready() -> void:
 	add_child(audio)
 	_apply_settings()
 	_show_main_menu()
+	if legacy_progress_found:
+		notify("พบเซฟเรื่องเดิม • เก็บไฟล์เดิมไว้และย้ายค่าตั้งค่าแล้ว เริ่มเรื่องใหม่เพื่อกู้มหาลัย", 8.0)
 
 func _setup_inputs() -> void:
 	var bindings := {
 		"move_forward": [KEY_W, KEY_UP], "move_back": [KEY_S, KEY_DOWN],
 		"move_left": [KEY_A, KEY_LEFT], "move_right": [KEY_D, KEY_RIGHT],
 		"light_attack": [KEY_J], "heavy_attack": [KEY_K], "guard": [KEY_SHIFT],
-		"dodge": [KEY_SPACE], "focus_attack": [KEY_Q], "interact": [KEY_E], "recenter": [KEY_R]
+		"dodge": [KEY_SPACE], "focus_attack": [KEY_Q], "interact": [KEY_E], "recenter": [KEY_R], "teacher_support": [KEY_T]
 	}
 	for action: String in bindings:
 		if not InputMap.has_action(action): InputMap.add_action(action)
@@ -101,17 +109,20 @@ func _build_world() -> void:
 	environment = WorldEnvironment.new()
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
-	env.background_color = Color("697b88")
+	env.background_color = Color("172129")
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color("c8d5df")
-	env.ambient_light_energy = 0.32
+	env.ambient_light_color = Color("859da3")
+	env.ambient_light_energy = 0.46
+	env.fog_enabled = true
+	env.fog_light_color = Color("253340")
+	env.fog_density = 0.004
 	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
 	environment.environment = env
 	add_child(environment)
 	sun = DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-58, -25, 0)
-	sun.light_color = Color("ffdfb6")
-	sun.light_energy = 0.5
+	sun.rotation_degrees = Vector3(-52, -30, 0)
+	sun.light_color = Color("b6cbd7")
+	sun.light_energy = 0.55
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 45.0
 	add_child(sun)
@@ -141,7 +152,7 @@ func _build_world() -> void:
 		for x in [-0.58, 0.58]:
 			_menu_box(pos + Vector3(x, 0.37, 0), Vector3(0.07, 0.74, 0.68), Color("42514d"))
 	_menu_box(Vector3(6.85, 1.5, -4.74), Vector3(0.95, 1.25, 0.05), CREAM)
-	_menu_sign("งดส่งงานย้อนหลัง\nยกเว้นหมัด", Vector3(6.85, 1.53, -4.69), 29, 0.004, INK)
+	_menu_sign("รับงานชดเชย\nภารกิจกู้มหาลัย", Vector3(6.85, 1.53, -4.69), 29, 0.004, INK)
 	_menu_sign("DEPARTMENT OF\nSECOND CHANCES", Vector3(-2.7, 2.7, -4.68), 34, 0.006, Color("3c544f"))
 	var board := Label3D.new()
 	board.font = FONT
@@ -274,6 +285,13 @@ func _build_ui() -> void:
 	theme.default_font_size = 18
 	ui.theme = theme
 	canvas.add_child(ui)
+	menu_cover = TextureRect.new()
+	menu_cover.texture = load("res://Assets/Images/campus_invasion_cover.png")
+	menu_cover.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	menu_cover.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	menu_cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui.add_child(menu_cover)
 	menu_backdrop = ColorRect.new()
 	menu_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -298,7 +316,7 @@ func _build_ui() -> void:
 	menu_title = _label("การล้างแค้น\nของนักศึกษาติด F", 37)
 	menu_title.add_theme_constant_override("line_spacing", -2)
 	menu_stack.add_child(menu_title)
-	var subtitle := _label("เกรดไม่ผ่าน แต่หมัดผ่านทุกวิชา\nสามด่าน · สามอาจารย์ · หนึ่งวันล้างแค้น", 16, Color("b6c5bd"))
+	var subtitle := _label("วันประกาศเกรด กลายเป็นวันปีศาจบุก\nสามอาจารย์ร่วมสู้ · หนึ่งโอกาสแก้ F", 16, Color("b6c5bd"))
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	menu_stack.add_child(subtitle)
 	var divider := HSeparator.new()
@@ -320,8 +338,8 @@ func _build_ui() -> void:
 	menu_dossier.add_child(dossier_stack)
 	dossier_stack.add_child(_label("ACADEMIC RECORD  /  000-F", 11, Color("5e756b")))
 	dossier_stack.add_child(_label("เข้าเรียน 0 / 15   ส่งงาน 0 / 8", 16, INK))
-	dossier_stack.add_child(_label("คำร้องขอแก้เกรด: ใช้กำปั้น", 17, Color("93452f")))
-	dossier_stack.add_child(_label("สถานะ  •  พร้อมกลับเข้าตึก", 12, Color("5e756b")))
+	dossier_stack.add_child(_label("งานชดเชย: กู้มหาวิทยาลัย", 17, Color("93452f")))
+	dossier_stack.add_child(_label("สถานะ  •  ร่วมมือกับอาจารย์", 12, Color("5e756b")))
 	_build_hud()
 	modal_scrim = ColorRect.new()
 	modal_scrim.color = Color("061011b3")
@@ -366,6 +384,9 @@ func _build_hud() -> void:
 	posture_bar = _bar(stack, Color("e4b75f"), 5)
 	stack.add_child(_label("สมาธิ   /   Q ใช้ 50", 12, MINT))
 	focus_bar = _bar(stack, MINT, 5)
+	support_label = _label("", 13, MINT)
+	support_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	stack.add_child(support_label)
 	objective_label = _label("", 17)
 	objective_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -397,7 +418,7 @@ func _build_hud() -> void:
 	hud_root.add_child(timer_label)
 	timer_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	timer_label.position = Vector2(28, -92)
-	control_hint = _label("WASD เดิน   /   L · H โจมตี   /   Shift การ์ด   /   Space หลบ   /   Q พิเศษ   /   E ใช้   /   Esc พัก", 14)
+	control_hint = _label("WASD เดิน  /  L · H โจมตี  /  Shift การ์ด  /  Space หลบ  /  Q พิเศษ  /  E ใช้  /  T อาจารย์ช่วย  /  Esc พัก", 14)
 	control_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	control_hint.add_theme_stylebox_override("normal", panel_style(Color("102125cf"), Color.TRANSPARENT, 8))
 	hud_root.add_child(control_hint)
@@ -444,7 +465,7 @@ func _layout_ui() -> void:
 	menu_dossier.size = Vector2(318, 122)
 	menu_dossier.visible = main_menu.visible and viewport_size.x >= 1050 and viewport_size.y >= 600
 	stats_panel.position = Vector2(margin, margin)
-	stats_panel.size = Vector2(254, 138)
+	stats_panel.size = Vector2(254, 168)
 	objective_label.offset_left = -minf(300, viewport_size.x * 0.32) - margin
 	objective_label.offset_right = -margin
 	objective_label.offset_top = margin
@@ -454,7 +475,7 @@ func _layout_ui() -> void:
 	boss_panel.offset_right = boss_width / 2
 	boss_panel.offset_top = margin if viewport_size.x >= 1120 else 183.0
 	boss_panel.offset_bottom = boss_panel.offset_top + 90
-	combo_label.position = Vector2(margin + 4, 188)
+	combo_label.position = Vector2(margin + 4, 220)
 	timer_label.offset_left = margin
 	timer_label.offset_top = -99
 	control_hint.offset_left = margin
@@ -544,6 +565,7 @@ func _show_main_menu() -> void:
 	menu_camera.current = true
 	main_menu.show()
 	menu_backdrop.show()
+	menu_cover.show()
 	continue_button.disabled = save_data.is_empty()
 	continue_button.text = "02   ยังไม่มีจุดบันทึก" if save_data.is_empty() else "02   เล่นต่อจากจุดล่าสุด"
 	modal.hide()
@@ -567,7 +589,7 @@ func _new_game() -> void:
 func _show_intro() -> void:
 	main_menu.hide()
 	menu_dossier.hide()
-	show_modal("ผลการเรียนออกแล้ว", "เข้าเรียน 0 / 15     ส่งงาน 0 / 8\nเกรดที่ได้รับ: F\n\nคุณเป็นนักศึกษาที่ชอบโดดเรียน\nแต่วันนี้คุณมีเหตุผลที่จะกลับเข้าตึก\n\nผ่านอาจารย์ทั้งสาม ไปหาอาจารย์ Web App\nและทำลายระบบ F กลางให้ได้", [{"text": "ถึงเวลาเข้าเรียน…ด้วยหมัด", "callback": func() -> void:
+	show_modal("ผลการเรียนออกแล้ว… ปีศาจก็มาด้วย", Campaign.INTRO_TEXT, [{"text": "ถึงเวลาเข้าเรียน…ภาคสนาม", "callback": func() -> void:
 		save_data.clear()
 		elapsed = 0.0
 		deaths = 0
@@ -588,7 +610,7 @@ func _show_stage_select() -> void:
 	show_modal("เลือกด่านสำหรับเดโม", "เปิดให้ลองครบทั้งสามด่าน\nคอมโบทั้งหมดใช้ได้ตั้งแต่เริ่ม", actions)
 
 func _show_help() -> void:
-	show_modal("วิธีเล่น", "WASD เดิน · เมาส์หมุนกล้อง · R หันกล้องกลับ\nคลิกซ้าย (L) / J = หมัดเบา\nคลิกขวา (H) / K = โจมตีหนัก\n\nL L L   แย็บ / หมัดตรง / ฮุก\nL L H   จบด้วยถีบ ผลักชนฉาก\nL H L   เตะกวาด แล้วต่อหมัด\n\nShift ค้าง = การ์ด · กดก่อนโดน = ปัดป้อง\nSpace + ทิศทาง = หลบ · Q = ท่าพิเศษ\nE = ปิดฉากศัตรูเสียหลัก / ขว้างสิ่งของ\n\nสัญลักษณ์ ! สีแดง = ท่าที่ต้องหลบ", [{"text": "เข้าใจแล้ว", "callback": func() -> void: modal.hide(), "primary": true}])
+	show_modal("วิธีเล่น", "WASD เดิน · เมาส์หมุนกล้อง · R หันกล้องกลับ\nคลิกซ้าย (L) / J = หมัดเบา\nคลิกขวา (H) / K = โจมตีหนัก\n\nL L L   แย็บ / หมัดตรง / ฮุก\nL L H   จบด้วยถีบ ผลักชนฉาก\nL H L   เตะกวาด แล้วต่อหมัด\n\nShift ค้าง = การ์ด · กดก่อนโดน = ปัดป้อง\nSpace + ทิศทาง = หลบ · Q = ท่าพิเศษ\nE = ใช้อุปกรณ์ภารกิจ / ปิดฉาก / ขว้างสิ่งของ\nT = เรียกอาจารย์ช่วย (รอ 15 วินาที)\n\nสัญลักษณ์ ! สีแดง = ท่าที่ต้องหลบ", [{"text": "เข้าใจแล้ว", "callback": func() -> void: modal.hide(), "primary": true}])
 
 func _show_settings() -> void:
 	show_modal("ตั้งค่า", "ปรับให้เหมาะกับเครื่องและการควบคุมของคุณ")
@@ -624,7 +646,7 @@ func _show_settings() -> void:
 		_apply_settings())
 	modal_stack.add_child(god_toggle)
 	var quality := OptionButton.new()
-	quality.add_item("ภาพประหยัด  /  ปิดเงา")
+	quality.add_item("ภาพประหยัด  /  75% และปิดเงา")
 	quality.add_item("ภาพปกติ  /  เปิดเงา")
 	quality.custom_minimum_size.y = 40
 	quality.select(int(settings.quality))
@@ -640,9 +662,10 @@ func _show_settings() -> void:
 	_layout_modal.call_deferred()
 
 func _show_credits() -> void:
-	show_modal("สร้างจากของจริง แล้วปรับให้เป็นเรา", "โครงการรายวิชา CP410844 · กลุ่ม 3\n\nGodot 4.7.2 / Blender 5.2\nเมนูและลำดับเกม: 3D-lab1 / SD Studios (MIT)\nการเคลื่อนที่และกล้อง: Jeh3no (MIT)\nตัวละครและแอนิเมชัน: Quaternius (CC0)\nเฟอร์นิเจอร์และเสียง: Kenney (CC0)\nโมเดลประกอบ: ดู ASSET_CREDITS ใน repository\nฟอนต์ Noto Sans Thai (SIL OFL)\n\nตัวละครและมหาวิทยาลัยเป็นเรื่องสมมติ\nหน้าจอคลิปและบทพูดสร้างเพื่อเกมนี้\nรายละเอียดการดัดแปลงอยู่ใน source และไฟล์ Blender", [{"text": "กลับ", "callback": func() -> void: modal.hide(), "primary": true}])
+	show_modal("สร้างจากของจริง แล้วปรับให้เป็นเรา", "โครงการรายวิชา CP410844 · กลุ่ม 3\n\nGodot 4.7.2 / Blender 5.2\nเมนูและลำดับเกม: 3D-lab1 / SD Studios (MIT)\nการเคลื่อนที่และกล้อง: Jeh3no (MIT)\nตัวละครและแอนิเมชัน: Quaternius (CC0)\nเฟอร์นิเจอร์และเสียง: Kenney (CC0)\nพื้นผิว: Poly Haven (CC0)\nบรรยากาศ: congusbongus (CC0)\nภาพหน้าปก: สร้างด้วย OpenAI imagegen\nโมเดลและเสียงเพิ่มเติม: ทีมพัฒนา\nฟอนต์ Noto Sans Thai (SIL OFL)\n\nตัวละครและมหาวิทยาลัยเป็นเรื่องสมมติ\nหน้าจอคลิปและบทพูดสร้างเพื่อเกมนี้\nรายละเอียดการดัดแปลงอยู่ใน source และไฟล์ Blender", [{"text": "กลับ", "callback": func() -> void: modal.hide(), "primary": true}])
 
 func start_level(index: int, checkpoint: int = 0) -> void:
+	menu_cover.hide()
 	_run_id += 1
 	get_tree().paused = false
 	paused = false
@@ -729,14 +752,14 @@ func _on_stage_completed() -> void:
 		save_data["stage"] = stage_index + 1
 		save_data["checkpoint"] = 0
 		_write_save()
-		show_modal("ผ่านวิชานี้แล้ว", "%s\n\nอาจารย์คนถัดไปรออยู่ชั้นบน" % STAGE_NAMES[stage_index], [
-			{"text": "ขึ้นชั้นถัดไป", "callback": func() -> void: start_level(stage_index + 1, 0), "primary": true},
+		show_modal("กู้พื้นที่สำเร็จ", "%s\n\n%s" % [STAGE_NAMES[stage_index], Campaign.STAGE_ENDINGS[stage_index]], [
+			{"text": "ไปช่วยพื้นที่ถัดไป", "callback": func() -> void: start_level(stage_index + 1, 0), "primary": true},
 			{"text": "กลับเมนู", "callback": _show_main_menu}])
 	else:
 		save_data["complete"] = true
 		_write_save()
 		audio.set_combat(false)
-		show_modal("200 OK  /  ล้างแค้นสำเร็จ", "ระบบเกรดปิดปรับปรุง ไม่มีกำหนดเปิดอีกครั้ง\n\nสามวิชา สามอาจารย์ และแกน F ที่พังไปแล้ว\nคุณเดินออกจากตึก…\nเครื่องพิมพ์พยายามพิมพ์ F ใบสุดท้าย แต่กระดาษติด\n\nเวลา %s    แก้มือ %d ครั้ง\n\nขอบคุณที่เล่นเดโมของกลุ่ม 3" % [_format_time(), deaths], [
+		show_modal("ภารกิจสอบซ่อม  /  ผ่าน", "%s\n\nเวลา %s    แก้มือ %d ครั้ง\nขอบคุณที่เล่นเดโมของกลุ่ม 3" % [Campaign.ENDING_TEXT, _format_time(), deaths], [
 			{"text": "กลับหน้าเมนู", "callback": _show_main_menu, "primary": true}])
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -753,7 +776,7 @@ func _show_pause() -> void:
 	if not running: return
 	paused = true
 	get_tree().paused = true
-	show_modal("พักก่อน เดี๋ยวค่อยล้างแค้น", "L L L หมัดต่อเนื่อง · L L H ถีบ · L H L กวาด\nShift ปัดป้อง · Space หลบ · Q ท่าพิเศษ · E ปิดฉาก", [
+	show_modal("พักก่อน เดี๋ยวค่อยล้างแค้น", "L L L หมัดต่อเนื่อง · L L H ถีบ · L H L กวาด\nShift ปัดป้อง · Space หลบ · Q ท่าพิเศษ · E ใช้ / ปิดฉาก · T อาจารย์ช่วย", [
 		{"text": "เล่นต่อ", "callback": _resume, "primary": true},
 		{"text": "เริ่มช่วงนี้ใหม่", "callback": func() -> void: start_level(stage_index, checkpoint_index)},
 		{"text": "ตั้งค่า", "callback": _show_settings},
@@ -811,6 +834,7 @@ func _update_hud() -> void:
 	health_bar.value = player.health
 	posture_bar.value = player.posture
 	focus_bar.value = player.focus
+	_set_label(support_label, level.get_support_status() if level.has_method("get_support_status") else "")
 	_set_label(objective_label, "%s\n%s" % [STAGE_SUBTITLES[stage_index], level.get_objective()])
 	_set_label(combo_label, "%02d HITS" % player.combo_hits if player.combo_hits > 1 else "")
 	_set_label(timer_label, "%s   /   แก้มือ %d ครั้ง" % [_format_time(), deaths])
@@ -823,10 +847,11 @@ func _update_hud() -> void:
 		boss_structure.max_value = boss.max_posture
 		boss_structure.value = boss.posture
 	var target: Node3D = player.nearest_enemy(2.4, false, true)
-	_set_label(prompt_label, "[ E ]  ปิดฉาก" if target else "")
+	_set_label(prompt_label, "[ E ]  ปิดฉาก" if target else "[ E ]  ใช้อุปกรณ์ภารกิจ" if level.combat_cleared and not level.objective_completed and not level.completed else "")
 
 func notify(text: String, duration: float = 2.5) -> void:
 	if not toast or (modal and modal.visible): return
+	if audio and audio.has_method("duck"): audio.duck(duration)
 	toast.text = text
 	toast_timer = duration
 	toast.show()
@@ -836,17 +861,20 @@ func _format_time() -> String:
 
 func _load_save() -> void:
 	if has_meta("qa_no_save"): return
-	if not FileAccess.file_exists("user://progress.json"): return
-	var file := FileAccess.open("user://progress.json", FileAccess.READ)
+	legacy_progress_found = false
+	var path := SAVE_PATH if FileAccess.file_exists(SAVE_PATH) else LEGACY_SAVE_PATH
+	if not FileAccess.file_exists(path): return
+	var file := FileAccess.open(path, FileAccess.READ)
 	if not file: return
 	var parser := JSON.new()
 	if parser.parse(file.get_as_text()) != OK:
 		return
 	var data = parser.data
-	if not data is Dictionary or data.get("version") != 1:
+	if not data is Dictionary or data.get("version") != (Campaign.VERSION if path == SAVE_PATH else 1):
 		return
 	var progress = data.get("progress", {})
-	if progress is Dictionary and typeof(progress.get("stage")) in [TYPE_INT, TYPE_FLOAT] and typeof(progress.get("checkpoint")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(progress.stage)) and is_finite(float(progress.checkpoint)):
+	legacy_progress_found = path == LEGACY_SAVE_PATH and progress is Dictionary and not progress.is_empty()
+	if path == SAVE_PATH and progress is Dictionary and typeof(progress.get("stage")) in [TYPE_INT, TYPE_FLOAT] and typeof(progress.get("checkpoint")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(progress.stage)) and is_finite(float(progress.checkpoint)):
 		save_data = {"stage": clampi(int(progress.stage), 0, 2), "checkpoint": clampi(int(progress.checkpoint), 0, 2), "complete": progress.get("complete", false) == true}
 	var stored = data.get("settings", {})
 	if not stored is Dictionary: return
@@ -863,9 +891,9 @@ func _write_save() -> void:
 	if running:
 		save_data["stage"] = stage_index
 		save_data["checkpoint"] = checkpoint_index
-	var file := FileAccess.open("user://progress.json", FileAccess.WRITE)
+	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
-		file.store_string(JSON.stringify({"version": 1, "progress": save_data, "settings": settings}))
+		file.store_string(JSON.stringify({"version": Campaign.VERSION, "progress": save_data, "settings": settings}))
 	else:
 		notify("เล่นต่อได้ แต่เบราว์เซอร์นี้บันทึกข้ามรอบไม่ได้", 4.0)
 
@@ -873,6 +901,7 @@ func _apply_settings() -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(0.001, float(settings.volume))))
 	AudioServer.set_bus_mute(0, float(settings.volume) <= 0.0)
 	if sun: sun.shadow_enabled = int(settings.quality) > 0
+	get_viewport().scaling_3d_scale = 1.0 if int(settings.quality) > 0 else 0.75
 	if audio: audio.effects_volume = float(settings.sfx)
 	if is_instance_valid(player):
 		player.god_mode = bool(settings.get("god_mode", false))

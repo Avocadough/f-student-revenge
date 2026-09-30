@@ -3,12 +3,13 @@ class_name SchoolEnemy
 
 signal defeated(enemy: Node)
 
+const Campaign = preload("res://Scripts/campaign_data.gd")
 const ProjectileScript = preload("res://Scripts/projectile.gd")
 const ENEMY_FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
 static var _model_scenes: Dictionary = {}
 
 var kind := "paper"
-var display_name := "กระดาษ F"
+var display_name := "อิมป์คลั่ง"
 var health := 30.0
 var max_health := 30.0
 var posture := 0.0
@@ -59,10 +60,15 @@ var floor_warning: Node3D
 var base_color := Color("ee6652")
 var phase_core: Node
 var born_delay := 0.55
+var exposed_time := 0.0
+var model_kind := ""
+
+static func model_for_kind(enemy_kind: String) -> String:
+	return {"programming": "demon_warden", "ai": "demon_mirror", "web": "demon_archon", "server_core": "computer", "final_core": "computer"}.get(enemy_kind, enemy_kind)
 
 static func preload_models(kinds: Array) -> void:
 	for requested in kinds:
-		var asset_kind: String = "teacher_" + requested if requested in ["programming", "ai", "web"] else "computer" if requested in ["server_core", "final_core"] else requested
+		var asset_kind: String = model_for_kind(requested)
 		var path := "res://Assets/Models/%s.glb" % asset_kind
 		if not _model_scenes.has(path) and ResourceLoader.exists(path):
 			_model_scenes[path] = load(path) as PackedScene
@@ -85,38 +91,45 @@ func _ready() -> void:
 	state_time = 0.8 + float(get_instance_id() % 7) * 0.1
 
 func _configure() -> void:
+	# Aliases select an existing tested combat archetype while using demon art.
+	model_kind = model_for_kind(kind)
+	kind = {"demon_imp": "paper", "demon_brute": "book", "demon_caster": "pen"}.get(kind, kind)
 	match kind:
 		"paper":
-			display_name = "กระดาษ F"; max_health = 30; speed = 2.7; base_color = Color("efe5ca")
+			display_name = "กระดาษคำสาป"; max_health = 30; speed = 2.7; base_color = Color("efe5ca")
 		"book":
-			display_name = "อ่านก่อนสอบ 1 คืน"; max_health = 82; speed = 1.4; base_color = Color("668bce")
+			display_name = "ตำราอาถรรพ์"; max_health = 82; speed = 1.4; base_color = Color("668bce")
 		"pencil":
-			display_name = "ดินสอสายพุ่ง"; max_health = 42; speed = 2.4; base_color = Color("fac66e")
+			display_name = "ดินสออาถรรพ์"; max_health = 42; speed = 2.4; base_color = Color("fac66e")
 		"pen":
-			display_name = "ปากกาแดง • แก้!"; max_health = 40; speed = 1.4; ranged = true; base_color = Color("ec596a")
+			display_name = "ปากกาอาถรรพ์"; max_health = 40; speed = 1.4; ranged = true; base_color = Color("ec596a")
 		"phone":
-			display_name = "อีกคลิปเดียว…"; max_health = 52; speed = 1.2; ranged = true; base_color = Color("ec71da")
+			display_name = "โทรศัพท์"; max_health = 52; speed = 1.2; ranged = true; base_color = Color("ec71da")
 		"tablet":
-			display_name = "ติวโค้ดก่อนส่งงาน"; max_health = 62; speed = 1.5; base_color = Color("5de1ca")
+			display_name = "แท็บเล็ต"; max_health = 62; speed = 1.5; base_color = Color("5de1ca")
 		"computer":
-			display_name = "ห้องแล็บ • Hello World"; max_health = 85; speed = 0; ranged = true; base_color = Color("a5dcf7")
+			display_name = "คอมพิวเตอร์"; max_health = 85; speed = 0; ranged = true; base_color = Color("a5dcf7")
 		"programming":
-			display_name = "อาจารย์เซมิโคลอน"; max_health = 340; speed = 2.2; is_boss = true; base_color = Color("f8b957")
+			display_name = Campaign.BOSS_NAMES[0]; max_health = 340; speed = 2.2; is_boss = true; base_color = Color("f8b957")
 		"ai":
-			display_name = "อาจารย์โอเวอร์ฟิต"; max_health = 410; speed = 2.4; is_boss = true; base_color = Color("6ddfdb")
+			display_name = Campaign.BOSS_NAMES[1]; max_health = 410; speed = 2.4; is_boss = true; base_color = Color("6ddfdb")
 		"web":
-			display_name = "อาจารย์ฟูลสแตก • Web App"; max_health = 480; speed = 2.4; is_boss = true; base_color = Color("ee5f8d")
+			display_name = Campaign.BOSS_NAMES[2]; max_health = 480; speed = 2.4; is_boss = true; base_color = Color("ee5f8d")
 		"server_core":
-			display_name = "SERVER CORE • ทำลายเพื่อปิดโล่"; max_health = 65; speed = 0; is_core = true; base_color = Color("53e6dc")
+			display_name = "เสาคำสาป • ทำลายเพื่อปิดโล่"; max_health = 65; speed = 0; is_core = true; base_color = Color("53e6dc")
 		"final_core":
-			display_name = "ระบบ F กลาง • โจมตีเพื่อจบเกม"; max_health = 40; speed = 0; is_core = true; base_color = Color("ff525d")
+			display_name = "เศษแกนคำสาป"; max_health = 40; speed = 0; is_core = true; base_color = Color("ff525d")
+	if model_kind == "demon_imp": display_name = "อิมป์คลั่ง"
+	elif model_kind == "demon_brute": display_name = "ปีศาจเกราะหิน"
+	elif model_kind == "demon_caster": display_name = "ผู้ร่ายคำสาป"
+	elif not is_boss and not is_core: display_name += " • ถูกสิง"
 	health = max_health
 	max_posture = 135 if is_boss else (100 if kind == "book" else 70)
 
 func _build_visual() -> void:
 	visual = Node3D.new()
 	add_child(visual)
-	var asset_kind := "teacher_" + kind if is_boss else kind
+	var asset_kind := model_kind
 	if is_core:
 		asset_kind = "computer"
 	var path := "res://Assets/Models/%s.glb" % asset_kind
@@ -138,10 +151,14 @@ func _build_visual() -> void:
 		mesh.material_override = mat
 		model = mesh
 	visual.add_child(model)
+	if model_kind == "demon_imp": model.scale *= 0.66
+	elif model_kind == "demon_brute": model.scale *= 0.95
+	elif model_kind == "demon_caster": model.scale *= 0.78
+	elif is_boss: model.scale *= 1.10
 	animator = _find_animator(model)
 	if animator:
-		# Teacher clips animate bones; device clips move interpolated Node3Ds.
-		animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE if is_boss else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
+		# Humanoid clips animate bones; device clips move interpolated Node3Ds.
+		animator.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_IDLE if model_kind.begins_with("demon_") else AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS
 		for clip: StringName in animator.get_animation_list():
 			var short_name := String(clip).get_slice("/", String(clip).get_slice_count("/") - 1).to_lower()
 			animation_clips[short_name] = clip
@@ -183,7 +200,7 @@ func _build_visual() -> void:
 		visual.add_child(screen_note)
 	if is_core:
 		model.scale *= 1.5
-		hint.text = "[ F ]" if kind == "final_core" else "BREAK SHIELD"
+		hint.text = "แกนคำสาป" if kind == "final_core" else "ทำลายโล่"
 		hint.modulate = base_color
 		telegraph.visible = true
 		telegraph_material.albedo_color = base_color
@@ -223,6 +240,9 @@ func _physics_process(delta: float) -> void:
 	if dead:
 		return
 	elapsed += delta
+	var was_exposed := exposed_time > 0.0
+	exposed_time = maxf(0.0, exposed_time - delta)
+	if was_exposed and exposed_time <= 0.0: _update_hint()
 	born_delay = maxf(0, born_delay - delta)
 	if not is_instance_valid(player):
 		return
@@ -269,7 +289,7 @@ func _physics_process(delta: float) -> void:
 	var direction := toward.normalized() if distance > 0.05 else Vector3.FORWARD
 	if mode != "attack":
 		rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), delta * 8)
-	if not is_boss:
+	if not is_boss and not model_kind.begins_with("demon_"):
 		visual.position.y = (0.07 + sin(elapsed * 5.0) * 0.055) if kind in ["paper", "pencil", "pen"] else sin(elapsed * 4) * 0.025
 		visual.rotation.z = sin(elapsed * 4.0) * 0.035
 	match mode:
@@ -374,6 +394,8 @@ func _begin_attack(direction: Vector3) -> void:
 			else:
 				attack_id = ["combo", "layout", "charge"][(attack_serial - 1) % 3]
 				state_time = 1.0 if attack_id == "layout" else 0.75
+	var audio := get_tree().get_first_node_in_group("game_audio")
+	if audio and audio.has_method("play_effect"): audio.play_effect("warning")
 	telegraph.visible = true
 	var danger := attack_id in ["spin", "ai_zone", "web_error", "layout"]
 	telegraph_material.albedo_color = Color("ff5067") if danger else Color("ffcc66")
@@ -516,13 +538,13 @@ func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0
 		_die()
 		return "hit"
 	if shielded:
-		hint.text = "ทำลาย SERVER CORE ก่อน"
+		hint.text = "ทำลายเสาคำสาปก่อน"
 		return "shielded"
 	var offset := from - global_position
 	offset.y = 0
 	var facing := -global_transform.basis.z
 	var frontal := offset.length() < 0.1 or facing.dot(offset.normalized()) > 0.15
-	if not broken and frontal and not heavy and ((kind == "book" and mode == "approach") or adapting):
+	if exposed_time <= 0.0 and not broken and frontal and not heavy and ((kind == "book" and mode == "approach") or adapting):
 		posture += structure * 0.4
 		hint.text = "ตั้งรับ • ใช้ท่าหนัก"
 		_check_broken()
@@ -544,7 +566,7 @@ func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0
 		tween.tween_property(visual, "scale", Vector3.ONE * 0.9, 0.05)
 		tween.tween_property(visual, "scale", Vector3.ONE, 0.1)
 		return "hit"
-	# Professors keep their attack/recovery clock through ordinary hits. Only a real
+	# Demon bosses keep their attack/recovery clock through ordinary hits. Only a real
 	# parry, posture break, finisher or phase transition interrupts their sequence.
 	# Damage and posture above still land normally, including heavy attacks.
 	if not is_boss:
@@ -552,6 +574,21 @@ func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0
 	_check_broken()
 	_check_web_phase()
 	return "hit"
+
+func apply_teacher_support(support_kind: int) -> void:
+	if dead or is_core or shielded:
+		return
+	if support_kind == 0:
+		posture += 20.0 if is_boss else 35.0
+		_interrupt(0.65 if is_boss else 1.6)
+		_check_broken()
+	else:
+		exposed_time = 6.0
+		adapting = false
+		repeated_combos = 0
+		_update_hint()
+		if not broken:
+			hint.text = "วิเคราะห์แล้ว • เจาะการตั้งรับได้"
 
 func _has_support() -> bool:
 	if kind == "tablet" or is_boss or is_core:
@@ -597,7 +634,7 @@ func finish() -> void:
 			_update_hint()
 
 func notify_combo(combo_id: String) -> void:
-	if kind != "ai" or dead:
+	if kind != "ai" or dead or exposed_time > 0.0:
 		return
 	if combo_id == last_combo:
 		repeated_combos += 1
@@ -621,17 +658,17 @@ func _check_web_phase() -> void:
 	broken = false
 	posture = 0
 	_interrupt(1.5)
-	hint.text = "WORKS ON MY MACHINE • SHIELD"
+	hint.text = "ม่านคำสาป • ทำลายเสาพลัง"
 	if is_instance_valid(stage):
 		phase_core = stage.spawn_web_core(self)
-	_toast("Works on my machine! ทำลาย SERVER CORE ที่ส่องแสงเพื่อปิดโล่", 4.0)
+	_toast("ราชันสร้างม่านคำสาป! ทำลายเสาพลังที่ส่องแสงเพื่อเปิดช่อง", 4.0)
 
 func disable_shield() -> void:
 	shielded = false
 	if not dead:
 		_interrupt(1.2)
 		_update_hint()
-		_toast("โล่ปิดแล้ว! BACKEND ONLINE • ระวัง 500 ERROR", 3.0)
+		_toast("ม่านคำสาปแตกแล้ว! ระวังการโจมตีระยะสอง", 3.0)
 
 func _die() -> void:
 	if dead:
@@ -662,13 +699,13 @@ func _update_hint() -> void:
 	if broken:
 		hint.text = "E  •  ปิดฉาก / FINISH"
 	elif shielded:
-		hint.text = "SHIELD • ทำลาย SERVER CORE"
+		hint.text = "ม่านคำสาป • ทำลายเสาพลัง"
 	elif adapting:
-		hint.text = "OVERFIT • เปลี่ยนคอมโบ!"
+		hint.text = "เลียนแบบคอมโบ • เปลี่ยนท่า!"
 	elif kind == "tablet":
 		hint.text = "SUPPORT • ช่วยเพื่อนตั้งรับ"
 	elif is_boss:
-		hint.text = "BACKEND" if backend else ""
+		hint.text = "ปีศาจคลั่ง • ระยะสอง" if backend else ""
 	else:
 		hint.text = ""
 	hint.modulate = Color("ffdb8c")

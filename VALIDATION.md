@@ -1,108 +1,54 @@
-# ผลตรวจเดโม 0.2
+# ผลตรวจรุ่น 0.3 — มหาวิทยาลัยถูกปีศาจบุก
 
-ตรวจวันที่ **24 กันยายน 2026** ด้วย Godot **4.7.2 Stable** บน Windows การทดสอบระบบ การเล่นอัตโนมัติ การตรวจเว็บ และความรู้สึกของผู้เล่นเป็นหลักฐานคนละส่วน
+ตรวจวันที่ **1 ตุลาคม 2026** ด้วย **Godot 4.7.2 Stable**, Compatibility renderer, Web แบบ single-thread บน Windows / NVIDIA RTX 5060 Ti แยกผลตรวจระบบ การควบคุมอัตโนมัติ การเปิดเว็บ และประสบการณ์ผู้เล่นใหม่ออกจากกัน
 
-## ผลที่ตรวจแล้ว
+## ระบบและการเล่น
 
-| ขอบเขต | ผล / ข้อจำกัด |
-| --- | --- |
-| นำเข้าและส่งออก Web | ผ่าน ไม่มี parse/export error; Compatibility renderer, single-thread; การส่งออกผ่านยังไม่แทนการทดสอบในเบราว์เซอร์ |
-| ระบบด่าน/บอส | [61 assertions ผ่าน](Verification/stage_subsystem_checks.json) รวมประตู checkpoint จำนวนศัตรู คอมโบซ้ำของ AI โล่ Web และแกน F; ใช้ fixture/API เพื่อแยกพฤติกรรม |
-| การเล่นผ่าน controller | [28 assertions ผ่าน](Verification/gameplay_integration.json) รวม J/K, hit window, การ์ด, parry/counter, dodge, pause, แพ้และลองใหม่ |
-| เดินเกมอัตโนมัติ | โหมดปกติผ่าน **9 ห้อง/3 ด่าน** ถึงตอนจบใน **136.68 วินาทีจำลอง**, retry 0; ไม่แก้ HP, ไม่อมตะ, ไม่ teleport และไม่เรียกโจมตีศัตรูโดยตรงระหว่างเดินเกม; bot อ่านสถานะศัตรูได้และได้รับการเติม HP ที่ checkpoint ตามกติกาจริง จึงไม่แทนผู้เล่นทั่วไป |
-| เมนูและบันทึก | [25 assertions ผ่าน](Verification/menu_persistence_checks.json) รวม Esc หลายสถานะ เริ่มใหม่ เล่นต่อ และไฟล์บันทึกผิดรูปแบบ ใช้ user directory ทดสอบแยกจากข้อมูลผู้เล่น |
-| ทางสำรองควบคุมเว็บ | [15 assertions ผ่าน](Verification/browser_fallback_checks.json); ปฏิเสธการจับเมาส์แล้วไม่ติดพัก, จับสำเร็จแล้วหลุดจึงพัก, ลากปุ่มกลางหมุนกล้องได้; headless ไม่ทดสอบ actual captured-camera branch |
-| การเคลื่อนที่/แอนิเมชัน/เอฟเฟกต์ | [14 assertions ผ่าน](Verification/motion_regressions.json); interpolation, กล้องเริ่มตรงตัวละคร, hitstop หยุดเวลาแอนิเมชันแล้วเดินต่อได้, parry ไม่ถูก guard ทับ, ไม่ใช้ focus/interact ซ้อน dodge, ล้าง buffered attack, finisher ไม่ทะลุกำแพง, 400 impacts ไม่เพิ่ม node/timer และหยุดเมื่อพัก |
-| การชนและฉาก | [12 assertions ผ่าน](Verification/stage_collision_checks.json); ลำดับกระสุนชนผู้เล่น/กำแพง, ขว้างพลาดเป้าหมายที่ขยับหนี, ไม่ทะลุกำแพง, วงปิดฉากหมดอายุ, ประตูเริ่มใหม่, static batching และการเปิดภาพห้องที่อยู่ใกล้ |
-| UI หลายขนาด | [17 assertions ผ่าน](Verification/ui_layout_checks.json) และตรวจภาพจริง 1280×720, 960×540, 800×720; scrim กันคลิก, โฟกัสคีย์บอร์ด, เนื้อหาเลื่อนถึงปุ่มท้าย, volume 0 mute จริง, เมนูที่ซ่อนหยุดประมวลผล |
-| God Mode: UI/บันทึก | [18 assertions ผ่าน](Verification/god_mode_ui_checks.json); ค่าเริ่มต้นปิด, รับเฉพาะ boolean จากเซฟ, toggle ใช้กับผู้เล่นปัจจุบัน, HUD แสดงสถานะ, บันทึกเปิด/ปิดได้, การเปิด–ปิดไม่รีเซ็ตความคืบหน้า และไม่ใช้หน้าตั้งค่าข้ามสถานะตาย; ใช้เซฟความคืบหน้าเดียวกับเกมปกติ ผลการต่อสู้ตรวจแยก |
-| God Mode: ต่อสู้ | [34 assertions ผ่าน](Verification/god_mode_combat_checks.json); J จริงกำจัดเป้าหมายครบ 12 ชนิด รวมบอส/แกน, ผ่านโล่ Web แล้วแกน F ยังต้องถูกทำลายเพื่อจบ, E ปิดฉาก/ขว้าง, ศัตรูโจมตีไม่ลด HP/สมดุล, ออกจากแผนที่แล้วกลับ checkpoint, ปิดโหมดแล้วคืนความเสียหายปกติ และยังไม่โจมตีนอกระยะ/ทะลุกำแพง; ใช้ fixture จัดตำแหน่งและสถานะเฉพาะกรณี |
-| Blender | [motion QA ผ่าน](Art/motion_qa.json) สำหรับตัวละคร 4 แบบ; เปลี่ยนเฉพาะ Run/Hook, ความยาวคลิปเท่าเดิม, ช่วงล่าง Hook ไม่เปลี่ยน พร้อมภาพ contact sheets |
-| เสียง | [หลักฐานเสียงที่คงใช้จาก 0.1](Verification/audio_checks.json): โหลด 12 เสียง, pool 8 เสียงหลัง 400 คำขอ, pause หยุด combat แต่ UI ใช้ได้; การ mute master ศูนย์ตรวจซ้ำใน UI 0.2 |
+| ขอบเขต | หลักฐาน | ผล |
+|---|---|---|
+| พันธมิตร ภารกิจ จุดเกิด ประตูมิติ | [demon_campaign_checks.json](Verification/v0_3/demon_campaign_checks.json) | 52 checks ผ่าน; อาจารย์ไม่เป็นศัตรู, T ใช้ไม่ได้ขณะพัก/บทพูด, คูลดาวน์คืนเมื่อเริ่ม checkpoint, E ต้องอยู่ในระยะและทำได้ครั้งเดียว |
+| ระบบด่าน บอส การปรับตัวและโล่ | [stage_subsystem_checks_v03.json](Verification/v0_3/stage_subsystem_checks_v03.json) | 63 checks ผ่าน |
+| การเล่นผ่าน controller | [gameplay_integration_v03.json](Verification/v0_3/gameplay_integration_v03.json) | 28 checks ผ่าน; เดินครบ 9 checkpoint และจบ F → D ในโหมดปกติ |
+| God Mode | [god_mode_combat_checks_v03.json](Verification/v0_3/god_mode_combat_checks_v03.json) | 36 checks ผ่าน; ยังต้องทำภารกิจ E และปิดประตูมิติ |
+| เมนูและการคงค่า | [menu_persistence_checks.json](Verification/v0_3/menu_persistence_checks.json) | 25 checks ผ่าน |
+| ย้ายค่าตั้งค่าและเริ่มเรื่องใหม่ | [save_migration_v03.json](Verification/v0_3/save_migration_v03.json) | 8 checks ผ่าน; เซฟเดิมตรงทุกไบต์, progress_v2.json เก็บความคืบหน้าแยก |
+| การเคลื่อนไหว กล้อง และ feedback | [motion_regressions.json](Verification/v0_3/motion_regressions.json) | 14 checks ผ่าน |
+| การชนกระสุน/วัตถุ/กำแพง | [stage_collision_checks.json](Verification/v0_3/stage_collision_checks.json) | 12 checks ผ่าน |
+| ตั้งค่า God Mode และ UI | [god_mode_ui_checks.json](Verification/v0_3/god_mode_ui_checks.json) | 18 checks ผ่าน |
+| ทางสำรองเมื่อเว็บไม่ล็อกเมาส์ | [browser_fallback_checks.json](Verification/v0_3/browser_fallback_checks.json) | 15 checks ผ่าน; headless ไม่ยืนยันว่าเบราว์เซอร์ให้ pointer lock จริง |
+| ขนาดหน้าจอ/ภาษาไทย | [ui_layout_checks.json](Verification/v0_3/ui_layout_checks.json) | 17 checks ผ่านที่ 1280×720, 960×540 และ 800×720; ตรวจภาพที่เรนเดอร์ด้วย |
+| เสียงใหม่และการหยุดเสียง | [audio_v03.json](Verification/v0_3/audio_v03.json) | 11 checks ผ่าน; โหลดเสียง, ducking, pause/resume, หยุดบรรยากาศเมื่อกลับเมนู และให้เสียงผนึกเล่นจบได้ |
 
-## ข้อบกพร่องที่แก้ในรุ่นนี้
+รวม **299 checks** การเดินเกมอัตโนมัติล่าสุดครบเรื่องใน **134.72 วินาทีจำลอง**, retry 0 ใช้ input ตัวละครจริง ไม่ทำความเสียหายโดยตรง ไม่ teleport ไม่แก้ HP และไม่เปิดอมตะในช่วงเดินเรื่อง บอตอ่านสถานะศัตรูได้และกดเมนูด้วยสัญญาณปุ่ม จึงไม่แทนการเล่นด้วยมือ ส่วนกรณีทดสอบรายระบบใช้ fixture จัดตำแหน่งและสถานะตามที่เปิดเผยใน JSON
 
-- ตำแหน่งตัวละครแสดงซ้ำระหว่างรอบฟิสิกส์เมื่อ render เร็วกว่า 60 Hz และกล้องไหลเข้าจากตำแหน่งเริ่มต้น: ใช้ interpolation และ reset/snap เมื่อเกิดใหม่
-- ท่า parry ถูก guard ทับใน tick ถัดไป, คำสั่งโจมตีเก่ากลับมาหลังหลบ และใช้ focus/ปิดฉาก/ขว้างซ้อน dodge: ปรับการเปลี่ยนสถานะและเวลาคงท่า
-- กระสุน สิ่งของขว้าง โจมตีประชิด และการเลือกเป้าหมายปิดฉากผ่านสิ่งกีดขวาง: ตรวจลำดับและแนวการชนจริง
-- วงปิดฉากค้างเมื่อหมดสถานะ และ tween ประตูเดิมทำงานต่อหลังเริ่มใหม่: ล้างสถานะและยกเลิกงานเดิม
-- คลิก/โฟกัสทะลุ modal, หน้าต่างยาวเกินจอสั้น, ปุ่มเล่นต่อทั้งที่ไม่มีเซฟ และเสียงหลักศูนย์ยังไม่ mute: เพิ่ม scrim, scroll/focus และสถานะที่ชัดเจน
-- HUD สร้างข้อความและค้นหาศัตรูทุกเฟรม, เมนูที่ซ่อนยังเล่นแอนิเมชัน และเอฟเฟกต์สร้าง node ซ้ำ: cache ข้อความที่ 10 Hz, หยุดเมนูที่ซ่อน และใช้ pool
+## งานภาพและแหล่งที่มา
 
-## ประสิทธิภาพและการเคลื่อนที่ที่วัดจริง
+- [QA โมเดล](Art/campus_asset_qa.json): ตัวละคร 10 แบบ หนึ่ง mesh ต่อแบบ 4–6 surfaces และ 18 คลิปต่อแบบ ชื่อ เวลา keyframe ค่าแอนิเมชัน และ skeleton bind เทียบฐานเดิมผ่าน ใช้ร่างกายต่อเนื่องแทนชิ้นทรงกระบอกที่มีรอยแยก ตรวจภาพแอนิเมชัน Idle/Run/Hook ใน Godot ด้วย
+- ตรวจฉากเล่นจริงทั้งเก้าโซน ใช้พื้นผิว 1K แสงทิศทาง/แสงเฉพาะจุด หมอกระยะ เงาสัมผัสจากภาพที่เตรียมไว้ และอุปกรณ์ภารกิจที่แยกรูปร่าง ไม่มีระบบ LightmapGI ที่ bake ทั้งฉาก; ฉากสร้างขณะรันและใช้วัสดุร่วมเพื่อลดภาระเว็บ
+- ภาพหน้าปกเป็นภาพประกอบสร้างด้วย imagegen ไม่ใช่ภาพกราฟิกขณะเล่น โมเดลมีวัสดุและสัดส่วนจริงขึ้นแต่ยังเป็นงาน stylized สำหรับ realtime ไม่ใช่ photorealistic scan
+- ใบอนุญาต แหล่งดาวน์โหลด และ SHA-256 อยู่ใน [เครดิต](CREDITS.md), [asset_manifest.json](Assets/asset_manifest.json), [texture_receipt.json](Assets/Textures/texture_receipt.json) และ [ambience_receipt.json](Assets/Audio/ambience_receipt.json)
 
-เทียบ [รุ่น 0.1](Verification/motion_before_controlled.json) จาก commit `3dfe2c2` กับ [รุ่นปรับปรุง](Verification/motion_after_controlled.json) โดยใช้ native Godot, GL Compatibility, **NVIDIA RTX 5060 Ti**, viewport **1280×720**, ปิด VSync และจำกัด **120 FPS**: ห้องที่ 2 ของด่าน AI ศัตรู 4 ตัว ผู้เล่นอมตะเพื่อรักษา workload เดินซ้าย–ขวาด้วย action input เดียวกัน warm-up 2 วินาที แล้วเก็บประมาณ 12 วินาทีต่อรอบ ปิดการแสดงตัวอย่างเกมอีกหน้าต่างก่อนวัดทั้งคู่
+## เว็บและประสิทธิภาพ
 
-| ตัวชี้วัด | รุ่น 0.1 | รุ่นปรับปรุง |
-| --- | ---: | ---: |
-| FPS เฉลี่ย | 120.076 | 120.074 |
-| p95 frame time | 9.706 ms | 9.158 ms |
-| p99 frame time | 10.045 ms | 9.552 ms |
-| Median process time | 3.544 ms | 2.869 ms |
-| Median draw calls | 929 | 436 |
-| Node count | 866 | 628 |
-| ตำแหน่งภาพซ้ำในเฟรมที่กำลังเดิน | 672/1,343 (50.0372%) | 1/1,343 (0.0745%) |
-| เฟรมพักเกม | 0 | 0 |
+ไฟล์เผยแพร่จริง `docs/index.pck` ผ่าน [การเล่นจากแพ็ก](Verification/v0_3/release_pack_gameplay.json) ด้วย Godot 4.7.2 native headless: 28/28 checks, ครบ 9 checkpoint จนถึงตอนจบ, retry 0, 141.52 วินาทีจำลอง และไม่มี error/warning ตัวทดสอบทำงานจากโฟลเดอร์ว่างนอกโครงการ มีเพียง runner แล้วโหลด Scenes/Scripts/Assets จาก PCK โดยตรง ผลนี้ยืนยันความครบของไฟล์ส่งออก แต่ไม่แทนการเรนเดอร์บนเว็บ
 
-Draw calls ลด **53.1%** และ process time ลดประมาณ **19.0%** ในคู่การวัดนี้ แต่ **FPS ยังอยู่ที่เพดาน 120 เท่าเดิม** จึงไม่อ้างว่า FPS เพิ่มขึ้น ผลนี้เป็นการวัดช่วงสั้นหนึ่งคู่ ไม่ใช่ benchmark เว็บ การเล่นครบเกม หรือการทดสอบเครื่องสเปกต่ำ
+เปิดหน้าเมนูและด่านแรกบน Chrome/Edge ระหว่างพัฒนาได้ แต่การตรวจชุดสุดท้ายด้วยเครื่องมือควบคุมหน้าจอหยุดเพราะเครื่องมือยืนยัน URL ไม่ได้ จึง **ยังไม่อ้างว่าผ่านการเล่นครบเกมบนเบราว์เซอร์หรือผ่านเกณฑ์ FPS เว็บ** ผู้ใช้ยืนยันขอบเขตเดโมรายวิชาและให้ส่งรุ่นที่เล่นได้บน GitHub Pages โดยไม่เพิ่มระบบอื่น
 
-เก็บ [รอบก่อนควบคุมหน้าต่างอื่น](Verification/motion_after.json) ไว้ด้วย: FPS 117.825, p95 9.580 ms และ p99 13.035 ms แสดงว่าค่าขึ้นกับสภาพแวดล้อมการวัด ส่วน [รอบที่ถูกขัดจังหวะ](Verification/motion_after_interrupted.json) มีเฟรมพักเกม 1,146 เฟรมจึงใช้เทียบประสิทธิภาพไม่ได้ ไม่ใช้ผลระหว่างเปลี่ยนนาฬิกากระดูกมาสรุปประโยชน์ของชุดสุดท้าย
+พบและแก้ปัญหาเสียงบรรยากาศบนเว็บ: การสั่ง unpause ซ้ำทุกเฟรมทำให้ backend ของ Godot สร้างสำเนาเสียงซ้ำ เปลี่ยนเป็นสั่งเมื่อสถานะเปลี่ยนเท่านั้น ตรวจกลไกจาก source รุ่น 4.7.2 และ JS ที่ส่งออกจริง พร้อมทดสอบเสียงซ้ำผ่าน ดู [บันทึกการวิเคราะห์](Verification/v0_3/web_audio_pause_diagnosis.md) ยังไม่ใช้การแก้ source นี้อ้างผล FPS ที่ไม่ได้วัดสำเร็จ
 
-ค่าตำแหน่งซ้ำตรวจการเคลื่อนตำแหน่ง root ที่แสดงระหว่างรอบฟิสิกส์ โดยนับเมื่อความเร็วแนวราบมากกว่า 3 และตำแหน่งเปลี่ยนน้อยกว่า 0.00001 หน่วย **ไม่ใช่ค่ากระดูกสั่น** และไม่ครอบคลุมอาการเท้าลื่นบนโลกสามมิติ
+ชุดตรวจแยกใน `tools/build_web_qa.py` ยังเก็บไว้ให้รันซ้ำได้: คัดลอก source/assets ที่มี hash และแสดงปุ่ม Start QA จากนั้นเดินครบเรื่องในโหมดปกติ แล้ววัดอีก 30 วินาทีในห้องเซิร์ฟเวอร์ที่มีศัตรูจริง 4 ตัว โดยเปิดอมตะเฉพาะช่วงวัดเพื่อรักษาภาระงานคงที่
 
-[performance.json](Verification/performance.json) เป็นหลักฐานเดิม **0.1** ที่ผู้เล่นยืนนิ่งบน viewport 1920×1061 ไม่ใช้เป็น before ของตารางนี้ เพราะ fixture และเพดาน FPS ต่างกัน
+วัดจากเวลาของ `RenderingServer.frame_post_draw` ที่ 1280×720 ข้ามช่วงพัก/เมนู/แท็บซ่อนและ warm-up 2 วินาทีต่อห้อง FPS เฉลี่ย = จำนวนเฟรมหารเวลารวม; p95 คำนวณจากเวลาเฟรมจริง เป้าหมายเฉลี่ย ≥55 FPS และ p95 ≤25 ms บนเครื่องนี้
 
-## แอนิเมชันใน Blender
+## ข้อจำกัด
 
-ตาม [Art/motion_qa.json](Art/motion_qa.json), Blender 5.2.2 LTS ปรับความต่อเนื่องด้วยค่าเพื่อนบ้านสามจุด: Run ใช้วงรอบและคีย์ปิดลูป ส่วน Hook ปรับเฉพาะช่วงบน รักษาจุดเริ่ม/จบ เชิงกรานและขา
+- 20–30 นาทีเป็นเป้าหมายเวลาเล่นครั้งแรก ยังไม่มีผลทดลองกับผู้เล่นใหม่ เวลา bot รายงานแยก
+- ผลเครื่อง RTX 5060 Ti ไม่รับรองเครื่องสเปกต่ำหรือมือถือ มีโหมดภาพเบาที่ลดความละเอียด 3D เหลือ 75% และปิดเงา
+- ผลโหลด/ducking เสียงไม่แทนการประเมินความดังและความน่ากลัวด้วยการฟังของมนุษย์ ไม่มีเสียงพากย์
+- ไม่มี multiplayer และอาจารย์ประจำเหตุการณ์ ไม่เดินตามทั้งด่าน ไม่มีเงื่อนไขแพ้จาก HP อาจารย์
 
-| ตัวชี้วัดจากคลิป | ก่อน | หลัง |
-| --- | ---: | ---: |
-| Run: มุมกระดูกเปลี่ยนมากที่สุดต่อ sample | 60.933° | 35.907° |
-| Run: ความต่างมุมรอยต่อปลายคลิป | 0.649° | 0.000° |
-| Hook: มุมกระดูกเปลี่ยนมากที่สุดต่อ sample | 94.991° | 52.747° |
-| Hook: เฟรมมือยื่นสูงสุด | 6 | 6 |
+## การเผยแพร่และย้อนกลับ
 
-ความยาว Run **0.9333 วินาที** และ Hook **0.4667 วินาที** คงเดิมทั้ง 4 ตัวละคร คลิปอื่น 16 คลิปไม่เปลี่ยน Run ยังรักษาท่าวิ่งและช่วงเท้าลอยของต้นฉบับ; การเปลี่ยนตำแหน่งเท้าแนวราบที่ phase ตรงกันสูงสุดประมาณ **13.8 มม.** ไม่ใช่การวัดเท้าลื่นขณะเล่น Hook มีฝ่าเท้าจมเดิมประมาณ **10.8 มม.** ซึ่งไม่ได้เพิ่มจากการปรับนี้ ดูภาพ [Run](Art/Previews/run_motion_contact_sheet.png) และ [Hook](Art/Previews/hook_motion_contact_sheet.png)
+สถานะ: รอตรวจเว็บชุดสุดท้ายก่อนอัปเดต GitHub Pages เดิม เก็บฐานก่อนเปลี่ยนไว้ที่ branch `codex/pre-demon-v0.2`, commit `d75d0f6283f2fd60f66cb5114a455c588f5f7219` การเผยแพร่ใช้ไฟล์ `docs` บน main และต้องตรวจ hash ไฟล์สาธารณะตรงกับไฟล์ส่งออก
 
-การแสดงภาพใน engine แยกเป็น root ที่เดินด้วยฟิสิกส์ 60 Hz และ interpolation กับท่ากระดูกของผู้เล่น/อาจารย์ที่อ่านทุกเฟรมภาพด้วย IDLE การทดสอบ hitstop ยืนยันว่าเวลาแอนิเมชันหยุดแล้วเดินต่อได้เมื่อหมดช่วงกระแทก การตรวจเปรียบเทียบ IDLE/PHYSICS ระหว่างพัฒนาเป็นการป้องกัน regression จากการเปลี่ยนนาฬิกากระดูก ไม่ใช่ผลก่อน–หลังรุ่น 0.1 ซึ่งเดิมใช้ IDLE อยู่แล้ว
-
-## สถานะเว็บและการเผยแพร่ 0.2
-
-- **ผ่านแล้ว:** นำเข้าและส่งออก Web ชุดล่าสุดโดยไม่มีข้อผิดพลาด
-- **ผ่านแล้วบน localhost:** เปิดเมนู/เลือกด่าน, คลิกนอก modal แล้วยังไม่ปิด, เริ่มด่าน AI, ท่าโจมตี, ศัตรูทำความเสียหาย, พัก, ตั้งค่าแล้วกลับหน้าพัก, เริ่มช่วงใหม่ได้ HP 100, กลับเมนูและเปิดวิธีเล่นใน Codex In-app Browser
-- **ผ่านแล้วเฉพาะข้อความ:** ตรวจหน้าวิธีเล่นซ้ำหลังเปลี่ยน glyph ลูกศรที่ฟอนต์ไม่รองรับและส่งออกใหม่
-- **ผ่านแล้วในไฟล์ส่งออกชุดสุดท้าย:** เปิด God Mode จากตั้งค่า/บันทึก → เข้า Programming เห็น HUD GOD → ถูกศัตรูโจมตีเกิน 16 วินาทีโดย HP เต็ม → J/K กำจัดเป้าหมายเมื่อโจมตีโดน → ห้องเคลียร์และประตูเปิด → พัก/ตั้งค่า/ปิด God Mode/บันทึก แล้ว HUD กลับเป็นสถานะนักศึกษาปกติ
-- **ผ่านแล้วบนเว็บสาธารณะ:** เมนู → ตั้งค่า God Mode ปิด → เปิดและบันทึก → ด่าน Programming แสดง HUD GOD → ศัตรูโจมตี 20 วินาทีโดย HP เต็ม → J หนึ่งครั้งกำจัดกระดาษ 2 ตัวที่อยู่ในระยะ → พัก/ตั้งค่า/ปิดและบันทึก → HUD กลับเป็นนักศึกษา 100 → กลับเมนู
-- **เผยแพร่แล้ว:** [GitHub Pages 0.2](https://avocadough.github.io/f-student-revenge/) จาก game commit [a03a0167](https://github.com/Avocadough/f-student-revenge/commit/a03a0167beaf3885669fb1099b7263392c214d7e); [deployment 35912098550](https://github.com/Avocadough/f-student-revenge/actions/runs/35912098550) สำเร็จ หน้าเว็บและ `index.pck` ตอบ HTTP 200
-
-PCK สาธารณะขนาด **4,196,736 ไบต์** มี SHA-256 ตรงกับไฟล์ทดสอบในเครื่อง: `70F3ED38212FE56AE8525CCA4443EDCBE34106B7BFB5CCFD129B8526680575D2` ตรวจไฟล์เมื่อ **24 กันยายน 2026 เวลา 02:52:34 น. ไทย** (`2026-09-23T19:52:34Z`)
-
-การตรวจ localhost ใน IAB รอบ 0.2 พบ `WrongDocumentError` จากการขอ pointer lock; การตรวจเว็บสาธารณะพบ generic Chromium `UnknownError` หนึ่งครั้งตอนเข้าด่าน แต่ไม่พบ Godot ScriptErrors ในเส้นทางที่ทดสอบ จึงไม่เรียกผลนี้ว่า browser console สะอาด ใช้ทางสำรองลากปุ่มเมาส์กลางได้; ผล headless ของทางสำรองไม่รับรอง pointer lock บน Chrome/Edge แยกแอป
-
-รายละเอียดการตรวจรุ่นนี้อยู่ใน [publication_v0_2.json](Verification/publication_v0_2.json) การตรวจเว็บเป็นเส้นทางที่ระบุข้างต้น ไม่ใช่การเล่นด้วยคนครบทั้งสามด่าน
-
-## วิธีตรวจซ้ำ
-
-จาก root ของโครงการ โดย `godot` ชี้ไปที่ Godot 4.7.2 และสร้างโฟลเดอร์ `evidence/` ก่อน:
-
-```text
-godot --headless --path . --editor --import --quit
-godot --headless --path . --script tools/test_stage_subsystem.gd
-godot --headless --path . --fixed-fps 60 --script tools/test_gameplay.gd
-godot --headless --path . --script tools/test_menu_persistence.gd
-godot --headless --path . --script tools/test_browser_fallback.gd
-godot --headless --path . --script tools/test_motion_regressions.gd
-godot --headless --path . --script tools/test_stage_collisions.gd
-godot --headless --path . --script tools/test_god_mode_ui.gd
-godot --headless --path . --fixed-fps 60 --script tools/test_god_mode.gd
-godot --path . --script tools/test_ui_layout.gd
-godot --path . --resolution 1280x720 --script tools/profile_motion.gd -- current
-godot --headless --path . --export-release Web docs/index.html
-```
-
-คำสั่ง profile ด้านบนสร้างผล `motion_current.json` เพื่อรักษาหลักฐานก่อน–หลังเดิม การสร้าง before ซ้ำต้องใช้ source ก่อนแก้ ไม่ใช่เพียงเปลี่ยนชื่อไฟล์ ผล JSON สาธารณะอยู่ใน `Verification/` โดยลบ path ส่วนตัวของโฟลเดอร์เซฟทดสอบแล้ว; log/ภาพชั่วคราวอยู่ใน `evidence/`
-
-## สิ่งที่ยังไม่ยืนยัน
-
-ยังไม่มีการเล่นด้วยคนต่อเนื่องครบทุกด่านบน Chrome/Edge, การประเมินความสนุกกับผู้เล่นใหม่, benchmark เว็บ/เครื่องสเปกต่ำ หรือการทดสอบมือถือ ระยะเวลา 15–20 นาทีเป็นเป้าหมายเดิม ไม่ใช่ผลวัดผู้เล่นจริง การผ่าน assertion และ bot ยืนยันพฤติกรรมตามเงื่อนไขที่ระบุ ไม่ใช่ข้อรับประกันว่าเกมสมดุลหรือไม่มีข้อผิดพลาดทุกกรณี
+ผลรุ่น 0.2 เป็นประวัติคนละ campaign: [VALIDATION เดิม](https://github.com/Avocadough/f-student-revenge/blob/d75d0f6283f2fd60f66cb5114a455c588f5f7219/VALIDATION.md) และ JSON เดิมใน `Verification/` ไม่ใช้ผลเก่าทดแทนการตรวจรุ่นนี้

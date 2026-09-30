@@ -191,6 +191,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		request_focus()
 	elif event.is_action_pressed("interact"):
 		request_interact()
+	elif event.is_action_pressed("teacher_support"):
+		if stage_ref and stage_ref.has_method("request_teacher_support"):
+			stage_ref.request_teacher_support()
 	elif event.is_action_pressed("recenter"):
 		camera_rig.recenter(atan2(-facing.x, -facing.z))
 
@@ -277,6 +280,8 @@ func request_focus() -> void:
 func request_interact() -> void:
 	if dead or not active or stagger_timer > 0.0 or not attack_id.is_empty() or dodge_timer > 0.0:
 		return
+	if stage_ref and stage_ref.has_method("interact_objective") and stage_ref.interact_objective(self):
+		return
 	var target := nearest_enemy(2.4, false, true)
 	if target:
 		var boss: bool = target.is_boss
@@ -288,7 +293,7 @@ func request_interact() -> void:
 		stagger_timer = 0.35
 		invulnerability = 0.85
 		camera_rig.shake = 0.32
-		message.emit("ปิดงาน!" if not boss else "เปิดช่องอาจารย์!")
+		message.emit("ปิดงาน!" if not boss else "เปิดช่องปีศาจ!")
 		_sound("heavy")
 	elif stage_ref and stage_ref.consume_prop(self, facing):
 		_play_animation("throw", 0.55, true)

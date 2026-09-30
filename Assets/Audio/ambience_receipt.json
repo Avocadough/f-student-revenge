@@ -1,0 +1,10 @@
+{
+  "asset": "campus_ambience.ogg",
+  "author": "congusbongus",
+  "title": "Lost in a bad place",
+  "source": "https://opengameart.org/content/lost-in-a-bad-place-horror-ambience-loop",
+  "download_url": "https://opengameart.org/sites/default/files/lost_2.ogg",
+  "license": "CC0-1.0",
+  "sha256": "ad9a9f39240ef5862d3a6dc5220893926c6873aa0e08a641dadf3f1c0acc2cd4",
+  "changes": "Original OGG; runtime gain and ducking only."
+}

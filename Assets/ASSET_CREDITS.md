@@ -17,3 +17,14 @@ Custom animation clips: **Guard, Parry, Kick, Sweep, Dodge**. Device animation: 
 The planned Poly Pizza files were **not included** because their CDN download timed out. They must not appear in credits as implemented assets. Raw download archives are kept locally under `.work/assets` and excluded from the source repository; selected edited models, working `.blend` files and licenses are included.
 
 Full per-file hashes, animation names, exact source URLs and modifications are in `asset_manifest.json`. Original license notices are preserved in `Licenses/`.
+
+## Campus demon remake — 2026-10-01
+
+The four human models now have project-authored campus shirts, straight trousers and low shoes, with different faculty hair, builds and accessories. The six demons (`demon_imp`, `demon_brute`, `demon_caster`, `demon_warden`, `demon_mirror`, `demon_archon`) reuse the existing licensed humanoid foundation and unchanged 18-clip set; their horns, claws, armour, facial details, crowns and silhouettes are original additions for this game. No new third-party monster pack was downloaded. The existing Quaternius CC0 notices are preserved as received, independently of the publisher's current license for new releases.
+
+| Publisher / artist | Source | Use | License |
+| --- | --- | --- | --- |
+| Poly Haven / eye-candy.xyz | [Concrete Floor](https://polyhaven.com/a/concrete_floor) | 1K diffuse, OpenGL normal and roughness maps | CC0 1.0 |
+| Poly Haven / Amal Kumar | [Painted Plaster Wall](https://polyhaven.com/a/painted_plaster_wall) | 1K diffuse, OpenGL normal and roughness maps | CC0 1.0 |
+
+Poly Haven's [license](https://polyhaven.com/license) permits use, modification and redistribution of the assets. The website's preview images are not included. Download URLs and hashes are preserved in `Textures/texture_receipt.json`; verification of mesh surfaces and unchanged motion is in `Art/campus_asset_qa.json`.
