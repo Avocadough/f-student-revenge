@@ -47,7 +47,9 @@
 
 ## การเผยแพร่
 
-ชุดส่งออกพร้อมสำหรับ GitHub Pages ลิงก์เดิม รอเติมบันทึกตรวจไฟล์สาธารณะหลัง deploy ใน [publication_v0_4.json](Verification/publication_v0_4.json)
+**เผยแพร่สำเร็จ:** [เล่นเดโม 0.4](https://avocadough.github.io/f-student-revenge/) จาก commit `05f7a95fe6e2c5079205399d6687266ef52db611`, [Pages run 36781773030](https://github.com/Avocadough/f-student-revenge/actions/runs/36781773030) สำเร็จ ตรวจ HTTP 200/SHA-256 ตรงครบเก้าไฟล์ใน [publication_v0_4.json](Verification/publication_v0_4.json) และเปิดลิงก์สาธารณะด้วย Edge เห็นหน้าโหลดภาษาไทยแล้วเข้าสู่ [เมนูใหม่จริง](Verification/v0_4/screenshots/pages_first_view.png)
+
+PCK ที่เผยแพร่และทดสอบเล่นจบมี SHA-256 `e3765e618483cddaf1377475036e228cd132550fdec0bf94ebc43947b8ae093d` ขนาด 19,008,760 ไบต์ (เพิ่มจากรุ่นก่อนเพียง 6,148 ไบต์) ตัวเปรียบเทียบยอมรับการแปลง CRLF ของ Git สำหรับ HTML/JS เท่านั้น; PCK/WASM ต้องตรงทุกไบต์
 
 เก็บฐานเว็บ 0.3 ไว้ที่ `codex/pre-ui-v0.3`, commit `64b260a2a33873e8e5fe9619c3879866758ac114` หากต้องย้อนกลับ ให้คืน docs จากฐานแล้วสร้าง commit ใหม่โดยไม่ลบประวัติ
 
