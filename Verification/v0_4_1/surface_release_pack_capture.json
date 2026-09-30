@@ -1,0 +1,22 @@
+{
+	"alive_enemies": 4,
+	"engine": "4.7.2-stable (official)",
+	"gpu": "NVIDIA GeForce RTX 5060 Ti",
+	"msaa": 1,
+	"pack": {
+		"bytes": 20801464,
+		"external_directory": "C:\\Users\\Admin\\AppData\\Local\\Temp\\FStudentSurfacePackQA_20261001_050627",
+		"pack": "C:\\Users\\Admin\\Desktop\\การล้างแค้นของนักศึกษาติด F\\docs\\index.pck",
+		"sha256": "70ae587d04a708e1c030d631c593a3a00e445330b46f6793fefe15961872a823",
+		"source": "Actual shipping Web PCK mounted using --main-pack from an otherwise empty external directory; no copied project or resources"
+	},
+	"physical_texture": "(1280.0, 720.0)",
+	"quality": 1,
+	"render_scale": 1.0,
+	"renderer": "Native GL Compatibility",
+	"room": 1,
+	"save_error": 0,
+	"scope": "Deterministic native screenshot from actual shipping PCK: seed410844, fixed60Hz150ticks, stage2room2 standard, camera mouse input disabled only for screenshot fixture. Not Web/browser/FPS evidence.",
+	"stage": 1,
+	"viewport_image": "(1280, 720)"
+}

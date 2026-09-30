@@ -1,0 +1,27 @@
+{
+  "pack": "C:\\Users\\Admin\\Desktop\\การล้างแค้นของนักศึกษาติด F\\docs\\index.pck",
+  "bytes": 20801464,
+  "sha256": "70ae587d04a708e1c030d631c593a3a00e445330b46f6793fefe15961872a823",
+  "external_directory": "C:\\Users\\Admin\\AppData\\Local\\Temp\\FStudentSurfacePackQA_20261001_050627",
+  "source": "Actual shipping Web PCK mounted using --main-pack from an otherwise empty external directory; no copied project or resources",
+  "metadata_checks_passed": 13,
+  "metadata_checks_skipped": [
+    "concrete_floor_normal.jpg normal import parameter absent from shipping PCK metadata; actual imported mip levels still checked",
+    "painted_plaster_wall_normal.jpg normal import parameter absent from shipping PCK metadata; actual imported mip levels still checked"
+  ],
+  "source_checks": {
+    "path": "evidence/surface_filtering_checks.json",
+    "passed": 15,
+    "failed": 0
+  },
+  "capture": {
+    "path": "evidence/surface_release_pack_stage2.png",
+    "sha256": "2270d06489582a164b306b517474533877c178567d9ec6b72b1643e060b2c3b3",
+    "metadata": "evidence/surface_release_pack_capture.json"
+  },
+  "pack_hash_still_matches": true,
+  "external_directory_files": [
+    "surface_release_pack_capture.gd",
+    "surface_release_pack_checks.gd"
+  ]
+}

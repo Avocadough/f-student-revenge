@@ -72,6 +72,9 @@ static func _prepare_materials(stage) -> void:
 
 static func _surface(stem: String, tint: Color, density: float) -> StandardMaterial3D:
 	var material: StandardMaterial3D = _mat(tint, 0.91)
+	# These repeating 1K maps need imported mip chains, especially on grazing floors.
+	# Anisotropy keeps their broad detail readable without single-pixel speckling.
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	var base: String = "res://Assets/Textures/%s_" % stem
 	if ResourceLoader.exists(base + "diff.jpg"):
 		material.albedo_texture = load(base + "diff.jpg") as Texture2D

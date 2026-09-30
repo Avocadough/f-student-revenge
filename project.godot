@@ -21,6 +21,7 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/default_filters/use_nearest_mipmap_filter=false
 textures/default_filters/use_nearest_mipmap_filter.web=false
+textures/default_filters/anisotropic_filtering_level=2
 anti_aliasing/quality/msaa_3d=1
 environment/defaults/default_clear_color=Color(0.07, 0.085, 0.11, 1)
 

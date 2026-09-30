@@ -1,0 +1,174 @@
+{
+	"checks": [
+		{
+			"case": "Anisotropic filtering is bounded at 4x",
+			"passed": true
+		},
+		{
+			"case": "concrete_floor_diff.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "concrete_floor_normal.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "concrete_floor_normal.jpg explicitly renormalizes normal-map mip levels",
+			"passed": true
+		},
+		{
+			"case": "concrete_floor_rough.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "painted_plaster_wall_diff.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "painted_plaster_wall_normal.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "painted_plaster_wall_normal.jpg explicitly renormalizes normal-map mip levels",
+			"passed": true
+		},
+		{
+			"case": "painted_plaster_wall_rough.jpg has actual imported mip levels",
+			"passed": true
+		},
+		{
+			"case": "Quality0 floor material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		},
+		{
+			"case": "Quality0 wall material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		},
+		{
+			"case": "Quality0 concrete material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		},
+		{
+			"case": "Quality1 floor material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		},
+		{
+			"case": "Quality1 wall material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		},
+		{
+			"case": "Quality1 concrete material samples mipmapped textures with anisotropic filtering",
+			"passed": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"materials": [
+		{
+			"filter": 5,
+			"material": "floor",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 0,
+			"uv_scale": "(0.45, 0.45, 0.45)"
+		},
+		{
+			"filter": 5,
+			"material": "wall",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 0,
+			"uv_scale": "(0.38, 0.38, 0.38)"
+		},
+		{
+			"filter": 5,
+			"material": "concrete",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 0,
+			"uv_scale": "(0.55, 0.55, 0.55)"
+		},
+		{
+			"filter": 5,
+			"material": "floor",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 1,
+			"uv_scale": "(0.45, 0.45, 0.45)"
+		},
+		{
+			"filter": 5,
+			"material": "wall",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 1,
+			"uv_scale": "(0.38, 0.38, 0.38)"
+		},
+		{
+			"filter": 5,
+			"material": "concrete",
+			"normal_enabled": true,
+			"normal_scale": 0.280000001192093,
+			"quality": 1,
+			"uv_scale": "(0.55, 0.55, 0.55)"
+		}
+	],
+	"passed": true,
+	"scope": "Godot imported texture mip levels and actual stage materials at both quality profiles. This does not establish visual improvement, Web compatibility or FPS.",
+	"textures": [
+		{
+			"has_mipmaps": true,
+			"image_bytes": 4194303,
+			"image_format": 4,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/concrete_floor_diff.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "5e06d0fb226f671470f59bf7798954b6965c9ed56dd45084dfd012e15737e444"
+		},
+		{
+			"has_mipmaps": true,
+			"image_bytes": 4194303,
+			"image_format": 4,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/concrete_floor_normal.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "5a403c176361193b785198ab363d3dc3755773ca5b023f19e05874e50caea302"
+		},
+		{
+			"has_mipmaps": true,
+			"image_bytes": 4194303,
+			"image_format": 4,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/concrete_floor_rough.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "342110e685c07af2c56194662a796b2ab4f2a4d992a9745b8fc55943414faead"
+		},
+		{
+			"has_mipmaps": true,
+			"image_bytes": 4194303,
+			"image_format": 4,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/painted_plaster_wall_diff.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "440310f05af089f2c93353167573403cbc3f805948203237b5d26431eeb9e19c"
+		},
+		{
+			"has_mipmaps": true,
+			"image_bytes": 4194303,
+			"image_format": 4,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/painted_plaster_wall_normal.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "8eb01647d126eb5341e2c325821ad48c8ca11349dbef53447c95422c5d91cc9d"
+		},
+		{
+			"has_mipmaps": true,
+			"image_bytes": 1398101,
+			"image_format": 0,
+			"mipmap_count": 10,
+			"path": "res://Assets/Textures/painted_plaster_wall_rough.jpg",
+			"size": "(1024.0, 1024.0)",
+			"source_sha256": "e0564c297b22ab1cf4ef02a82157b84ce3b92eb4fd49d9c64b7256a8b300af82"
+		}
+	]
+}
