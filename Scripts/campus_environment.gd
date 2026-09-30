@@ -34,7 +34,7 @@ static func build(stage) -> void:
 		_exit_arch(stage, room, z)
 		_connector(stage, room, z)
 		if not outdoor:
-			_light(stage, Vector3(0, 3.4, z + 2.5), Color("bec9c6"), 2.4, 14)
+			_light(stage, Vector3(0, 3.4, z + 2.5), Color("bec9c6"), 2.4, 14, true)
 		stage._create_gate(room, z - 10.0)
 	stage._batch_region = 0
 	_box(stage, "DoorWall", Vector3(18.4, 4.5, 0.4), Vector3(0, 2.25, 10.2), "wall", true)
@@ -532,7 +532,7 @@ static func _contact(stage, at: Vector3, size: Vector2, angle: float) -> void:
 	var basis := Basis(Vector3.UP, angle) * Basis(Vector3.RIGHT, -PI / 2.0)
 	stage._batch_instance(_geometry["shadow_plane"], Transform3D(basis.scaled_local(Vector3(size.x, size.y, 1)), at), _contact_material, false)
 
-static func _light(stage, at: Vector3, color: Color, energy: float, distance: float) -> void:
+static func _light(stage, at: Vector3, color: Color, energy: float, distance: float, primary: bool = false) -> void:
 	var light := OmniLight3D.new()
 	light.position = at
 	light.light_color = color
@@ -541,3 +541,4 @@ static func _light(stage, at: Vector3, color: Color, energy: float, distance: fl
 	light.omni_attenuation = 1.4
 	light.shadow_enabled = false
 	stage._visual_regions[stage._batch_region].add_child(light)
+	stage.register_room_light(light, stage._batch_region, primary)

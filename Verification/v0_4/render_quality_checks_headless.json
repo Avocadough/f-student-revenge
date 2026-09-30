@@ -1,0 +1,110 @@
+{
+	"checks": [
+		{
+			"case": "(1280, 720) quality0 respects physical render pixel budget",
+			"passed": true
+		},
+		{
+			"case": "(1280, 720) quality0 updates stage lights and FX through game settings",
+			"passed": true
+		},
+		{
+			"case": "(1280, 720) quality0 applies rendering options without changing physics rate",
+			"passed": true
+		},
+		{
+			"case": "(1280, 720) quality1 respects physical render pixel budget",
+			"passed": true
+		},
+		{
+			"case": "(1280, 720) quality1 updates stage lights and FX through game settings",
+			"passed": true
+		},
+		{
+			"case": "(1280, 720) quality1 applies rendering options without changing physics rate",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality0 respects physical render pixel budget",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality0 updates stage lights and FX through game settings",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality0 applies rendering options without changing physics rate",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality1 respects physical render pixel budget",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality1 updates stage lights and FX through game settings",
+			"passed": true
+		},
+		{
+			"case": "(1920, 1080) quality1 applies rendering options without changing physics rate",
+			"passed": true
+		},
+		{
+			"case": "Returning to menu lets one-shot impacts expire without pool growth",
+			"passed": true
+		},
+		{
+			"case": "New stage reuses the bounded FX pool and reapplies saved low quality",
+			"passed": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"measurements": [
+		{
+			"active_fx_slots": 6,
+			"active_room_lights": 3,
+			"effective_3d_pixels": "(960.0, 540.0)",
+			"logical_rect": "(1280.0, 720.0)",
+			"max_impact_particles": 24,
+			"physical_texture": "(1280.0, 720.0)",
+			"quality": 0,
+			"render_scale": 0.75,
+			"requested_window": "(1280, 720)"
+		},
+		{
+			"active_fx_slots": 12,
+			"active_room_lights": 4,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"logical_rect": "(1280.0, 720.0)",
+			"max_impact_particles": 84,
+			"physical_texture": "(1280.0, 720.0)",
+			"quality": 1,
+			"render_scale": 1.0,
+			"requested_window": "(1280, 720)"
+		},
+		{
+			"active_fx_slots": 6,
+			"active_room_lights": 3,
+			"effective_3d_pixels": "(960.0, 540.0)",
+			"logical_rect": "(1280.0, 720.0)",
+			"max_impact_particles": 24,
+			"physical_texture": "(2880.0, 1620.0)",
+			"quality": 0,
+			"render_scale": 0.333333343267441,
+			"requested_window": "(1920, 1080)"
+		},
+		{
+			"active_fx_slots": 12,
+			"active_room_lights": 4,
+			"effective_3d_pixels": "(1280.0, 720.0)",
+			"logical_rect": "(1280.0, 720.0)",
+			"max_impact_particles": 84,
+			"physical_texture": "(2880.0, 1620.0)",
+			"quality": 1,
+			"render_scale": 0.444444447755814,
+			"requested_window": "(1920, 1080)"
+		}
+	],
+	"passed": true,
+	"scope": "Integrated quality, canvas_items viewport budgets and FX lifecycle. Headless resource assertions are not rendered FPS evidence."
+}

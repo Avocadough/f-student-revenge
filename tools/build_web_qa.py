@@ -62,7 +62,7 @@ def main() -> None:
     PROJECT.mkdir(parents=True, exist_ok=True)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     # Explicit directories avoid recursively copying .work, exports, or prior QA builds.
-    for directory in ("Assets", "Scripts", "Scenes"):
+    for directory in ("Assets", "Scripts", "Scenes", "Web"):
         shutil.copytree(ROOT / directory, PROJECT / directory, dirs_exist_ok=True)
     shutil.copy2(ROOT / "icon.svg", PROJECT / "icon.svg")
     shutil.copy2(ROOT / "tools/web_qa_runner.gd", PROJECT / "web_qa_runner.gd")

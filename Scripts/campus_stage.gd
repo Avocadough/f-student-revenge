@@ -50,6 +50,9 @@ var _static_batches: Dictionary = {}
 var _unit_cube: BoxMesh
 var static_instance_count := 0
 var static_batch_count := 0
+var render_quality := 1
+var _room_lights: Array = [[], [], []]
+var _room_key_lights: Array[OmniLight3D] = [null, null, null]
 
 # Geometry supplies local-space markers; progression never relies on a fixed axis.
 var room_centers: Array[Vector3] = [Vector3.ZERO, Vector3(0, 0, -24), Vector3(0, 0, -48)]
@@ -175,8 +178,7 @@ func _start_encounter(index: int) -> void:
 	for enemy_kind in ENCOUNTERS[stage_index][index]: pending_enemies.append(enemy_kind)
 	_setup_props(index)
 	_setup_mission(index)
-	for region_index in range(3):
-		_visual_regions[region_index].visible = absi(region_index - index) <= 1
+	_update_visual_quality()
 	encounter_changed.emit(index, ROOM_TITLES[stage_index][index])
 	if index == 2:
 		_toast("%s: “%s”" % [Campaign.TEACHER_NAMES[stage_index], INTRO_LINES[stage_index]], 4.0)
@@ -186,6 +188,24 @@ func _start_encounter(index: int) -> void:
 		_toast("อาจารย์กำลังเปิดเครื่องผนึก! ป้องกันปีศาจ 2 ระลอก • T กางกำแพง", 5.0)
 	else:
 		_toast("%s • T ขอแรงอาจารย์ • E ใช้อุปกรณ์เมื่อพื้นที่ปลอดภัย" % OBJECTIVE_TITLES[stage_index][index], 4.5)
+
+func apply_render_quality(quality: int) -> void:
+	render_quality = clampi(quality, 0, 1)
+	_update_visual_quality()
+
+func register_room_light(light: OmniLight3D, room: int, primary: bool = false) -> void:
+	_room_lights[room].append(light)
+	if primary or _room_key_lights[room] == null:
+		_room_key_lights[room] = light
+
+func _update_visual_quality() -> void:
+	if _visual_regions.size() < 3: return
+	for room in range(3):
+		var nearby := absi(room - checkpoint_index) <= 1
+		_visual_regions[room].visible = nearby
+		# Keep neighboring architecture readable without lighting it with every accent.
+		for light: OmniLight3D in _room_lights[room]:
+			light.visible = nearby and (light == _room_key_lights[room] or (render_quality > 0 and room == checkpoint_index))
 
 func _physics_process(delta: float) -> void:
 	if not encounter_started or completed or not is_instance_valid(player) or get_tree().paused:

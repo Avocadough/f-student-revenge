@@ -1,0 +1,12 @@
+{
+  "version": "0.4",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "pck_sha256": "e3765e618483cddaf1377475036e228cd132550fdec0bf94ebc43947b8ae093d",
+  "bytes": 19008760,
+  "scope": "Final production PCK tested by an external runner in an otherwise empty temporary folder; native headless engine with fixed physics delta. Browser performance is not inferred from it.",
+  "runner_source": "tools/test_gameplay_v03.gd",
+  "runner_change": "Only result output redirected to absolute Verification/v0_4/release_pack_gameplay.json path",
+  "result": "release_pack_gameplay.json",
+  "checks": 28,
+  "passed": true
+}

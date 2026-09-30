@@ -2,6 +2,7 @@
 config_version=5
 
 [application]
+run/max_fps=60
 config/name="การล้างแค้นของนักศึกษาติด F"
 config/description="A three-stage campus beat-em-up demo. CP410844 Group 3."
 run/main_scene="res://Scenes/main.tscn"

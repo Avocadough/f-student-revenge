@@ -1,6 +1,7 @@
 extends Node3D
 
 const POOL_SIZE := 12
+const LOW_POOL_SIZE := 6
 const FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
 
 static func prepare(parent: Node) -> Node3D:
@@ -11,6 +12,7 @@ static func prepare(parent: Node) -> Node3D:
 	pool.process_mode = Node.PROCESS_MODE_PAUSABLE
 	pool.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	pool.set_meta("next", 0)
+	pool.set_meta("budget", LOW_POOL_SIZE if int(parent.get_meta("render_quality", 1)) == 0 else POOL_SIZE)
 	parent.add_child(pool)
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(0.028, 0.028, 0.16)
@@ -26,7 +28,7 @@ static func prepare(parent: Node) -> Node3D:
 		var particles := CPUParticles3D.new()
 		particles.emitting = false
 		particles.one_shot = true
-		particles.amount = 7
+		particles.amount = 4 if int(parent.get_meta("render_quality", 1)) == 0 else 7
 		particles.lifetime = 0.24
 		particles.explosiveness = 1.0
 		particles.mesh = mesh
@@ -44,11 +46,26 @@ static func prepare(parent: Node) -> Node3D:
 		pool.add_child(particles)
 	return pool
 
+static func apply_quality(parent: Node, quality: int) -> void:
+	var low := quality == 0
+	parent.set_meta("render_quality", 0 if low else 1)
+	var pool := prepare(parent)
+	var budget := LOW_POOL_SIZE if low else POOL_SIZE
+	pool.set_meta("budget", budget)
+	pool.set_meta("next", int(pool.get_meta("next", 0)) % budget)
+	for index in range(POOL_SIZE):
+		var particles := pool.get_child(index) as CPUParticles3D
+		particles.amount = 4 if low else 7
+		if index >= budget:
+			particles.emitting = false
+		particles.visible = index < budget
+		particles.process_mode = Node.PROCESS_MODE_INHERIT if index < budget else Node.PROCESS_MODE_DISABLED
+
 static func burst(parent: Node, point: Vector3, color: Color, large: bool = false) -> void:
 	var pool := prepare(parent)
 	var index: int = pool.get_meta("next", 0)
 	var particles := pool.get_child(index) as CPUParticles3D
-	pool.set_meta("next", (index + 1) % POOL_SIZE)
+	pool.set_meta("next", (index + 1) % int(pool.get_meta("budget", POOL_SIZE)))
 	particles.global_position = point
 	particles.color = color
 	particles.initial_velocity_max = 3.0 if large else 1.6

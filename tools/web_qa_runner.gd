@@ -248,7 +248,7 @@ func run_traversal() -> void:
 	game.save_data.clear()
 	game.elapsed = 0
 	game.deaths = 0
-	press_button_with("เริ่มล้างแค้น", game.menu_stack)
+	press_button_with("เริ่มภารกิจสอบซ่อม", game.menu_stack)
 	await wait_frames(1)
 	press_button_with("ถึงเวลาเข้าเรียน", game.modal_stack)
 	await wait_frames(3)

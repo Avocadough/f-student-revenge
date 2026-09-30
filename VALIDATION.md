@@ -1,56 +1,54 @@
-# ผลตรวจรุ่น 0.3 — มหาวิทยาลัยถูกปีศาจบุก
+# ผลตรวจเดโม 0.4 — UI สยองขวัญและลดภาระเครื่อง
 
-ตรวจวันที่ **1 ตุลาคม 2026** ด้วย **Godot 4.7.2 Stable**, Compatibility renderer, Web แบบ single-thread บน Windows / NVIDIA RTX 5060 Ti แยกผลตรวจระบบ การควบคุมอัตโนมัติ การเปิดเว็บ และประสบการณ์ผู้เล่นใหม่ออกจากกัน
+ตรวจวันที่ **1 ตุลาคม 2026** ด้วย Godot 4.7.2 Stable / Compatibility renderer บน Windows, NVIDIA RTX 5060 Ti งานรอบนี้ปรับ UI และคุณภาพการเรนเดอร์ คงเดโมสามด่าน เนื้อเรื่อง และเงื่อนไขการต่อสู้เดิม
 
-## ระบบและการเล่น
+## สิ่งที่ตรวจผ่าน
 
-| ขอบเขต | หลักฐาน | ผล |
+| ขอบเขต | ผลและหลักฐาน |
+|---|---|
+| หน้าหลัก วิธีเล่น ตั้งค่า เลือกด่าน บทนำ เครดิต HUD พักเกม แพ้ ผ่านด่าน และตอนจบ | [UI fixtures](Verification/v0_4/horror_ui_checks.json): 1,167 assertions ผ่าน; เก็บภาพจริง 49 ภาพที่ 1280×720, 960×540, 800×720; ตรวจด้วยตาเพิ่มเติมเรื่องภาษาไทย กรอบ และการซ้อนทับ ตัวเลขนี้เป็นการตรวจ layout/focus ไม่ใช่จำนวนระบบเกม |
+| ข้อความยาวและคีย์บอร์ด | แก้ focus ก่อน layout เสร็จที่ทำให้ปุ่มท้ายถูกตัด; หน้ายาวเปิดที่หัวข้อแล้ว Tab ไปเห็นปุ่มครบ หน้าตั้งค่าครบในหน้าเดียวที่ 720p; 540p เลื่อนได้ |
+| คุณภาพจากหน้าตั้งค่าจริง | [Native checks](Verification/v0_4/render_quality_checks_native.json), [headless checks](Verification/v0_4/render_quality_checks_headless.json): 14/14 แต่ละโหมดรันทดสอบ ครอบคลุม 720p/1080p, DPI, ระดับภาพ, แสง, FX, AA, 60 FPS cap และฟิสิกส์ 60 Hz |
+| ภาระฉาก | [27 snapshots](Verification/v0_4/quality_resource_audit.json): ปกติ → ประหยัด → ปกติ ครบเก้าจุดเริ่มใหม่; จุดเกิด ทางออก และอุปกรณ์ภารกิจคงเดิม |
+| เมนู/เซฟ/การกลับเข้าเกม | [25 checks](Verification/v0_4/menu_persistence_checks.json) ผ่านใน user directory แยก |
+| God Mode บน UI / ทางสำรองจับเมาส์ | [18 checks](Verification/v0_4/god_mode_ui_checks.json), [15 checks](Verification/v0_4/browser_fallback_checks.json) ผ่าน |
+| แพ็กส่งออกสุดท้าย | [28 checks](Verification/v0_4/release_pack_gameplay.json) ผ่านจาก PCK ด้วย native headless; บอตใช้คำสั่งตัวละครเดินครบเก้า checkpoint ถึง F → D, retry 0, 142.37 วินาทีจำลอง |
+| เว็บโหลด/แจ้งข้อผิดพลาด | JavaScript parse และ lifecycle แบบ stub 14 checks ผ่าน; template placeholders ตรง Godot ที่ติดตั้งครบ 8 ตัว ดู [shell checks](Verification/v0_4/web_shell_checks.json) |
+
+ชุด UI ใช้ fixture เปิดสถานะต่าง ๆ เพื่อเก็บภาพ ไม่ถือว่าเล่นชนะเกม ชุด PCK ใช้ runner นอกโครงการในโฟลเดอร์ชั่วคราวว่าง แล้วโหลด Scenes/Scripts/Assets จากแพ็กจริง ไม่ใช้ source เป็นทางสำรอง ไม่แก้ HP/teleport/เปิดอมตะในช่วงเดินเรื่อง บอตอ่านสถานะศัตรูและกดปุ่มเมนูผ่านสัญญาณ จึงไม่แทนการเล่นครั้งแรกของคน รายละเอียด [pack receipt](Verification/v0_4/release_pack_receipt.json)
+
+## ผลลดงานเรนเดอร์
+
+ลบฉาก 3D ที่ถูกภาพหน้าปกบัง ใช้กรอบ UI เวกเตอร์คงที่ ไม่มี noise shader เคลื่อนไหวทั้งจอ จำกัดการเรนเดอร์ **60 FPS** ทั้งสองระดับโดยคงฟิสิกส์ 60 Hz กำหนดงบจากขนาด render target จริง ไม่ใช้ขนาด UI ที่อาจเล็กกว่าบนจอ DPI สูง
+
+| ค่า | มาตรฐาน | ประหยัด |
 |---|---|---|
-| พันธมิตร ภารกิจ จุดเกิด ประตูมิติ | [demon_campaign_checks.json](Verification/v0_3/demon_campaign_checks.json) | 52 checks ผ่าน; อาจารย์ไม่เป็นศัตรู, T ใช้ไม่ได้ขณะพัก/บทพูด, คูลดาวน์คืนเมื่อเริ่ม checkpoint, E ต้องอยู่ในระยะและทำได้ครั้งเดียว |
-| ระบบด่าน บอส การปรับตัวและโล่ | [stage_subsystem_checks_v03.json](Verification/v0_3/stage_subsystem_checks_v03.json) | 63 checks ผ่าน |
-| การเล่นผ่าน controller | [gameplay_integration_v03.json](Verification/v0_3/gameplay_integration_v03.json) | 28 checks ผ่าน; เดินครบ 9 checkpoint และจบ F → D ในโหมดปกติ |
-| God Mode | [god_mode_combat_checks_v03.json](Verification/v0_3/god_mode_combat_checks_v03.json) | 36 checks ผ่าน; ยังต้องทำภารกิจ E และปิดประตูมิติ |
-| เมนูและการคงค่า | [menu_persistence_checks.json](Verification/v0_3/menu_persistence_checks.json) | 25 checks ผ่าน |
-| ย้ายค่าตั้งค่าและเริ่มเรื่องใหม่ | [save_migration_v03.json](Verification/v0_3/save_migration_v03.json) | 8 checks ผ่าน; เซฟเดิมตรงทุกไบต์, progress_v2.json เก็บความคืบหน้าแยก |
-| การเคลื่อนไหว กล้อง และ feedback | [motion_regressions.json](Verification/v0_3/motion_regressions.json) | 14 checks ผ่าน |
-| การชนกระสุน/วัตถุ/กำแพง | [stage_collision_checks.json](Verification/v0_3/stage_collision_checks.json) | 12 checks ผ่าน |
-| ตั้งค่า God Mode และ UI | [god_mode_ui_checks.json](Verification/v0_3/god_mode_ui_checks.json) | 18 checks ผ่าน |
-| ทางสำรองเมื่อเว็บไม่ล็อกเมาส์ | [browser_fallback_checks.json](Verification/v0_3/browser_fallback_checks.json) | 15 checks ผ่าน; headless ไม่ยืนยันว่าเบราว์เซอร์ให้ pointer lock จริง |
-| ขนาดหน้าจอ/ภาษาไทย | [ui_layout_checks.json](Verification/v0_3/ui_layout_checks.json) | 17 checks ผ่านที่ 1280×720, 960×540 และ 800×720; ตรวจภาพที่เรนเดอร์ด้วย |
-| เสียงใหม่และการหยุดเสียง | [audio_v03.json](Verification/v0_3/audio_v03.json) | 11 checks ผ่าน; โหลดเสียง, ducking, pause/resume, หยุดบรรยากาศเมื่อกลับเมนู และให้เสียงผนึกเล่นจบได้ |
+| ความละเอียด 3D สูงสุด | 1280×720 | 960×540 |
+| เงา / ลบรอยหยัก | เปิด / 2× | ปิด / ปิด |
+| ไฟ | ห้องปัจจุบันครบ + ไฟหลักห้องใกล้เคียง | ไฟหลักต่อห้องที่มองเห็น |
+| ประกายสูงสุดใน pool | 12×7 = 84 | 6×4 = 24 |
 
-รวม **299 checks** การเดินเกมอัตโนมัติล่าสุดครบเรื่องใน **134.72 วินาทีจำลอง**, retry 0 ใช้ input ตัวละครจริง ไม่ทำความเสียหายโดยตรง ไม่ teleport ไม่แก้ HP และไม่เปิดอมตะในช่วงเดินเรื่อง บอตอ่านสถานะศัตรูได้และกดเมนูด้วยสัญญาณปุ่ม จึงไม่แทนการเล่นด้วยมือ ส่วนกรณีทดสอบรายระบบใช้ fixture จัดตำแหน่งและสถานะตามที่เปิดเผยใน JSON
+ทดสอบ native ในห้องเซิร์ฟเวอร์ ศัตรูปกติสี่ตัว ตัวละครเดินซ้ายขวาและอมตะเฉพาะช่วงวัด Warm-up สองวินาที แล้ววัดเวลาเฟรมจริงประมาณ 12 วินาที:
 
-## งานภาพและแหล่งที่มา
+| ตัวอย่าง | เฉลี่ย FPS | p95 frame time | คำสั่งวาดมัธยฐาน |
+|---|---:|---:|---:|
+| แพ็กเดิม ภายใต้เพดานทดสอบ 120 | 120.22 | 9.199 ms | 301 |
+| ใหม่ มาตรฐาน ภายใต้เพดานทดสอบ 120 | 120.22 | 9.002 ms | 301 |
+| ใหม่ ประหยัด ภายใต้เพดานทดสอบ 120 | 120.09 | 9.137 ms | 148 |
+| ใหม่ มาตรฐาน เพดานส่งมอบจริง 60 | 60.23 | 17.731 ms | 301 |
 
-- [QA โมเดล](Art/campus_asset_qa.json): ตัวละคร 10 แบบ หนึ่ง mesh ต่อแบบ 4–6 surfaces และ 18 คลิปต่อแบบ ชื่อ เวลา keyframe ค่าแอนิเมชัน และ skeleton bind เทียบฐานเดิมผ่าน ใช้ร่างกายต่อเนื่องแทนชิ้นทรงกระบอกที่มีรอยแยก ตรวจภาพแอนิเมชัน Idle/Run/Hook ใน Godot ด้วย
-- ตรวจฉากเล่นจริงทั้งเก้าโซน ใช้พื้นผิว 1K แสงทิศทาง/แสงเฉพาะจุด หมอกระยะ เงาสัมผัสจากภาพที่เตรียมไว้ และอุปกรณ์ภารกิจที่แยกรูปร่าง ไม่มีระบบ LightmapGI ที่ bake ทั้งฉาก; ฉากสร้างขณะรันและใช้วัสดุร่วมเพื่อลดภาระเว็บ
-- ภาพหน้าปกเป็นภาพประกอบสร้างด้วย imagegen ไม่ใช่ภาพกราฟิกขณะเล่น โมเดลมีวัสดุและสัดส่วนจริงขึ้นแต่ยังเป็นงาน stylized สำหรับ realtime ไม่ใช่ photorealistic scan
-- ใบอนุญาต แหล่งดาวน์โหลด และ SHA-256 อยู่ใน [เครดิต](CREDITS.md), [asset_manifest.json](Assets/asset_manifest.json), [texture_receipt.json](Assets/Textures/texture_receipt.json) และ [ambience_receipt.json](Assets/Audio/ambience_receipt.json)
+โหมดประหยัดลดคำสั่งวาดที่วัดได้ **50.8%** และงบพิกเซล 3D **43.75%** ขณะที่ UI ยังเรนเดอร์แยก ภาพฉากจะนุ่มขึ้นและมีขอบหยัก/เงาน้อยลง ตัวอย่างถูกจำกัดด้วยเพดาน FPS จึงไม่อ้างว่าเร็วขึ้นกี่ FPS หรือใช้ RAM ลดลงกี่เปอร์เซ็นต์ ดู [ข้อมูลดิบและข้อจำกัด](Verification/v0_4/render_quality_performance_summary.md)
 
-## เว็บและประสิทธิภาพ
+## ตรวจเว็บจริง
 
-ไฟล์เผยแพร่จริง `docs/index.pck` ผ่าน [การเล่นจากแพ็ก](Verification/v0_3/release_pack_gameplay.json) ด้วย Godot 4.7.2 native headless: 28/28 checks, ครบ 9 checkpoint จนถึงตอนจบ, retry 0, 141.52 วินาทีจำลอง และไม่มี error/warning ตัวทดสอบทำงานจากโฟลเดอร์ว่างนอกโครงการ มีเพียง runner แล้วโหลด Scenes/Scripts/Assets จาก PCK โดยตรง ผลนี้ยืนยันความครบของไฟล์ส่งออก แต่ไม่แทนการเรนเดอร์บนเว็บ
+เปิด Web export ชุดใหม่บน Edge ผ่าน localhost แล้วตรวจเมนู ตั้งค่า เลือกโหมดประหยัด เลือกด่าน เข้าเกมเห็น HUD/ศัตรู และพักเกมด้วย P ได้ ภาพ [พักเกมบน Edge](Verification/v0_4/screenshots/edge_local_pause.png) เบราว์เซอร์ที่เครื่องมือควบคุมใช้ปฏิเสธ pointer lock ด้วย WrongDocumentError; เกมแสดงคำแนะนำลากเมาส์กลาง/R ตามทางสำรองที่มีอยู่ จึงไม่ใช้รอบนี้ยืนยัน pointer lock สำหรับผู้เล่นหรือ FPS ของแท็บ foreground
 
-เปิดหน้าเมนูและด่านแรกบน Chrome/Edge ระหว่างพัฒนาได้ แต่การตรวจชุดสุดท้ายด้วยเครื่องมือควบคุมหน้าจอหยุดเพราะเครื่องมือยืนยัน URL ไม่ได้ จึง **ยังไม่อ้างว่าผ่านการเล่นครบเกมบนเบราว์เซอร์หรือผ่านเกณฑ์ FPS เว็บ** ผู้ใช้ยืนยันขอบเขตเดโมรายวิชาและให้ส่งรุ่นที่เล่นได้บน GitHub Pages โดยไม่เพิ่มระบบอื่น
+**ยังไม่มีผล FPS บนเว็บที่ใช้รับรองเกณฑ์ ≥55 FPS/p95 ≤25 ms และยังไม่ได้ทดสอบเครื่องสเปกต่ำจริง** ผล native ของ RTX 5060 Ti ไม่แทนเครื่องทั่วไปหรือมือถือ รอบนี้ไม่ได้อ้างว่าเล่นครบเกมด้วยมือบน Chrome/Edge และไม่ได้วัดการฟังเสียงจากมนุษย์
 
-พบและแก้ปัญหาเสียงบรรยากาศบนเว็บ: การสั่ง unpause ซ้ำทุกเฟรมทำให้ backend ของ Godot สร้างสำเนาเสียงซ้ำ เปลี่ยนเป็นสั่งเมื่อสถานะเปลี่ยนเท่านั้น ตรวจกลไกจาก source รุ่น 4.7.2 และ JS ที่ส่งออกจริง พร้อมทดสอบเสียงซ้ำผ่าน ดู [บันทึกการวิเคราะห์](Verification/v0_3/web_audio_pause_diagnosis.md) ยังไม่ใช้การแก้ source นี้อ้างผล FPS ที่ไม่ได้วัดสำเร็จ
+## การเผยแพร่
 
-ชุดตรวจแยกใน `tools/build_web_qa.py` ยังเก็บไว้ให้รันซ้ำได้: คัดลอก source/assets ที่มี hash และแสดงปุ่ม Start QA จากนั้นเดินครบเรื่องในโหมดปกติ แล้ววัดอีก 30 วินาทีในห้องเซิร์ฟเวอร์ที่มีศัตรูจริง 4 ตัว โดยเปิดอมตะเฉพาะช่วงวัดเพื่อรักษาภาระงานคงที่
+ชุดส่งออกพร้อมสำหรับ GitHub Pages ลิงก์เดิม รอเติมบันทึกตรวจไฟล์สาธารณะหลัง deploy ใน [publication_v0_4.json](Verification/publication_v0_4.json)
 
-วัดจากเวลาของ `RenderingServer.frame_post_draw` ที่ 1280×720 ข้ามช่วงพัก/เมนู/แท็บซ่อนและ warm-up 2 วินาทีต่อห้อง FPS เฉลี่ย = จำนวนเฟรมหารเวลารวม; p95 คำนวณจากเวลาเฟรมจริง เป้าหมายเฉลี่ย ≥55 FPS และ p95 ≤25 ms บนเครื่องนี้
+เก็บฐานเว็บ 0.3 ไว้ที่ `codex/pre-ui-v0.3`, commit `64b260a2a33873e8e5fe9619c3879866758ac114` หากต้องย้อนกลับ ให้คืน docs จากฐานแล้วสร้าง commit ใหม่โดยไม่ลบประวัติ
 
-## ข้อจำกัด
-
-- 20–30 นาทีเป็นเป้าหมายเวลาเล่นครั้งแรก ยังไม่มีผลทดลองกับผู้เล่นใหม่ เวลา bot รายงานแยก
-- ผลเครื่อง RTX 5060 Ti ไม่รับรองเครื่องสเปกต่ำหรือมือถือ มีโหมดภาพเบาที่ลดความละเอียด 3D เหลือ 75% และปิดเงา
-- ผลโหลด/ducking เสียงไม่แทนการประเมินความดังและความน่ากลัวด้วยการฟังของมนุษย์ ไม่มีเสียงพากย์
-- ไม่มี multiplayer และอาจารย์ประจำเหตุการณ์ ไม่เดินตามทั้งด่าน ไม่มีเงื่อนไขแพ้จาก HP อาจารย์
-
-## การเผยแพร่และย้อนกลับ
-
-**เผยแพร่สำเร็จ:** [เล่นเดโม 0.3](https://avocadough.github.io/f-student-revenge/) จาก commit `386d08225b6b9b6e81b4bf04e92a352b8ebf830f` บน main/docs, GitHub Pages build/deploy สำเร็จ [run 36778800639](https://github.com/Avocadough/f-student-revenge/actions/runs/36778800639) ตรวจ HTTP 200 และ SHA-256 ตรงครบ 9 ไฟล์ใน [publication_v0_3.json](Verification/publication_v0_3.json) ตัวเปรียบเทียบยอมรับเฉพาะการแปลง CRLF ของ Git สำหรับ HTML/JS ส่วน PCK/WASM ต้องตรงทุกไบต์
-
-PCK สาธารณะตรงกับแพ็กที่เล่นจบ: `29aca469b3f7c52209be3c2c3b4b920a5e8024018bcf480b2754960e8e347a97` เก็บฐานก่อนเปลี่ยนไว้ทั้ง local และ remote ที่ branch `codex/pre-demon-v0.2`, commit `d75d0f6283f2fd60f66cb5114a455c588f5f7219` หากต้องย้อนเว็บให้คืนโฟลเดอร์ docs จากฐานนี้แล้วสร้าง commit ใหม่โดยไม่ลบประวัติ
-
-ผลรุ่น 0.2 เป็นประวัติคนละ campaign: [VALIDATION เดิม](https://github.com/Avocadough/f-student-revenge/blob/d75d0f6283f2fd60f66cb5114a455c588f5f7219/VALIDATION.md) และ JSON เดิมใน `Verification/` ไม่ใช้ผลเก่าทดแทนการตรวจรุ่นนี้
+ประวัติแคมเปญ/โมเดล/เสียงและผล 299 checks ของรุ่นก่อนอยู่ใน [VALIDATION 0.3](https://github.com/Avocadough/f-student-revenge/blob/64b260a2a33873e8e5fe9619c3879866758ac114/VALIDATION.md) ไม่ใช้จำนวนดังกล่าวอ้างว่าได้รันทั้งหมดซ้ำในรอบ UI นี้ เวลาเล่นครั้งแรก 20–30 นาทีและความสนุกยังต้องประเมินกับผู้เล่นใหม่

@@ -4,6 +4,8 @@ extends Node3D
 
 const Player = preload("res://Scripts/student_player.gd")
 const Stage = preload("res://Scripts/campus_stage.gd")
+const HorrorUI = preload("res://Scripts/horror_ui.gd")
+const FX = preload("res://Scripts/combat_fx.gd")
 const GameAudio = preload("res://Scripts/game_audio.gd")
 const Campaign = preload("res://Scripts/campaign_data.gd")
 const FONT = preload("res://Assets/Fonts/NotoSansThai.ttf")
@@ -11,10 +13,10 @@ const STAGE_NAMES := Campaign.STAGE_NAMES
 const SAVE_PATH := "user://progress_v2.json"
 const LEGACY_SAVE_PATH := "user://progress.json"
 const STAGE_SUBTITLES := ["01 / PROGRAMMING", "02 / ARTIFICIAL INTELLIGENCE", "03 / WEB APPLICATION"]
-const INK := Color("151b24")
-const CREAM := Color("f3ecda")
-const ORANGE := Color("f2704e")
-const MINT := Color("88d5c5")
+const INK := Color("100e12")
+const CREAM := HorrorUI.BONE
+const ORANGE := HorrorUI.BLOOD
+const MINT := HorrorUI.TEAL
 
 var player: CharacterBody3D
 var level: Node3D
@@ -71,6 +73,9 @@ var _modal_return_focus: Control
 var _run_id: int = 0
 var menu_cover: TextureRect
 var support_label: Label
+var menu_frame: Control
+var modal_frame: Control
+var modal_kicker: Label
 var legacy_progress_found := false
 
 func _ready() -> void:
@@ -80,6 +85,7 @@ func _ready() -> void:
 	_load_save()
 	_build_world()
 	_build_ui()
+	get_viewport().size_changed.connect(func() -> void: _apply_render_settings.call_deferred())
 	audio = GameAudio.new()
 	add_child(audio)
 	_apply_settings()
@@ -127,63 +133,8 @@ func _build_world() -> void:
 	sun.directional_shadow_max_distance = 45.0
 	add_child(sun)
 	menu_world = Node3D.new()
-	# Menu animation is decorative and never mixed with interpolated gameplay.
-	menu_world.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	# The opaque cover needs no hidden models, materials, lights or animation.
 	add_child(menu_world)
-	_menu_box(Vector3(0, -0.16, 0), Vector3(30, 0.3, 25), Color("717975"))
-	_menu_box(Vector3(0, 2.7, -5), Vector3(22, 5.4, 0.3), Color("cbc6b2"))
-	_menu_box(Vector3(0, 0.5, -4.81), Vector3(22, 1.0, 0.08), Color("4a6762"))
-	_menu_box(Vector3(2.2, 2.45, -4.77), Vector3(7.4, 2.65, 0.12), Color("ac9971"))
-	_menu_box(Vector3(2.2, 2.45, -4.68), Vector3(7.16, 2.41, 0.08), Color("243e36"))
-	_menu_box(Vector3(2.2, 1.08, -4.58), Vector3(7.4, 0.09, 0.25), Color("b8ac8d"))
-	# Wall rails, floor inlays and actual desks anchor the scene as a campus room.
-	for x in [-5.5, -1.0, 7.0]:
-		_menu_box(Vector3(x, 2.7, -4.76), Vector3(0.13, 5.4, 0.08), Color("ddd6bd"))
-	for z in [-3.0, 1.0, 5.0]:
-		_menu_box(Vector3(2, 0.002, z), Vector3(17, 0.008, 0.025), Color("9caa9e"))
-	for x in [-2.0, 2.2, 6.5]:
-		_menu_box(Vector3(x, 4.85, -1.7), Vector3(2.0, 0.055, 0.4), Color("eee4c3"))
-	_menu_box(Vector3(1.0, 0.96, -1.3), Vector3(3.1, 0.13, 1.25), Color("b69262"))
-	_menu_box(Vector3(1.0, 0.57, -1.62), Vector3(2.7, 0.64, 0.1), Color("426059"))
-	for x in [-0.3, 2.3]:
-		_menu_box(Vector3(x, 0.45, -1.3), Vector3(0.12, 0.95, 1.0), Color("283d3c"))
-	for pos in [Vector3(5.7, 0, -2.6), Vector3(7.7, 0, -2.6)]:
-		_menu_box(pos + Vector3(0, 0.76, 0), Vector3(1.45, 0.09, 0.9), Color("b49c74"))
-		for x in [-0.58, 0.58]:
-			_menu_box(pos + Vector3(x, 0.37, 0), Vector3(0.07, 0.74, 0.68), Color("42514d"))
-	_menu_box(Vector3(6.85, 1.5, -4.74), Vector3(0.95, 1.25, 0.05), CREAM)
-	_menu_sign("รับงานชดเชย\nภารกิจกู้มหาลัย", Vector3(6.85, 1.53, -4.69), 29, 0.004, INK)
-	_menu_sign("DEPARTMENT OF\nSECOND CHANCES", Vector3(-2.7, 2.7, -4.68), 34, 0.006, Color("3c544f"))
-	var board := Label3D.new()
-	board.font = FONT
-	board.text = "F"
-	board.font_size = 190
-	board.pixel_size = 0.008
-	board.modulate = ORANGE
-	board.outline_size = 0
-	board.position = Vector3(3.4, 2.55, -4.59)
-	menu_world.add_child(board)
-	var note := Label3D.new()
-	note.font = FONT
-	note.text = "FINAL GRADE\nเข้าเรียน 0 / 15"
-	note.font_size = 40
-	note.pixel_size = 0.005
-	note.position = Vector3(3.4, 1.5, -4.55)
-	menu_world.add_child(note)
-	for item: Array in [["student", Vector3(5.4, 0, 1.5), 0.5], ["phone", Vector3(0.6, 1.05, -1.1), 0.0], ["book", Vector3(1.45, 1.05, -1.55), 0.1]]:
-		var path: String = "res://Assets/Models/%s.glb" % item[0]
-		if ResourceLoader.exists(path):
-			var model: Node3D = load(path).instantiate()
-			menu_world.add_child(model)
-			model.position = item[1]
-			model.rotation.y = item[2] + PI
-			var animator := _find_animator(model)
-			if animator:
-				for clip: StringName in animator.get_animation_list():
-					if String(clip).to_lower() in ["idle", "screenloop"]:
-						animator.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
-						animator.play(clip)
-						break
 	menu_camera = Camera3D.new()
 	add_child(menu_camera)
 	menu_camera.position = Vector3(6.3, 2.9, 7.4)
@@ -191,40 +142,10 @@ func _build_world() -> void:
 	menu_camera.fov = 49
 	menu_camera.current = true
 
-func _menu_sign(copy: String, pos: Vector3, font_size: int, pixel_size: float, color: Color) -> void:
-	var label := Label3D.new()
-	label.font = FONT
-	label.text = copy
-	label.font_size = font_size
-	label.pixel_size = pixel_size
-	label.modulate = color
-	label.outline_size = 0
-	label.position = pos
-	menu_world.add_child(label)
-
-func _find_animator(node: Node) -> AnimationPlayer:
-	if node is AnimationPlayer: return node
-	for child in node.get_children():
-		var animator := _find_animator(child)
-		if animator: return animator
-	return null
-
-func _menu_box(pos: Vector3, size: Vector3, color: Color) -> void:
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = size
-	mesh.mesh = box
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = 0.8
-	mesh.material_override = material
-	mesh.position = pos
-	menu_world.add_child(mesh)
-
 func panel_style(color: Color, border: Color = Color.TRANSPARENT, padding: float = 24.0) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = color
-	style.set_corner_radius_all(8)
+	style.set_corner_radius_all(0)
 	style.set_content_margin_all(padding)
 	style.border_color = border
 	style.set_border_width_all(1)
@@ -240,24 +161,24 @@ func _label(text: String, size: int = 20, color: Color = CREAM) -> Label:
 func _button(text: String, callback: Callable, primary: bool = false) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size.y = 46
+	button.custom_minimum_size.y = 44
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.add_theme_font_size_override("font_size", 18)
-	button.add_theme_color_override("font_color", INK if primary else CREAM)
-	button.add_theme_color_override("font_hover_color", INK)
-	button.add_theme_color_override("font_focus_color", INK)
-	button.add_theme_color_override("font_pressed_color", INK)
-	button.add_theme_color_override("font_disabled_color", Color("7d898d"))
-	button.add_theme_stylebox_override("normal", panel_style(ORANGE if primary else Color("253234"), ORANGE if primary else Color("425350"), 11))
-	button.add_theme_stylebox_override("hover", panel_style(CREAM, CREAM, 11))
-	button.add_theme_stylebox_override("pressed", panel_style(MINT, MINT, 11))
-	var focus_style := panel_style(Color.TRANSPARENT, MINT, 11)
+	button.add_theme_color_override("font_color", CREAM)
+	button.add_theme_color_override("font_hover_color", Color.WHITE)
+	button.add_theme_color_override("font_focus_color", CREAM)
+	button.add_theme_color_override("font_pressed_color", CREAM)
+	button.add_theme_color_override("font_disabled_color", Color("79716c"))
+	button.add_theme_stylebox_override("normal", panel_style(Color("772932") if primary else Color("221a1dcc"), Color("bc5c58") if primary else Color("4b373c"), 11))
+	button.add_theme_stylebox_override("hover", panel_style(Color("48282e"), HorrorUI.BRASS, 11))
+	button.add_theme_stylebox_override("pressed", panel_style(Color("682d36"), CREAM, 11))
+	var focus_style := panel_style(Color.TRANSPARENT, HorrorUI.BRASS, 11)
 	focus_style.set_border_width_all(2)
 	button.add_theme_stylebox_override("focus", focus_style)
-	button.add_theme_color_override("font_focus_color", CREAM if not primary else INK)
-	button.add_theme_stylebox_override("disabled", panel_style(Color("1c2729"), Color("303f40"), 11))
+	button.add_theme_color_override("font_focus_color", CREAM)
+	button.add_theme_stylebox_override("disabled", panel_style(Color("191519"), Color("30282d"), 11))
 	button.mouse_entered.connect(func() -> void: _button_hover(button, true))
 	button.mouse_exited.connect(func() -> void: _button_hover(button, false))
 	button.pressed.connect(func() -> void:
@@ -271,7 +192,7 @@ func _button_hover(button: Button, active: bool) -> void:
 		var old: Tween = button.get_meta("hover_tween")
 		if old and old.is_valid(): old.kill()
 	var tween := button.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tween.tween_property(button, "modulate", Color.WHITE if active else Color("e9eeea"), 0.12)
+	tween.tween_property(button, "modulate", Color.WHITE if active else Color("e5dcda"), 0.12)
 	button.set_meta("hover_tween", tween)
 
 func _build_ui() -> void:
@@ -283,6 +204,7 @@ func _build_ui() -> void:
 	var theme := Theme.new()
 	theme.default_font = FONT
 	theme.default_font_size = 18
+	HorrorUI.apply(theme)
 	ui.theme = theme
 	canvas.add_child(ui)
 	menu_cover = TextureRect.new()
@@ -296,53 +218,63 @@ func _build_ui() -> void:
 	menu_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	menu_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	var shader := Shader.new()
-	shader.code = "shader_type canvas_item; void fragment(){ float shade = mix(0.86, 0.03, smoothstep(0.1,0.75,UV.x)); COLOR=vec4(0.045,0.075,0.075,shade); }"
+	shader.code = "shader_type canvas_item; void fragment(){ float shade = mix(0.96, 0.08, smoothstep(0.1,0.8,UV.x)); shade += 0.2 * pow(abs(UV.y-0.5)*2.0, 2.0); COLOR=vec4(0.038,0.023,0.033,min(shade,0.98)); }"
 	var shader_material := ShaderMaterial.new()
 	shader_material.shader = shader
 	menu_backdrop.material = shader_material
 	ui.add_child(menu_backdrop)
 	main_menu = PanelContainer.new()
 	ui.add_child(main_menu)
-	main_menu.add_theme_stylebox_override("panel", panel_style(Color("142325f5"), Color("58736a"), 26))
+	main_menu.add_theme_stylebox_override("panel", panel_style(Color("100d12cf"), Color("513c3c"), 26))
 	menu_scroll = ScrollContainer.new()
 	menu_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	menu_scroll.follow_focus = true
 	main_menu.add_child(menu_scroll)
 	menu_stack = VBoxContainer.new()
 	menu_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	menu_stack.add_theme_constant_override("separation", 9)
+	menu_stack.add_theme_constant_override("separation", 8)
 	menu_scroll.add_child(menu_stack)
-	menu_stack.add_child(_label("CP410844   /   GROUP 03", 13, MINT))
-	menu_title = _label("การล้างแค้น\nของนักศึกษาติด F", 37)
+	menu_stack.add_child(_label("มหาวิทยาลัยเขตอันตราย   /   DEMO", 13, HorrorUI.BRASS))
+	menu_title = _label("การล้างแค้น\nของนักศึกษาติด F", 39)
+	menu_title.add_theme_color_override("font_shadow_color", Color("5f1c27"))
+	menu_title.add_theme_constant_override("shadow_offset_y", 3)
 	menu_title.add_theme_constant_override("line_spacing", -2)
 	menu_stack.add_child(menu_title)
-	var subtitle := _label("วันประกาศเกรด กลายเป็นวันปีศาจบุก\nสามอาจารย์ร่วมสู้ · หนึ่งโอกาสแก้ F", 16, Color("b6c5bd"))
+	var subtitle := _label("วันประกาศเกรด กลายเป็นวันปีศาจบุก\nสามอาจารย์ร่วมสู้ · หนึ่งโอกาสแก้ F", 16, HorrorUI.ASH)
 	subtitle.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	menu_stack.add_child(subtitle)
 	var divider := HSeparator.new()
 	divider.add_theme_constant_override("separation", 10)
 	menu_stack.add_child(divider)
-	menu_stack.add_child(_button("01   เริ่มล้างแค้น", _new_game, true))
+	menu_stack.add_child(_button("01    เริ่มภารกิจสอบซ่อม", _new_game, true))
 	continue_button = _button("02   เล่นต่อจากจุดล่าสุด", _continue_game)
 	menu_stack.add_child(continue_button)
 	menu_stack.add_child(_button("03   เลือกด่านสำหรับเดโม", _show_stage_select))
 	menu_stack.add_child(_button("04   วิธีเล่นและคอมโบ", _show_help))
 	menu_stack.add_child(_button("05   ตั้งค่า", _show_settings))
 	menu_stack.add_child(_button("06   เครดิตและที่มา", _show_credits))
-	menu_stack.add_child(_label("WASD + เมาส์    /    เดโม 3 ด่าน", 13, Color("9fb3aa")))
+	menu_stack.add_child(_label("CP410844  ·  กลุ่ม 3   /   WASD + เมาส์", 12, HorrorUI.ASH))
+	menu_frame = HorrorUI.new()
+	ui.add_child(menu_frame)
 	menu_dossier = PanelContainer.new()
 	menu_dossier.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	menu_dossier.add_theme_stylebox_override("panel", panel_style(CREAM, Color("e4d7b6"), 18))
+	menu_dossier.add_theme_stylebox_override("panel", panel_style(Color("110e13e8"), Color("745445"), 18))
 	ui.add_child(menu_dossier)
+	var dossier_row := HBoxContainer.new()
+	dossier_row.add_theme_constant_override("separation", 18)
+	menu_dossier.add_child(dossier_row)
+	var grade := _label("F", 74, Color("c95759"))
+	dossier_row.add_child(grade)
 	var dossier_stack := VBoxContainer.new()
-	menu_dossier.add_child(dossier_stack)
-	dossier_stack.add_child(_label("ACADEMIC RECORD  /  000-F", 11, Color("5e756b")))
-	dossier_stack.add_child(_label("เข้าเรียน 0 / 15   ส่งงาน 0 / 8", 16, INK))
-	dossier_stack.add_child(_label("งานชดเชย: กู้มหาวิทยาลัย", 17, Color("93452f")))
-	dossier_stack.add_child(_label("สถานะ  •  ร่วมมือกับอาจารย์", 12, Color("5e756b")))
+	dossier_stack.add_theme_constant_override("separation", 2)
+	dossier_row.add_child(dossier_stack)
+	dossier_stack.add_child(_label("ACADEMIC RECORD / 000-F", 10, HorrorUI.BRASS))
+	dossier_stack.add_child(_label("ขาดเรียน 15 ครั้ง", 20))
+	dossier_stack.add_child(_label("งานชดเชย: กู้มหาวิทยาลัย", 15, HorrorUI.ASH))
+	dossier_stack.add_child(_label("โอกาสสุดท้ายของภาคเรียน", 12, Color("c95759")))
 	_build_hud()
 	modal_scrim = ColorRect.new()
-	modal_scrim.color = Color("061011b3")
+	modal_scrim.color = Color("08060bdc")
 	modal_scrim.mouse_filter = Control.MOUSE_FILTER_STOP
 	modal_scrim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui.add_child(modal_scrim)
@@ -350,7 +282,7 @@ func _build_ui() -> void:
 	modal = PanelContainer.new()
 	ui.add_child(modal)
 	modal.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
-	modal.add_theme_stylebox_override("panel", panel_style(Color("142326"), Color("718b7e"), 26))
+	modal.add_theme_stylebox_override("panel", panel_style(Color("171218fa"), Color("755249"), 30))
 	modal_scroll = ScrollContainer.new()
 	modal_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	modal_scroll.follow_focus = true
@@ -358,6 +290,13 @@ func _build_ui() -> void:
 	modal_stack = VBoxContainer.new()
 	modal_stack.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	modal_stack.add_theme_constant_override("separation", 12)
+	modal_frame = HorrorUI.new()
+	ui.add_child(modal_frame)
+	modal_frame.hide()
+	modal_kicker = _label("บันทึกจากมหาวิทยาลัย  /  RESTRICTED", 12, HorrorUI.BRASS)
+	modal_kicker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui.add_child(modal_kicker)
+	modal_kicker.hide()
 	modal_scroll.add_child(modal_stack)
 	modal_stack.minimum_size_changed.connect(func() -> void: _layout_modal.call_deferred())
 	modal.visibility_changed.connect(_modal_visibility_changed)
@@ -373,24 +312,24 @@ func _build_hud() -> void:
 	stats_panel = PanelContainer.new()
 	hud_root.add_child(stats_panel)
 	stats_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	stats_panel.add_theme_stylebox_override("panel", panel_style(Color("102125e8"), Color("647c70"), 14))
+	stats_panel.add_theme_stylebox_override("panel", panel_style(Color("100e14e0"), Color("64504a"), 12))
 	var stack := VBoxContainer.new()
 	stats_panel.add_child(stack)
-	health_label = _label("นักศึกษา  /  100", 19)
+	health_label = _label("นักศึกษา  /  100", 17)
 	stack.add_child(health_label)
-	health_bar = _bar(stack, ORANGE, 10)
-	var posture_text := _label("สมดุล", 12, Color("c4ccc4"))
+	health_bar = _bar(stack, Color("c65358"), 9)
+	var posture_text := _label("สมดุล  /  SHIFT ปัดป้อง", 12, HorrorUI.ASH)
 	stack.add_child(posture_text)
-	posture_bar = _bar(stack, Color("e4b75f"), 5)
-	stack.add_child(_label("สมาธิ   /   Q ใช้ 50", 12, MINT))
+	posture_bar = _bar(stack, HorrorUI.BRASS, 5)
+	stack.add_child(_label("สมาธิ  /  Q ใช้ 50", 12, MINT))
 	focus_bar = _bar(stack, MINT, 5)
-	support_label = _label("", 13, MINT)
+	support_label = _label("", 12, HorrorUI.BRASS)
 	support_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stack.add_child(support_label)
-	objective_label = _label("", 17)
+	objective_label = _label("", 15)
 	objective_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	objective_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	objective_label.add_theme_stylebox_override("normal", panel_style(Color("102125df"), Color("485e55"), 12))
+	objective_label.add_theme_stylebox_override("normal", panel_style(Color("100e14dc"), Color("54413c"), 12))
 	hud_root.add_child(objective_label)
 	objective_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	objective_label.offset_left = -370
@@ -404,23 +343,23 @@ func _build_hud() -> void:
 	boss_panel.offset_right = 245
 	boss_panel.offset_top = 22
 	boss_panel.offset_bottom = 95
-	boss_label = _label("", 23)
+	boss_label = _label("", 22, CREAM)
 	boss_label.add_theme_color_override("font_shadow_color", INK)
 	boss_label.add_theme_constant_override("shadow_offset_y", 2)
 	boss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_panel.add_child(boss_label)
-	boss_bar = _bar(boss_panel, ORANGE, 10)
-	boss_structure = _bar(boss_panel, Color("e5bb65"), 4)
-	combo_label = _label("", 35, CREAM)
+	boss_bar = _bar(boss_panel, Color("b4414e"), 8)
+	boss_structure = _bar(boss_panel, HorrorUI.BRASS, 4)
+	combo_label = _label("", 27, HorrorUI.BRASS)
 	hud_root.add_child(combo_label)
 	combo_label.position = Vector2(28, 164)
-	timer_label = _label("", 14, Color("d0d8d5"))
+	timer_label = _label("", 14, HorrorUI.ASH)
 	hud_root.add_child(timer_label)
 	timer_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	timer_label.position = Vector2(28, -92)
-	control_hint = _label("WASD เดิน  /  L · H โจมตี  /  Shift การ์ด  /  Space หลบ  /  Q พิเศษ  /  E ใช้  /  T อาจารย์ช่วย  /  Esc พัก", 14)
+	control_hint = _label("WASD เดิน   ·   J / K โจมตี   ·   Shift การ์ด   ·   Space หลบ   ·   Q พิเศษ   ·   E ใช้   ·   T อาจารย์   ·   Esc พัก", 12, HorrorUI.ASH)
 	control_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	control_hint.add_theme_stylebox_override("normal", panel_style(Color("102125cf"), Color.TRANSPARENT, 8))
+	control_hint.add_theme_stylebox_override("normal", panel_style(Color("100e14d9"), Color("3d3036"), 8))
 	hud_root.add_child(control_hint)
 	control_hint.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	control_hint.offset_top = -34
@@ -429,7 +368,11 @@ func _build_hud() -> void:
 	control_hint.add_theme_color_override("font_shadow_color", INK)
 	control_hint.add_theme_constant_override("shadow_offset_x", 1)
 	control_hint.add_theme_constant_override("shadow_offset_y", 2)
-	prompt_label = _label("", 20, MINT)
+	prompt_label = _label("", 19, CREAM)
+	prompt_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	prompt_label.add_theme_constant_override("shadow_offset_y", 2)
+	prompt_label.add_theme_constant_override("outline_size", 5)
+	prompt_label.add_theme_color_override("font_outline_color", Color("160f16"))
 	hud_root.add_child(prompt_label)
 	prompt_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 	prompt_label.offset_left = -350
@@ -437,9 +380,9 @@ func _build_hud() -> void:
 	prompt_label.offset_top = -102
 	prompt_label.offset_bottom = -68
 	prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	toast = _label("", 21, CREAM)
+	toast = _label("", 18, CREAM)
 	toast.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	toast.add_theme_stylebox_override("normal", panel_style(Color("102125ef"), Color("6a8475"), 12))
+	toast.add_theme_stylebox_override("normal", panel_style(Color("190f18ec"), Color("845450"), 10))
 	ui.add_child(toast)
 	toast.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
 	toast.offset_left = -460
@@ -460,48 +403,60 @@ func _layout_ui() -> void:
 	var menu_width := minf(490.0, viewport_size.x - margin * 2.0)
 	main_menu.position = Vector2(margin, margin)
 	main_menu.size = Vector2(menu_width, viewport_size.y - margin * 2.0)
-	menu_title.add_theme_font_size_override("font_size", 37 if menu_width >= 460 else 30)
-	menu_dossier.position = Vector2(viewport_size.x - 346.0, viewport_size.y - 154.0)
-	menu_dossier.size = Vector2(318, 122)
+	menu_frame.position = main_menu.position + Vector2(6, 6)
+	menu_frame.size = main_menu.size - Vector2(12, 12)
+	menu_frame.visible = main_menu.visible
+	menu_title.add_theme_font_size_override("font_size", 39 if menu_width >= 460 else 30)
+	menu_dossier.position = Vector2(viewport_size.x - 374.0, viewport_size.y - 164.0)
+	menu_dossier.size = Vector2(346, 136)
 	menu_dossier.visible = main_menu.visible and viewport_size.x >= 1050 and viewport_size.y >= 600
 	stats_panel.position = Vector2(margin, margin)
-	stats_panel.size = Vector2(254, 168)
-	objective_label.offset_left = -minf(300, viewport_size.x * 0.32) - margin
+	stats_panel.size = Vector2(238, 162)
+	objective_label.offset_left = -minf(284, viewport_size.x * 0.32) - margin
 	objective_label.offset_right = -margin
 	objective_label.offset_top = margin
 	objective_label.offset_bottom = margin + 100
-	var boss_width := minf(430, viewport_size.x - 2 * margin)
+	var boss_width := minf(390, viewport_size.x - 2 * margin)
 	boss_panel.offset_left = -boss_width / 2
 	boss_panel.offset_right = boss_width / 2
 	boss_panel.offset_top = margin if viewport_size.x >= 1120 else 183.0
 	boss_panel.offset_bottom = boss_panel.offset_top + 90
-	combo_label.position = Vector2(margin + 4, 220)
+	combo_label.position = Vector2(margin + 4, 216)
 	timer_label.offset_left = margin
-	timer_label.offset_top = -99
+	timer_label.offset_top = -79
 	control_hint.offset_left = margin
 	control_hint.offset_right = -margin
-	control_hint.offset_top = -60
-	control_hint.offset_bottom = -16
+	control_hint.offset_top = -48
+	control_hint.offset_bottom = -12
 	toast.offset_left = -minf(420, viewport_size.x / 2 - margin)
 	toast.offset_right = minf(420, viewport_size.x / 2 - margin)
-	toast.offset_top = -169
-	toast.offset_bottom = -109
+	toast.offset_top = -155
+	toast.offset_bottom = -110
 	prompt_label.offset_left = -minf(300, viewport_size.x / 2 - margin)
 	prompt_label.offset_right = minf(300, viewport_size.x / 2 - margin)
 	_layout_modal()
+	_apply_render_settings()
 
 func _layout_modal() -> void:
 	if not is_instance_valid(modal) or not is_instance_valid(ui): return
 	var width := minf(660, ui.size.x - 32)
-	var height := clampf(modal_stack.get_combined_minimum_size().y + 52, 220, maxf(220, ui.size.y - 40))
+	var height := clampf(modal_stack.get_combined_minimum_size().y + 60, 220, maxf(220, ui.size.y - 84))
 	modal.offset_left = -width / 2
 	modal.offset_right = width / 2
 	modal.offset_top = -height / 2
 	modal.offset_bottom = height / 2
+	if is_instance_valid(modal_frame):
+		modal_frame.position = modal.position + Vector2(7, 7)
+		modal_frame.size = modal.size - Vector2(14, 14)
+		modal_kicker.position = modal.position + Vector2(0, -27)
+		modal_kicker.size.x = width
 
 func _modal_visibility_changed() -> void:
 	if not modal or not modal_scrim: return
 	modal_scrim.visible = modal.visible
+	if is_instance_valid(modal_frame):
+		modal_frame.visible = modal.visible
+		modal_kicker.visible = modal.visible
 	for child in menu_stack.get_children():
 		if child is BaseButton:
 			child.focus_mode = Control.FOCUS_NONE if modal.visible else Control.FOCUS_ALL
@@ -517,7 +472,7 @@ func _bar(parent: Node, color: Color, height: float) -> ProgressBar:
 	bar.show_percentage = false
 	bar.max_value = 100.0
 	bar.custom_minimum_size.y = height
-	bar.add_theme_stylebox_override("background", panel_style(Color("35414b"), Color.TRANSPARENT, 0))
+	bar.add_theme_stylebox_override("background", panel_style(Color("35272d"), Color.TRANSPARENT, 0))
 	bar.add_theme_stylebox_override("fill", panel_style(color, Color.TRANSPARENT, 0))
 	parent.add_child(bar)
 	return bar
@@ -530,10 +485,14 @@ func show_modal(title: String, copy: String, actions: Array = []) -> void:
 	for child in modal_stack.get_children():
 		modal_stack.remove_child(child)
 		child.queue_free()
-	var heading := _label(title, 29, ORANGE)
+	modal_stack.add_theme_constant_override("separation", 12)
+	var heading := _label(title, 28, CREAM)
+	heading.focus_mode = Control.FOCUS_ALL
+	heading.add_theme_stylebox_override("normal", _heading_style())
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	modal_stack.add_child(heading)
-	var body := _label(copy, 18)
+	var body := _label(copy, 17, Color("c5b9ad"))
+	body.add_theme_constant_override("line_spacing", 3)
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	modal_stack.add_child(body)
 	body.visible = not copy.is_empty()
@@ -544,7 +503,19 @@ func show_modal(title: String, copy: String, actions: Array = []) -> void:
 	_layout_modal.call_deferred()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if modal_stack.get_child_count() > 2:
-		modal_stack.get_child(2).grab_focus()
+		_focus_initial_modal.call_deferred(heading, modal_stack.get_child(2))
+
+func _focus_initial_modal(heading: Label, action: Control) -> void:
+	# Containers need a layout pass before follow_focus can reveal an action.
+	# Long pages open at their heading; Tab reaches the action and scrolls to it.
+	await get_tree().process_frame
+	if not is_instance_valid(heading) or not is_instance_valid(action) or not modal.visible: return
+	if heading.get_parent() != modal_stack: return
+	if modal_stack.size.y > modal_scroll.size.y + 1:
+		heading.grab_focus()
+		modal_scroll.scroll_vertical = 0
+	else:
+		action.grab_focus()
 
 func _show_main_menu() -> void:
 	toast_timer = 0.0
@@ -564,6 +535,7 @@ func _show_main_menu() -> void:
 	menu_world.process_mode = Node.PROCESS_MODE_ALWAYS
 	menu_camera.current = true
 	main_menu.show()
+	menu_frame.show()
 	menu_backdrop.show()
 	menu_cover.show()
 	continue_button.disabled = save_data.is_empty()
@@ -588,6 +560,7 @@ func _new_game() -> void:
 
 func _show_intro() -> void:
 	main_menu.hide()
+	menu_frame.hide()
 	menu_dossier.hide()
 	show_modal("ผลการเรียนออกแล้ว… ปีศาจก็มาด้วย", Campaign.INTRO_TEXT, [{"text": "ถึงเวลาเข้าเรียน…ภาคสนาม", "callback": func() -> void:
 		save_data.clear()
@@ -597,7 +570,7 @@ func _show_intro() -> void:
 
 func _continue_game() -> void:
 	if save_data.is_empty():
-		notify("ยังไม่มีจุดบันทึก เลือกเริ่มล้างแค้นได้เลย", 3)
+		notify("ยังไม่มีจุดบันทึก เลือกเริ่มภารกิจสอบซ่อมได้เลย", 3)
 		return
 	start_level(int(save_data.get("stage", 0)), int(save_data.get("checkpoint", 0)))
 
@@ -613,7 +586,8 @@ func _show_help() -> void:
 	show_modal("วิธีเล่น", "WASD เดิน · เมาส์หมุนกล้อง · R หันกล้องกลับ\nคลิกซ้าย (L) / J = หมัดเบา\nคลิกขวา (H) / K = โจมตีหนัก\n\nL L L   แย็บ / หมัดตรง / ฮุก\nL L H   จบด้วยถีบ ผลักชนฉาก\nL H L   เตะกวาด แล้วต่อหมัด\n\nShift ค้าง = การ์ด · กดก่อนโดน = ปัดป้อง\nSpace + ทิศทาง = หลบ · Q = ท่าพิเศษ\nE = ใช้อุปกรณ์ภารกิจ / ปิดฉาก / ขว้างสิ่งของ\nT = เรียกอาจารย์ช่วย (รอ 15 วินาที)\n\nสัญลักษณ์ ! สีแดง = ท่าที่ต้องหลบ", [{"text": "เข้าใจแล้ว", "callback": func() -> void: modal.hide(), "primary": true}])
 
 func _show_settings() -> void:
-	show_modal("ตั้งค่า", "ปรับให้เหมาะกับเครื่องและการควบคุมของคุณ")
+	show_modal("ตั้งค่า", "")
+	modal_stack.add_theme_constant_override("separation", 8)
 	for row: Array in [["เสียงหลัก", "volume", 0.0, 1.0], ["เสียงเอฟเฟกต์", "sfx", 0.0, 1.0], ["ความไวเมาส์", "sensitivity", 0.3, 2.0]]:
 		var title := _label("", 17)
 		modal_stack.add_child(title)
@@ -646,14 +620,18 @@ func _show_settings() -> void:
 		_apply_settings())
 	modal_stack.add_child(god_toggle)
 	var quality := OptionButton.new()
-	quality.add_item("ภาพประหยัด  /  75% และปิดเงา")
-	quality.add_item("ภาพปกติ  /  เปิดเงา")
+	quality.add_item("ประหยัด  /  เหมาะกับคอมทั่วไป")
+	quality.add_item("มาตรฐาน  /  ภาพคมและเงา")
 	quality.custom_minimum_size.y = 40
 	quality.select(int(settings.quality))
 	quality.item_selected.connect(func(index: int) -> void:
 		settings.quality = index
 		_apply_settings())
 	modal_stack.add_child(quality)
+	var quality_note := _label("ทั้งสองโหมดจำกัด 60 FPS · โหมดประหยัดลดแสง เงา และประกาย
+ถ้าการต่อสู้ไม่ลื่น ให้เลือกประหยัดก่อนเริ่มเล่น", 12, HorrorUI.ASH)
+	quality_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	modal_stack.add_child(quality_note)
 	modal_stack.add_child(_button("บันทึกและกลับ", func() -> void:
 		_write_save()
 		if paused: _show_pause()
@@ -683,6 +661,7 @@ func start_level(index: int, checkpoint: int = 0) -> void:
 	menu_world.hide()
 	menu_world.process_mode = Node.PROCESS_MODE_DISABLED
 	main_menu.hide()
+	menu_frame.hide()
 	menu_backdrop.hide()
 	menu_dossier.hide()
 	modal.hide()
@@ -841,7 +820,7 @@ func _update_hud() -> void:
 	var boss: Node = level.get_boss()
 	boss_panel.visible = is_instance_valid(boss) and not boss.dead
 	if boss_panel.visible:
-		_set_label(boss_label, boss.display_name)
+		_set_label(boss_label, "—  %s  —" % boss.display_name)
 		boss_bar.max_value = boss.max_health
 		boss_bar.value = boss.health
 		boss_structure.max_value = boss.max_posture
@@ -900,8 +879,7 @@ func _write_save() -> void:
 func _apply_settings() -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(0.001, float(settings.volume))))
 	AudioServer.set_bus_mute(0, float(settings.volume) <= 0.0)
-	if sun: sun.shadow_enabled = int(settings.quality) > 0
-	get_viewport().scaling_3d_scale = 1.0 if int(settings.quality) > 0 else 0.75
+	_apply_render_settings()
 	if audio: audio.effects_volume = float(settings.sfx)
 	if is_instance_valid(player):
 		player.god_mode = bool(settings.get("god_mode", false))
@@ -913,3 +891,24 @@ func _apply_settings() -> void:
 	if is_instance_valid(player) and player.camera_rig:
 		player.camera_rig.sensitivity = float(settings.sensitivity) * 0.0025
 		player.camera_rig.shake_enabled = bool(settings.shake)
+
+func _heading_style() -> StyleBoxFlat:
+	var style := panel_style(Color.TRANSPARENT, ORANGE, 0)
+	style.set_border_width_all(0)
+	style.border_width_bottom = 2
+	style.content_margin_bottom = 13
+	return style
+
+func _apply_render_settings() -> void:
+	# Render pixel budget is independent from crisp native-resolution UI.
+	# Physics remains 60 Hz; this cap avoids burning GPU power on surplus frames.
+	Engine.max_fps = 60
+	var quality := int(settings.quality)
+	if sun: sun.shadow_enabled = quality > 0
+	var viewport := get_viewport()
+	var pixels := Vector2(viewport.get_texture().get_size())
+	var budget := Vector2(1280, 720) if quality > 0 else Vector2(960, 540)
+	viewport.scaling_3d_scale = clampf(minf(budget.x / maxf(1, pixels.x), budget.y / maxf(1, pixels.y)), 0.25, 1.0)
+	viewport.msaa_3d = Viewport.MSAA_2X if quality > 0 else Viewport.MSAA_DISABLED
+	if is_instance_valid(level): level.apply_render_quality(quality)
+	if is_instance_valid(player): FX.apply_quality(self, quality)

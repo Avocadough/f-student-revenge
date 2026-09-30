@@ -1,6 +1,6 @@
 # Credits and licenses
 
-**การล้างแค้นของนักศึกษาติด F — demo 0.3, 1 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its cooperative demon campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
+**การล้างแค้นของนักศึกษาติด F — demo 0.4, 1 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its cooperative demon campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
 
 ## Game foundations
 
@@ -52,3 +52,7 @@ Campus architecture, signs, procedural contact shading, corruption forms and the
 - **Godot Engine 4.7.2** — game engine, [MIT license](https://godotengine.org/license/).
 - **Blender 5.2.2 LTS** — mesh editing, rig/animation work, GLB export and render inspection. Its application license does not replace the licenses of source assets.
 - **SIFU** is a reference for readable melee combat, defence and environmental interaction. No SIFU code, models, animation, music or branding is included. This remains an independent educational demo.
+
+## UI presentation in 0.4
+
+The angular frames, blood/bone/brass palette, SVG controls and web loading F seal are original code/vector artwork for this project. The custom Web shell adapts the installed official Godot 4.7.2 `web_nothreads_release.zip/godot.html` template (MIT); engine startup, feature detection and loading progress are retained. No extra third-party UI pack, external font service or animated fullscreen texture was added.

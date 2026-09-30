@@ -35,17 +35,17 @@ def main() -> None:
                         "working_tree_sha256": hashlib.sha256(local).hexdigest(),
                         "working_tree_matches_commit_allowing_text_crlf": local_matches,
                         "match": status == 200 and expected == received and local_matches})
-    record = {"version": "0.3", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+    record = {"version": "0.4", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "source_commit": revision, "url": URL,
               "scope": "Public HTTP bytes against committed production export, also checked against the local export allowing Git CRLF conversion for HTML/JS only. Binary PCK/WASM bytes must match exactly. Browser behavior is separately documented in VALIDATION.md.",
               "passed": all(row["match"] for row in results), "files": results,
-              "rollback_commit": "d75d0f6283f2fd60f66cb5114a455c588f5f7219",
-              "rollback_branch": "codex/pre-demon-v0.2"}
-    path = ROOT / "Verification" / "publication_v0_3.json"
+              "rollback_commit": "64b260a2a33873e8e5fe9619c3879866758ac114",
+              "rollback_branch": "codex/pre-ui-v0.3"}
+    path = ROOT / "Verification" / "publication_v0_4.json"
     path.write_text(json.dumps(record, indent=2), encoding="utf-8")
     print(json.dumps({"passed": record["passed"], "files": len(results), "source_commit": revision}))
     if not record["passed"]:
-        raise SystemExit("Publication does not match; inspect publication_v0_3.json")
+        raise SystemExit("Publication does not match; inspect publication_v0_4.json")
 
 
 if __name__ == "__main__":

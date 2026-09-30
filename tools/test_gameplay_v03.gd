@@ -102,7 +102,7 @@ func run() -> void:
 	root.add_child(game)
 	await wait_frames(3)
 	check(game.main_menu.visible and not game.running, "Startup renders menu state before gameplay")
-	check(press_button_with("เริ่มล้างแค้น", game.menu_stack), "New-game menu button is wired")
+	check(press_button_with("เริ่มภารกิจสอบซ่อม", game.menu_stack), "New-game menu button is wired")
 	await wait_frames(1)
 	check(game.modal.visible and not game.running, "New-game button opens story introduction")
 	check(press_button_with("ถึงเวลาเข้าเรียน", game.modal_stack), "Intro button starts playable stage")
@@ -211,7 +211,7 @@ func run_traversal() -> void:
 	game.save_data.clear()
 	game.elapsed = 0
 	game.deaths = 0
-	press_button_with("เริ่มล้างแค้น", game.menu_stack)
+	press_button_with("เริ่มภารกิจสอบซ่อม", game.menu_stack)
 	await wait_frames(1)
 	press_button_with("ถึงเวลาเข้าเรียน", game.modal_stack)
 	await wait_frames(3)
