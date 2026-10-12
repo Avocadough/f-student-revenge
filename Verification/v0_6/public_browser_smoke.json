@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-12",
+  "browser": "Microsoft Edge, connected extension session",
+  "url": "https://avocadough.github.io/f-student-revenge/",
+  "source_commit": "0335c124f3b419b8e7471b9defc272be5fb9d45c",
+  "pages_deployment": "https://github.com/Avocadough/f-student-revenge/actions/runs/38265377428",
+  "release_cache_key": "0.6-ally-polish2",
+  "pck_sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+  "scope": "Observed the actual published game through browser UI after successful deployment and separate public HTTP byte verification. No game-state injection.",
+  "observed": [
+    "Navigated to the existing public URL; rendered menu displays DEMO 0.6, six complete rows and supported slash separators",
+    "Read the public HTML's DOM script: packUrl uses ?v=0.6-ally-polish2",
+    "Opened stage selection and entered CAPTCHA stage",
+    "Observed the teacher moving alongside the player and in a visible punch pose with automatic-combat HUD status",
+    "Observed active enemies, attack warnings and changing player health",
+    "Later capture shows the first-room mission completed, teacher nearby and the next-room door open"
+  ],
+  "input_scope": "T, D and P were issued, but a separate paused-state/cooldown screenshot was not obtained in this public session. Do not treat those actions alone as independent verification; local controlled smoke and source tests cover these functions.",
+  "screenshots": ["screenshots/pages_menu.jpg", "screenshots/pages_gameplay.jpg"],
+  "limitations": [
+    "Not a complete browser campaign traversal or first-time human playthrough",
+    "No browser FPS benchmark or low-spec hardware measurement",
+    "Chrome not separately tested",
+    "Pointer-lock behavior under normal unautomated browser use not certified"
+  ],
+  "public_bytes_receipt": "../publication_v0_6.json",
+  "rollback_branch": "codex/pre-ui-ally-v0.6",
+  "rollback_commit": "6af1aa4afe4a0388d29038d90607eda0f61d1263"
+}

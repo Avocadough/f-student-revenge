@@ -1,0 +1,109 @@
+{
+  "version": "0.6",
+  "checked_at_utc": "2026-10-12T14:48:15.199632+00:00",
+  "source_commit": "0335c124f3b419b8e7471b9defc272be5fb9d45c",
+  "url": "https://avocadough.github.io/f-student-revenge/",
+  "scope": "Public HTTP bytes against committed production export, also checked against the local export allowing Git CRLF conversion for HTML/JS only. Binary PCK/WASM bytes must match exactly. Browser behavior is separately documented in VALIDATION.md.",
+  "passed": true,
+  "files": [
+    {
+      "file": "index.html",
+      "http_status": 200,
+      "bytes": 12580,
+      "committed_sha256": "8eed8a738e8932d61a542f99649eda3338ee6eedb2c910921242918dbb7bdda2",
+      "public_sha256": "8eed8a738e8932d61a542f99649eda3338ee6eedb2c910921242918dbb7bdda2",
+      "working_tree_sha256": "2eb44b8a0a8953a33629984306750dde03cd87b50a7d4a2f5d6880304a23fed7",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.pck",
+      "http_status": 200,
+      "bytes": 21142536,
+      "committed_sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+      "public_sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+      "working_tree_sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.wasm",
+      "http_status": 200,
+      "bytes": 39514754,
+      "committed_sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+      "public_sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+      "working_tree_sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.js",
+      "http_status": 200,
+      "bytes": 279815,
+      "committed_sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+      "public_sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+      "working_tree_sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.audio.worklet.js",
+      "http_status": 200,
+      "bytes": 7298,
+      "committed_sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+      "public_sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+      "working_tree_sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.audio.position.worklet.js",
+      "http_status": 200,
+      "bytes": 2973,
+      "committed_sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+      "public_sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+      "working_tree_sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.icon.png",
+      "http_status": 200,
+      "bytes": 2234,
+      "committed_sha256": "aad6a4e5e3c535472087b9b67a1f067c6809d5e62a62e28d9889cd71007aeea7",
+      "public_sha256": "aad6a4e5e3c535472087b9b67a1f067c6809d5e62a62e28d9889cd71007aeea7",
+      "working_tree_sha256": "aad6a4e5e3c535472087b9b67a1f067c6809d5e62a62e28d9889cd71007aeea7",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.apple-touch-icon.png",
+      "http_status": 200,
+      "bytes": 5169,
+      "committed_sha256": "4f1fb9efb8eddfc89aeaea1088c2f17502e48d83f5be373cf114a16b27484485",
+      "public_sha256": "4f1fb9efb8eddfc89aeaea1088c2f17502e48d83f5be373cf114a16b27484485",
+      "working_tree_sha256": "4f1fb9efb8eddfc89aeaea1088c2f17502e48d83f5be373cf114a16b27484485",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    },
+    {
+      "file": "index.png",
+      "http_status": 200,
+      "bytes": 21443,
+      "committed_sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+      "public_sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+      "working_tree_sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+      "working_tree_matches_commit_allowing_text_crlf": true,
+      "match": true
+    }
+  ],
+  "versioned_pack": {
+    "url": "https://avocadough.github.io/f-student-revenge/index.pck?v=0.6-ally-polish2",
+    "http_status": 200,
+    "bytes": 21142536,
+    "sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+    "match": true
+  },
+  "rollback_commit": "6af1aa4afe4a0388d29038d90607eda0f61d1263",
+  "rollback_branch": "codex/pre-ui-ally-v0.6"
+}
