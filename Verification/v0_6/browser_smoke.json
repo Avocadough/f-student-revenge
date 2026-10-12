@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-12",
+  "browser": "Microsoft Edge, connected extension session",
+  "url": "http://127.0.0.1:8786/",
+  "viewport_css": [1912, 914],
+  "device_pixel_ratio": 1,
+  "release_cache_key": "0.6-ally-polish2",
+  "pck_sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+  "scope": "Browser UI smoke using the actual exported game through loopback HTTP. Keyboard/mouse input only; no game-state injection. Native automation and browser observation are separate evidence.",
+  "final_build_observed": [
+    "Reloaded final HTML and read the versioned PCK URL from its DOM script",
+    "Menu shows DEMO 0.6 and all six menu separators render as slash characters without missing-glyph boxes",
+    "Stage selection opens and CAPTCHA stage starts with its teacher available",
+    "Player moves using D; teacher follows and visibly enters combat, with automatic-combat status in HUD",
+    "T activates support; HUD shows a decreasing cooldown separately from basic melee status",
+    "P opens pause; return-to-menu action works"
+  ],
+  "earlier_same_behavior_build_observed": [
+    "0.6-ally-polish1 entered stage one and stage two, accepted J and D, and used T",
+    "T while paused left the frozen cooldown and pause state unchanged",
+    "Found missing menu glyphs on Web despite native OS fallback; corrected before final export"
+  ],
+  "screenshots": ["screenshots/edge_menu.jpg", "screenshots/edge_combat.jpg", "screenshots/edge_pause.jpg"],
+  "limitations": [
+    "No complete browser campaign traversal or first-time human playthrough",
+    "No browser frame-time benchmark or low-spec hardware measurement",
+    "Chrome was not connected in the available browser inventory; not separately certified",
+    "Browser automation reports WrongDocumentError for pointer lock; the existing middle-mouse/R fallback is displayed. Native pointer lock behavior in a normal browser session was not certified by this control session",
+    "No public GitHub Pages deployment performed in this verification"
+  ]
+}

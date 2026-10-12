@@ -60,9 +60,9 @@ async function ready(state) { state.init.resolve(); state.pack.resolve(); await 
   let state = start();
   check(state.nodes.get('progress-panel').attributes['aria-busy'] === 'true', 'Loading UI is active during initialization');
   check(state.calls[0][0] === 'init' && state.calls[0][1] === 'index', 'Engine initializes using the original executable');
-  check(state.calls[1][0] === 'preloadFile' && state.calls[1][1] === 'index.pck?v=0.5-captions3', 'Pack download has the release cache key');
+  check(state.calls[1][0] === 'preloadFile' && state.calls[1][1] === 'index.pck?v=0.6-ally-polish2', 'Pack download has the release cache key');
   check(state.calls[1][2] === 'index.pck' && !state.calls[1][2].includes('?'), 'Preload VFS path stays query-free');
-  check(state.config.fileSizes['index.pck?v=0.5-captions3'] === 21130280 && state.config.fileSizes['index.pck'] === 21130280 && state.config.fileSizes['index.wasm'] === 1234, 'Versioned download has the correct known size without losing original sizes');
+  check(state.config.fileSizes['index.pck?v=0.6-ally-polish2'] === 21130280 && state.config.fileSizes['index.pck'] === 21130280 && state.config.fileSizes['index.wasm'] === 1234, 'Versioned download has the correct known size without losing original sizes');
   check(typeof state.config.onProgress === 'function', 'Progress callback is available at Engine construction');
   state.config.onProgress(250, 1000);
   check(state.nodes.get('status-progress').value === 250 && state.nodes.get('status-progress').max === 1000, 'Actual byte counts drive the native progress element');

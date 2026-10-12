@@ -49,18 +49,18 @@ def main() -> None:
                       "sha256": hashlib.sha256(pack_bytes).hexdigest()}
     versioned_pack["match"] = pack_status == 200 and versioned_pack["sha256"] == next(
         row["committed_sha256"] for row in results if row["file"] == "index.pck")
-    record = {"version": "0.5", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+    record = {"version": "0.6", "checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "source_commit": revision, "url": URL,
               "scope": "Public HTTP bytes against committed production export, also checked against the local export allowing Git CRLF conversion for HTML/JS only. Binary PCK/WASM bytes must match exactly. Browser behavior is separately documented in VALIDATION.md.",
               "passed": all(row["match"] for row in results) and versioned_pack["match"],
               "files": results, "versioned_pack": versioned_pack,
-              "rollback_commit": "8dddb42569aaf0cedf0f11130263e6e512fdbde7",
-              "rollback_branch": "codex/pre-bureaucracy-v0.4.1"}
-    path = ROOT / "Verification" / "publication_v0_5.json"
+              "rollback_commit": "6af1aa4afe4a0388d29038d90607eda0f61d1263",
+              "rollback_branch": "codex/pre-ui-ally-v0.6"}
+    path = ROOT / "Verification" / "publication_v0_6.json"
     path.write_text(json.dumps(record, indent=2), encoding="utf-8")
     print(json.dumps({"passed": record["passed"], "files": len(results), "source_commit": revision}))
     if not record["passed"]:
-        raise SystemExit("Publication does not match; inspect publication_v0_5.json")
+        raise SystemExit("Publication does not match; inspect publication_v0_6.json")
 
 
 if __name__ == "__main__":

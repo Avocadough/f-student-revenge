@@ -2,7 +2,7 @@ extends SceneTree
 ## Rendered UI fixtures only, not gameplay completion or a performance benchmark.
 ## Run without --headless after the render slot is free. Uses qa_no_save throughout.
 
-const OUTPUT_DIR := "res://evidence/v05/ui"
+var output_dir := "res://evidence/v05/ui"
 const SIZES := [Vector2i(1280, 720), Vector2i(960, 540), Vector2i(800, 720)]
 
 var game: Node
@@ -14,6 +14,9 @@ var resolution := ""
 var started_usec := 0
 
 func _initialize() -> void:
+	for argument in OS.get_cmdline_user_args():
+		if argument.begins_with("--output="):
+			output_dir = argument.trim_prefix("--output=").trim_suffix("/")
 	_run.call_deferred()
 
 func check(condition: bool, label: String) -> void:
@@ -24,6 +27,8 @@ func check(condition: bool, label: String) -> void:
 		print("HORROR_UI_FAIL ", description)
 
 func settle(frames: int = 5) -> void:
+	# UI now has bounded 160–240ms pause-safe fades. Capture the settled state.
+	await create_timer(0.27, true, false, true).timeout
 	for frame in range(frames):
 		await process_frame
 
@@ -78,7 +83,7 @@ func text_inventory(parent: Node) -> Array[Dictionary]:
 func capture(state: String, owner: Control) -> void:
 	await RenderingServer.frame_post_draw
 	var shot := root.get_texture().get_image()
-	var path := "%s/%s/%s.png" % [OUTPUT_DIR, resolution, state]
+	var path := "%s/%s/%s.png" % [output_dir, resolution, state]
 	var save_error := shot.save_png(path)
 	check(save_error == OK, "PNG captured: " + state)
 	check(shot.get_size() == root.size, "Capture uses requested pixel size")
@@ -201,7 +206,7 @@ func inspect_hud() -> void:
 
 func run_resolution(size: Vector2i) -> void:
 	resolution = "%dx%d" % [size.x, size.y]
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR + "/" + resolution))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_dir + "/" + resolution))
 	game._show_main_menu()
 	root.size = size
 	root.content_scale_size = size
@@ -248,7 +253,7 @@ func run_resolution(size: Vector2i) -> void:
 	check(not game.running and paused, "Ending pauses gameplay")
 	var ending_has_grade := false
 	for item in text_inventory(game.modal):
-		if "F → D" in item.text: ending_has_grade = true
+		if "F เป็น D" in item.text: ending_has_grade = true
 	check(ending_has_grade, "Ending shows the cooperative F to D resolution")
 
 func stop_audio(parent: Node) -> void:
@@ -265,7 +270,7 @@ func _run() -> void:
 	# Bound the capture helper's load and give physics/animations a predictable
 	# settling interval. This cap is not used as evidence of game performance.
 	Engine.max_fps = 60
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_dir))
 	game = load("res://Scenes/main.tscn").instantiate()
 	game.set_meta("qa_no_save", true)
 	root.add_child(game)
@@ -275,7 +280,7 @@ func _run() -> void:
 	context = "cleanup"
 	check(game.has_meta("qa_no_save"), "Player save reads/writes remained disabled")
 	var report := {"passed": failures.is_empty(), "engine": Engine.get_version_info().string, "scope": "Native synthetic UI/layout fixtures at three window sizes; direct handlers dispatch death/clear/ending for presentation QA. No player saves, gameplay completion, browser behavior or performance are certified.", "manual_review_required": "Inspect captured PNGs for Thai legibility, contrast, composition and the horror art direction; geometry and font-size assertions do not certify visual readability.", "resolutions": ["1280x720", "960x540", "800x720"], "checks": checks, "failures": failures, "screens": screens, "wall_seconds": (Time.get_ticks_usec() - started_usec) / 1000000.0}
-	var output := FileAccess.open(OUTPUT_DIR + "/checks.json", FileAccess.WRITE)
+	var output := FileAccess.open(output_dir + "/checks.json", FileAccess.WRITE)
 	if output:
 		output.store_string(JSON.stringify(report, "\t"))
 		output.close()

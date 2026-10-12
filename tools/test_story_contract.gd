@@ -35,7 +35,7 @@ func _run() -> void:
 		for room in range(3):
 			var beat: Dictionary = Campaign.OBJECTIVE_PAYOFFS[stage][room]
 			check(beat.get("title") is String and not str(beat.title).is_empty() and beat.get("body") is String and not str(beat.body).is_empty(), "Stage%d room%d supplies a complete readable payoff" % [stage, room])
-	check(Campaign.STAGE_ENDINGS.size() == 2 and "F → D" in Campaign.ENDING_TEXT and "เดินมาเรียนด้วย" in Campaign.ENDING_TEXT and "กรุณาประเมินความพึงพอใจ" in Campaign.ENDING_TEXT, "Two stage transitions lead to the authored grade and post-credits payoff")
+	check(Campaign.STAGE_ENDINGS.size() == 2 and "F เป็น D" in Campaign.ENDING_TEXT and "เดินมาเรียนด้วย" in Campaign.ENDING_TEXT and "กรุณาประเมินความพึงพอใจ" in Campaign.ENDING_TEXT, "Two stage transitions lead to the authored grade and post-credits payoff")
 
 	original_user_dir = ProjectSettings.globalize_path("user://")
 	ProjectSettings.set_setting("application/config/use_custom_user_dir", true)

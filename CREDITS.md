@@ -1,6 +1,6 @@
 # Credits and licenses
 
-**การล้างแค้นของนักศึกษาติด F — demo 0.5, 1 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its dark-comedy demon registrar campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
+**การล้างแค้นของนักศึกษาติด F — demo 0.6 source, 12 October 2026.** This project adapts open-source foundations and downloaded assets for **CP410844 Group 3**. Its dark-comedy demon registrar campaign, campus environments, support/objective systems and asset modifications were produced for this coursework project. The project MIT license does not replace third-party notices.
 
 ## Game foundations
 
@@ -49,6 +49,7 @@ Campus architecture, signs, procedural contact shading, corruption forms and the
 
 ## Tools and inspiration
 
+- **[achimala/dream-loop](https://github.com/achimala/dream-loop/tree/9bddb901f7d071cfefdd21e264267c757177a9df)**, MIT — development workflow guidance for the 0.6 reference-image / screenshot / independent-review pass. Installed locally at this pinned revision after inspecting its files. No Dream-loop code or preview GIF is bundled in the game; its Fal helpers were not run. The generated 0.6 menu target used the built-in OpenAI imagegen tool as an internal layout reference, not a new runtime asset or evidence of gameplay quality. Community sources and limits are recorded in [the research report](docs/research/2026-10-12-astra-game-workflows.md).
 - **Godot Engine 4.7.2** — game engine, [MIT license](https://godotengine.org/license/).
 - **Blender 5.2.2 LTS** — mesh editing, rig/animation work, GLB export and render inspection. Its application license does not replace the licenses of source assets.
 - **SIFU** is a reference for readable melee combat, defence and environmental interaction. No SIFU code, models, animation, music or branding is included. This remains an independent educational demo.

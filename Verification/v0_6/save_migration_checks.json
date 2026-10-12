@@ -1,0 +1,6 @@
+{
+	"checks": 8,
+	"failures": [],
+	"passed": true,
+	"scope": "Isolated on-disk migration and checkpoint reconstruction. Original user directory untouched."
+}

@@ -256,9 +256,13 @@ func _setup_mission(index: int) -> void:
 	teacher = TeacherScript.new()
 	teacher.teacher_index = stage_index
 	teacher.rescued = teacher_rescued
+	teacher.stage = self
+	teacher.player = player
+	teacher.arena_center = to_global(room_centers[index])
 	teacher.position = ally_markers[index]
 	teacher.rotation.y = PI
 	add_child(teacher)
+	teacher.reset_physics_interpolation()
 	objective_node = Node3D.new()
 	objective_node.name = "MissionDevice"
 	objective_node.position = objective_markers[index]

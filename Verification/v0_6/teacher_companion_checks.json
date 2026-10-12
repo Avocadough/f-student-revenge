@@ -1,0 +1,208 @@
+{
+	"checks": [
+		{
+			"description": "Rescued teacher actually follows the player through physics",
+			"pass": true
+		},
+		{
+			"description": "Teacher collides with the world but cannot block actors",
+			"pass": true
+		},
+		{
+			"description": "Teacher exposes a concise combat status for its HUD card",
+			"pass": true
+		},
+		{
+			"description": "Companion never counts toward room-clear enemies",
+			"pass": true
+		},
+		{
+			"description": "Following has no friendly-fire or escort-health interface",
+			"pass": true
+		},
+		{
+			"description": "Teacher preserves foot-cycle phase when walk becomes run",
+			"pass": true
+		},
+		{
+			"description": "Player collision sweep passes through the companion",
+			"pass": true
+		},
+		{
+			"description": "Follower remains in its current room when player leaves its bounds",
+			"pass": true
+		},
+		{
+			"description": "Unrescued teacher remains at the rescue marker",
+			"pass": true
+		},
+		{
+			"description": "First real clear unlocks companion follow as well as T",
+			"pass": true
+		},
+		{
+			"description": "Enemy exposes a separate ally damage entry point",
+			"pass": true
+		},
+		{
+			"description": "Nearby visible enemy triggers a real companion attack",
+			"pass": true
+		},
+		{
+			"description": "Companion windup does not deal early damage",
+			"pass": true
+		},
+		{
+			"description": "Companion deals exactly eight damage through the live enemy API",
+			"pass": true
+		},
+		{
+			"description": "Recovery frames and cooldown cannot repeat the same hit",
+			"pass": true
+		},
+		{
+			"description": "Companion attack cannot hurt its student or alter live enemy count",
+			"pass": true
+		},
+		{
+			"description": "Companion can begin a new attack after its bounded cooldown",
+			"pass": true
+		},
+		{
+			"description": "Rear target cannot take an early punch while teacher is still turning",
+			"pass": true
+		},
+		{
+			"description": "Rear target is hit only after the teacher naturally turns into the attack arc",
+			"pass": true
+		},
+		{
+			"description": "Target crossing behind during windup cannot be hit outside the fist's impact arc",
+			"pass": true
+		},
+		{
+			"description": "Player God Mode never makes autonomous ally damage lethal",
+			"pass": true
+		},
+		{
+			"description": "Freed enemy cancels a pending strike and is skipped by later scans",
+			"pass": true
+		},
+		{
+			"description": "Companion does not lock onto an unreachable arena-corner target",
+			"pass": true
+		},
+		{
+			"description": "Teacher cannot acquire or hit an enemy behind solid cover",
+			"pass": true
+		},
+		{
+			"description": "Follower's world collider cannot cross a wall",
+			"pass": true
+		},
+		{
+			"description": "Removing cover makes the enemy eligible again",
+			"pass": true
+		},
+		{
+			"description": "Cover inserted during windup is checked again at impact",
+			"pass": true
+		},
+		{
+			"description": "Teacher skips shielded targets to preserve player mechanics",
+			"pass": true
+		},
+		{
+			"description": "Teacher skips broken targets to preserve player mechanics",
+			"pass": true
+		},
+		{
+			"description": "Teacher skips is_core targets to preserve player mechanics",
+			"pass": true
+		},
+		{
+			"description": "Teacher skips dead targets to preserve player mechanics",
+			"pass": true
+		},
+		{
+			"description": "T remains available while companion begins a basic attack",
+			"pass": true
+		},
+		{
+			"description": "T cancels basic windup and retains its existing fifteen-second skill cooldown",
+			"pass": true
+		},
+		{
+			"description": "T still cannot be spammed",
+			"pass": true
+		},
+		{
+			"description": "pause cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "pause freezes companion movement",
+			"pass": true
+		},
+		{
+			"description": "Resuming pause cannot deliver a canceled delayed strike",
+			"pass": true
+		},
+		{
+			"description": "modal cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "modal freezes companion movement",
+			"pass": true
+		},
+		{
+			"description": "inactive cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "inactive freezes companion movement",
+			"pass": true
+		},
+		{
+			"description": "dead cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "dead freezes companion movement",
+			"pass": true
+		},
+		{
+			"description": "clear cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "completed cancels companion damage already winding up",
+			"pass": true
+		},
+		{
+			"description": "completed freezes companion movement",
+			"pass": true
+		},
+		{
+			"description": "Restart frees the old companion and its in-flight attack",
+			"pass": true
+		},
+		{
+			"description": "Checkpoint creates one companion bound to the new room",
+			"pass": true
+		},
+		{
+			"description": "Checkpoint lifecycle leaves no orphan ally nodes",
+			"pass": true
+		},
+		{
+			"description": "Menu return destroys companion and pending attacks",
+			"pass": true
+		}
+	],
+	"engine": "4.7.2-stable (official)",
+	"failures": [],
+	"fixture_disclosure": "Fresh qa_no_save levels, encounter spawning and player physics paused; real companion physics and real enemy damage API run. Explicit positions/cover isolate behavior.",
+	"scope": "Synthetic companion physics/combat/lifecycle regression; not rendered smoothness, Web FPS or a human playtest"
+}

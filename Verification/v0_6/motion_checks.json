@@ -1,0 +1,34 @@
+{
+	"checks": [
+		{
+			"detail": null,
+			"label": "Fixture player is stopped by solid cover",
+			"pass": true
+		},
+		{
+			"detail": "Idle",
+			"label": "Pushing a wall stops the walking animation",
+			"pass": true
+		},
+		{
+			"detail": [
+				0.457499986365438,
+				0.457499986365438
+			],
+			"label": "Walk to run preserves the planted-foot cycle phase",
+			"pass": true
+		},
+		{
+			"detail": null,
+			"label": "Normal enemy strike still deals damage",
+			"pass": true
+		},
+		{
+			"detail": 0.277843325689909,
+			"label": "Damage lands during the visible punch instead of its starting pose",
+			"pass": true
+		}
+	],
+	"failures": [],
+	"scope": "Isolated behavioral fixtures, not a frame-time benchmark or full playthrough."
+}

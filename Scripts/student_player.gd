@@ -65,6 +65,7 @@ var damage_taken: float = 0.0
 var step_timer: float = 0.0
 var animation_hold: float = 0.0
 var locomotion_clip: String = "idle"
+var locomotion_rate: float = 1.0
 var audio_ref: Node
 
 func _ready() -> void:
@@ -145,17 +146,26 @@ func _play_animation(key: String, duration: float = 0.0, force: bool = false) ->
 	var clip: String = animation_map[key]
 	if current_animation == clip and not force:
 		return
+	# Preserve the foot cycle when crossing walk/run speed thresholds. Restarting
+	# both clips at frame zero made the same foot plant twice on acceleration.
+	var phase := -1.0
+	if key in ["walk", "run"] and current_animation in [animation_map.get("walk", ""), animation_map.get("run", "")]:
+		phase = fposmod(animation_player.current_animation_position / maxf(0.001, animation_player.current_animation_length), 1.0)
+	var recovering := key in ["idle", "walk", "run", "guard"] and current_animation not in [animation_map.get("idle", ""), animation_map.get("walk", ""), animation_map.get("run", ""), animation_map.get("guard", "")]
 	current_animation = clip
 	var anim := animation_player.get_animation(clip)
 	anim.loop_mode = Animation.LOOP_LINEAR if key in ["idle", "walk", "run", "guard"] else Animation.LOOP_NONE
 	var speed := anim.length / duration if duration > 0.0 else 1.0
-	var blend := 0.16 if key in ["idle", "walk", "run", "guard"] else 0.07
+	var blend := 0.22 if recovering else 0.18 if key in ["idle", "walk", "run", "guard"] else 0.07
 	animation_player.speed_scale = 1.0
 	animation_player.play(clip, blend, speed)
+	if phase >= 0.0: animation_player.seek(phase * anim.length)
 
-func _update_locomotion() -> void:
+func _update_locomotion(delta: float = 1.0 / 60.0) -> void:
 	if animation_hold > 0.0: return
-	var speed := Vector2(velocity.x, velocity.z).length()
+	# Collision-resolved speed prevents running in place against furniture/walls.
+	var actual_velocity := get_real_velocity()
+	var speed := Vector2(actual_velocity.x, actual_velocity.z).length()
 	var key := "guard" if guarding else locomotion_clip
 	if not guarding:
 		# Velocity and hysteresis prevent idle/run flicker while accelerating or brushing walls.
@@ -168,7 +178,9 @@ func _update_locomotion() -> void:
 		locomotion_clip = key
 	_play_animation(key)
 	if animation_player:
-		animation_player.speed_scale = clampf(speed / (4.5 if key == "run" else 2.0), 0.65, 1.2) if key in ["run", "walk"] else 1.0
+		var wanted_rate := clampf(speed / (4.5 if key == "run" else 2.0), 0.65, 1.2) if key in ["run", "walk"] else 1.0
+		locomotion_rate = lerpf(locomotion_rate, wanted_rate, 1.0 - exp(-12.0 * delta))
+		animation_player.speed_scale = locomotion_rate
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not active or dead or get_tree().paused:
@@ -245,6 +257,9 @@ func _start_attack(id: String) -> void:
 		facing = move_direction.normalized()
 	var data: Dictionary = ATTACKS[id]
 	var duration: float = data.startup + data.active + data.recovery
+	# The short source hook peaks at 61% of its length; bring its visible contact
+	# into the existing active window instead of extending gameplay damage timing.
+	if id == "hook": duration = 0.49
 	_play_animation("kick" if id == "focus" else "cross" if id == "counter" else id, duration, true)
 	_sound("swing")
 
@@ -362,12 +377,13 @@ func _physics_process(delta: float) -> void:
 		if move_direction.length() > 0.1:
 			facing = move_direction.normalized()
 			visual.rotation.y = rotate_toward(visual.rotation.y, atan2(-facing.x, -facing.z), model_rot_speed * delta)
-		_update_locomotion()
 		step_timer -= delta
 		if move_dir.length() > 0.1 and is_on_floor() and step_timer <= 0.0:
 			_sound("step")
 			step_timer = 0.33
 	move_and_slide()
+	if dodge_timer <= 0.0 and stagger_timer <= 0.0 and attack_id.is_empty():
+		_update_locomotion(delta)
 
 func _tick_attack(delta: float) -> void:
 	attack_elapsed += delta

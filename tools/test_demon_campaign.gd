@@ -58,7 +58,7 @@ func run() -> void:
 	check(stage.get_spawn_position() == stage.to_global(stage.spawn_markers[0]), "Spawn is supplied by the environment marker")
 	check(not stage.request_teacher_support(), "First teacher support stays locked until rescue")
 	check(not stage.teacher.is_in_group("enemies") and stage.teacher.is_in_group("teacher_allies"), "Teachers are allied and excluded from enemy targeting")
-	check(not stage.teacher is CollisionObject3D and not stage.teacher.has_method("take_hit"), "Event teacher is invulnerable and cannot physically block combat")
+	check(stage.teacher is CharacterBody3D and stage.teacher.collision_layer == 0 and stage.teacher.collision_mask == 1 and not stage.teacher.has_method("take_hit"), "Companion uses world collision but remains invulnerable and never obstructs actors")
 	stage.player.global_position = stage.teacher.global_position
 	check(stage.player.nearest_enemy(2.4) == null, "Player targeting never acquires the teacher")
 	check(not stage.interact_objective(stage.player), "A live encounter cannot be bypassed by E")

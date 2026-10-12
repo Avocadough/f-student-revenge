@@ -1,0 +1,117 @@
+{
+	"checks": [
+		{
+			"label": "All menu choices and footer fit at 1280x720 without scrolling",
+			"pass": true
+		},
+		{
+			"label": "Menu action copy has bundled glyphs without operating-system fallback",
+			"pass": true
+		},
+		{
+			"label": "Ending copy including the changed grade has bundled UI glyphs",
+			"pass": true
+		},
+		{
+			"label": "Electrical cabinet runtime caption has bundled world-font glyphs",
+			"pass": true
+		},
+		{
+			"label": "Settings save action fits the 720px screen without scrolling",
+			"pass": true
+		},
+		{
+			"label": "Rapid paused modal replacement finishes fully visible without stale motion",
+			"pass": true
+		},
+		{
+			"label": "Rapid modal replacement preserves final settings keyboard focus",
+			"pass": true
+		},
+		{
+			"label": "Background cannot steal focus during modal presentation",
+			"pass": true
+		},
+		{
+			"label": "Instantiated electrical caption uses covered glyphs and fits its 0.38m warning plate with margins",
+			"pass": true
+		},
+		{
+			"label": "Damage number reflects actual HP immediately while the bar animates",
+			"pass": true
+		},
+		{
+			"label": "Damage bar eases toward HP rather than snapping or staying frozen",
+			"pass": true
+		},
+		{
+			"label": "Damage bar settles accurately and does not drift",
+			"pass": true
+		},
+		{
+			"label": "Combat gives teacher status a dedicated readable HUD region",
+			"pass": true
+		},
+		{
+			"label": "Teacher card cannot retain a tall transient autowrap measurement",
+			"pass": true
+		},
+		{
+			"label": "T status shows remaining cooldown rounded up, separate from autonomous combat",
+			"pass": true
+		},
+		{
+			"label": "Autonomous teacher status does not duplicate T instructions",
+			"pass": true
+		},
+		{
+			"label": "Autonomous attack and ready T skill are represented independently",
+			"pass": true
+		},
+		{
+			"label": "Actual story resume action has bundled UI glyphs",
+			"pass": true
+		},
+		{
+			"label": "Pause stays inside viewport at (1280, 720)",
+			"pass": true
+		},
+		{
+			"label": "Ally and boss regions stay separate at (1280, 720)",
+			"pass": true
+		},
+		{
+			"label": "Student and teacher regions stay separate at (1280, 720)",
+			"pass": true
+		},
+		{
+			"label": "Pause stays inside viewport at (960, 540)",
+			"pass": true
+		},
+		{
+			"label": "Ally and boss regions stay separate at (960, 540)",
+			"pass": true
+		},
+		{
+			"label": "Student and teacher regions stay separate at (960, 540)",
+			"pass": true
+		},
+		{
+			"label": "Pause stays inside viewport at (800, 720)",
+			"pass": true
+		},
+		{
+			"label": "Ally and boss regions stay separate at (800, 720)",
+			"pass": true
+		},
+		{
+			"label": "Student and teacher regions stay separate at (800, 720)",
+			"pass": true
+		},
+		{
+			"label": "Resume dismisses modal and restores gameplay immediately",
+			"pass": true
+		}
+	],
+	"passed": true
+}

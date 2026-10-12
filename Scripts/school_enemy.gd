@@ -35,6 +35,7 @@ var stun_time := 0.0
 var broken_time := 0.0
 var attack_id := "melee"
 var attack_step := 0
+var combo_visual_step := 0
 var attack_clock := 0.0
 var attack_serial := 0
 var attack_direction := Vector3.FORWARD
@@ -226,14 +227,22 @@ func _find_animator(node: Node) -> AnimationPlayer:
 			return found
 	return null
 
-func _play(clip: String) -> void:
-	if animator == null or current_animation == clip:
+func _play(clip: String, duration: float = 0.0, force: bool = false) -> void:
+	if animator == null or (current_animation == clip and not force):
 		return
 	var matching: String = animation_clips.get(clip.to_lower(), "")
 	if matching.is_empty():
 		return
+	var recovery := clip == "Idle" and current_animation not in ["Idle", "Walk", "Guard"]
 	current_animation = clip
-	animator.play(matching, 0.12)
+	var rate := animator.get_animation(matching).length / duration if duration > 0.0 else 1.0
+	animator.speed_scale = 1.0
+	animator.play(matching, 0.22 if recovery else 0.08 if duration > 0.0 else 0.16, rate)
+
+func _start_attack_visual() -> void:
+	combo_visual_step = 0
+	var kick := attack_id in ["spin", "charge", "web_error"]
+	_play("Kick" if kick else "Jab", 0.65 if kick else 0.48 if attack_id == "combo" else 0.60, true)
 
 func _physics_process(delta: float) -> void:
 	if dead:
@@ -287,7 +296,8 @@ func _physics_process(delta: float) -> void:
 	var distance := toward.length()
 	var direction := toward.normalized() if distance > 0.05 else Vector3.FORWARD
 	if mode != "attack":
-		rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), delta * 8)
+		rotation.y = lerp_angle(rotation.y, atan2(-direction.x, -direction.z), 1.0 - exp(-8.0 * delta))
+		visual.rotation.y = lerp_angle(visual.rotation.y, 0.0, 1.0 - exp(-16.0 * delta))
 	if not is_boss and not model_kind.begins_with("demon_"):
 		visual.position.y = (0.07 + sin(elapsed * 5.0) * 0.055) if kind in ["paper", "pencil", "pen"] else sin(elapsed * 4) * 0.025
 		visual.rotation.z = sin(elapsed * 4.0) * 0.035
@@ -308,7 +318,7 @@ func _physics_process(delta: float) -> void:
 				attack_clock = 0
 				attack_step = 0
 				attack_direction = direction if attack_id not in ["charge", "ai_zone", "web_error"] else attack_direction
-				_play("Kick" if attack_id in ["spin", "charge", "web_error"] else "Jab")
+				_start_attack_visual()
 		"attack":
 			_process_attack(delta)
 		"approach":
@@ -325,13 +335,18 @@ func _physics_process(delta: float) -> void:
 			movement += _separation() * 1.4
 			velocity.x += movement.x
 			velocity.z += movement.z
-			_play("Walk" if movement.length() > 0.2 else "Idle")
 			if born_delay <= 0 and state_time <= 0 and distance < (9.0 if ranged or is_boss else 4.7 if kind == "pencil" else 2.3 if kind != "tablet" else 4.0):
 				if stage == null or stage.request_attack(self, ranged):
 					_begin_attack(direction)
 	global_position.x = clampf(global_position.x, arena_center.x - arena_half_size.x, arena_center.x + arena_half_size.x)
 	global_position.z = clampf(global_position.z, arena_center.z - arena_half_size.y, arena_center.z + arena_half_size.y)
 	move_and_slide()
+	if mode == "approach":
+		var actual_velocity := get_real_velocity()
+		var actual_speed := Vector2(actual_velocity.x, actual_velocity.z).length()
+		_play("Walk" if actual_speed > (0.10 if current_animation == "Walk" else 0.22) else "Idle")
+		if animator and current_animation == "Walk":
+			animator.speed_scale = lerpf(animator.speed_scale, clampf(actual_speed / 2.0, 0.65, 1.35), 1.0 - exp(-12.0 * delta))
 	_resolve_knockback_impact()
 
 func _resolve_knockback_impact() -> void:
@@ -416,13 +431,19 @@ func _process_attack(delta: float) -> void:
 	attack_clock += delta
 	match attack_id:
 		"combo":
-			var timing := [0.06, 0.42, 1.02]
+			# Begin each swing before its hit. Previously each clip restarted on the
+			# damage tick, so the player was hit while the fist was still at rest.
+			if combo_visual_step == 0 and attack_clock >= 0.38:
+				combo_visual_step = 1
+				_play("Cross", 0.48, true)
+			if combo_visual_step == 1 and attack_clock >= 0.72:
+				combo_visual_step = 2
+				_play("Hook", 0.46, true)
+			var timing := [0.14, 0.52, 1.00]
 			if attack_step < 3 and attack_clock >= timing[attack_step]:
-				current_animation = ""
-				_play(["Jab", "Cross", "Hook"][attack_step])
 				_melee_hit(10.0, 18.0, 2.35, false)
 				attack_step += 1
-			if attack_clock > 1.2: _end_attack(1.3)
+			if attack_clock > 1.3: _end_attack(1.3)
 		"charge":
 			if attack_clock < 0.5:
 				velocity.x = attack_direction.x * (8.0 if is_boss else 7.0)
@@ -448,7 +469,7 @@ func _process_attack(delta: float) -> void:
 				_clear_warning()
 			if attack_clock > 0.35: _end_attack(1.45)
 		"spin":
-			visual.rotate_y(delta * 11)
+			visual.rotation.y = TAU * smoothstep(0.0, 0.65, attack_clock)
 			if attack_step == 0 and attack_clock > 0.18:
 				attack_step = 1
 				_melee_hit(17.0, 32.0, 3.2, true, true)
@@ -461,10 +482,10 @@ func _process_attack(delta: float) -> void:
 				_melee_hit(6.0, 12.0, 1.9, false)
 			if attack_clock > 0.4: _end_attack(1.8)
 		_:
-			if attack_step == 0 and attack_clock > 0.07:
+			if attack_step == 0 and attack_clock > 0.15:
 				attack_step = 1
 				_melee_hit(11.0 if kind == "book" else 7.0, 24.0 if kind == "book" else 13.0, 2.15, false)
-			if attack_clock > 0.35: _end_attack(1.0)
+			if attack_clock > 0.50: _end_attack(1.0)
 
 func _melee_hit(damage_value: float, structure_value: float, reach: float, unblockable: bool, all_directions: bool = false) -> void:
 	var offset := player.global_position - global_position
@@ -521,18 +542,24 @@ func _interrupt(duration: float) -> void:
 	state_time = duration + 0.35
 	stun_time = duration
 	telegraph.visible = false
-	visual.rotation.y = 0
 	current_animation = ""
 	_play("Hit")
 	_clear_warning()
 
 func take_hit(damage: float, structure: float, from: Vector3, force: float = 0.0, heavy: bool = false) -> String:
+	return _receive_damage(damage, structure, from, force, heavy, true)
+
+func take_ally_hit(damage: float, structure: float, from: Vector3, force: float = 0.0) -> String:
+	# The player's optional one-hit demonstration cheat is never inherited by AI.
+	return _receive_damage(damage, structure, from, force, false, false)
+
+func _receive_damage(damage: float, structure: float, from: Vector3, force: float, heavy: bool, player_hit: bool) -> String:
 	if dead:
 		return "dead"
 	# Every successful player hit is lethal in the optional demonstration mode,
 	# including guarded enemies, bosses and the Web shield. Normal hit detection
 	# still enforces range and cover before this damage interface is called.
-	if _player_has_god_mode():
+	if player_hit and _player_has_god_mode():
 		health = 0.0
 		_die()
 		return "hit"

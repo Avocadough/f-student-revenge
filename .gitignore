@@ -1,6 +1,8 @@
 .godot/
 .work/
-evidence/
+.dream-loop/
+evidence/*
+!evidence/.gdignore
 *.docx
 *.blend1
 *.blend2

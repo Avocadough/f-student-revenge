@@ -155,7 +155,7 @@ let engine = null;
 	const packPath = GODOT_CONFIG.mainPack || GODOT_CONFIG.executable + '.pck';
 	// Change this release marker when publishing a new pack at the same URL.
 	// The cache key belongs only to the download URL, never to Godot's VFS path.
-	const packUrl = packPath + '?v=0.5-captions3';
+	const packUrl = packPath + '?v=0.6-ally-polish2';
 	const fileSizes = Object.assign({}, GODOT_CONFIG.fileSizes);
 	fileSizes[packUrl] = fileSizes[packPath] || 0;
 	engine = new Engine(Object.assign({}, GODOT_CONFIG, {

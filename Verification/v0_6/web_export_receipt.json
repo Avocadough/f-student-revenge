@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-12",
+  "version": "0.6-ally-polish2",
+  "scope": "Local exported package served over loopback; not public GitHub Pages verification",
+  "engine": "Godot 4.7.2 stable official ed1daf0bf",
+  "export_exit_code": 0,
+  "publication_status": "not_published_awaiting_user_approval",
+  "files": [
+    {
+      "file": "index.html",
+      "bytes": 12790,
+      "sha256": "2eb44b8a0a8953a33629984306750dde03cd87b50a7d4a2f5d6880304a23fed7",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.html"
+    },
+    {
+      "file": "index.pck",
+      "bytes": 21142536,
+      "sha256": "b9afa14884277d382319a4e4a42492f4e0c212def8a892d7db1d10236236d9b9",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.pck?v=0.6-ally-polish2"
+    },
+    {
+      "file": "index.wasm",
+      "bytes": 39514754,
+      "sha256": "fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.wasm"
+    },
+    {
+      "file": "index.js",
+      "bytes": 279815,
+      "sha256": "33c94cb3175f3333b82e2a3be5e8e86f77986f0aa2042b1631f6367a4e5bb6ba",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.js"
+    },
+    {
+      "file": "index.audio.position.worklet.js",
+      "bytes": 2973,
+      "sha256": "be33985bc7160d6bf9646f259cd86b259cd67b02ccb297ee5c44f8ac84327bc8",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.audio.position.worklet.js"
+    },
+    {
+      "file": "index.audio.worklet.js",
+      "bytes": 7298,
+      "sha256": "5b476a9c9ce642c0ee4256436d1bc31d9c38f868aca0f9a8e2a57c18d2dec2a3",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.audio.worklet.js"
+    },
+    {
+      "file": "index.apple-touch-icon.png",
+      "bytes": 5169,
+      "sha256": "4f1fb9efb8eddfc89aeaea1088c2f17502e48d83f5be373cf114a16b27484485",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.apple-touch-icon.png"
+    },
+    {
+      "file": "index.icon.png",
+      "bytes": 2234,
+      "sha256": "aad6a4e5e3c535472087b9b67a1f067c6809d5e62a62e28d9889cd71007aeea7",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.icon.png"
+    },
+    {
+      "file": "index.png",
+      "bytes": 21443,
+      "sha256": "3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+      "local_http_status": 200,
+      "local_http_matches": true,
+      "url": "http://127.0.0.1:8786/index.png"
+    }
+  ]
+}

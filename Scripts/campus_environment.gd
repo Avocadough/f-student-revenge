@@ -519,7 +519,8 @@ static func _electrical_cabinet(stage, at: Vector3, side: int) -> void:
 	for row in range(6):
 		_box(stage, "CabinetVent", Vector3(0.05, 0.035, 0.72), at + Vector3(-side * 0.78, 0.54 + row * 0.105, 0), "dark")
 	_box(stage, "VoltageSign", Vector3(0.05, 0.4, 0.38), at + Vector3(-side * 0.78, 1.8, 0), "warning")
-	stage._sign("⚡", at + Vector3(-side * 0.82, 1.8, 0), 0.009, Color("252b26"), Vector3(0, -side * PI / 2, 0))
+	var voltage_label: Label3D = stage._sign("ไฟฟ้า", at + Vector3(-side * 0.82, 1.8, 0), 0.005, Color("252b26"), Vector3(0, -side * PI / 2, 0))
+	voltage_label.pixel_size = 0.0025 # Keep the word inside the existing 0.38m warning plate.
 	_box(stage, "StatusLamp", Vector3(0.06, 0.08, 0.08), at + Vector3(-side * 0.79, 2.38, -0.6), "vein")
 	_contact(stage, at + Vector3(0, 0.004, 0), Vector2(2.4, 3.0), 0)
 
