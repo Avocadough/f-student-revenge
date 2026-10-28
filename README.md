@@ -1,8 +1,15 @@
-# F-Student Revenge | การล้างแค้นของนักศึกษาติด F
+<div align="center">
+  <h1>F-Student Revenge | การล้างแค้นของนักศึกษาติด F</h1>
+  <p>A three-stage 3D beat-em-up set in a satirical university.</p>
+  <p>
+    <img src="https://img.shields.io/badge/Godot-4.7.2-478CBF" alt="Godot 4.7.2">
+    <img src="https://img.shields.io/badge/Blender-5.2.2-E87D0D" alt="Blender 5.2.2">
+  </p>
+  <p><a href="https://avocadough.github.io/f-student-revenge/">Play the browser demo</a> &nbsp;·&nbsp; <a href="https://github.com/Avocadough/f-student-revenge/blob/main/DESIGN.md">Game design</a> &nbsp;·&nbsp; <a href="https://github.com/Avocadough/f-student-revenge/blob/main/VALIDATION.md">Validation</a> &nbsp;·&nbsp; <a href="https://github.com/Avocadough/f-student-revenge/blob/main/CREDITS.md">Credits</a></p>
+</div>
 
 A three-stage, single-player 3D beat-'em-up set in a satirical university, built by **CP410844 Group 3** with Godot 4.7.2 and Blender.
 
-[Play the browser demo](https://avocadough.github.io/f-student-revenge/) · [Game design](DESIGN.md) · [Validation](VALIDATION.md) · [Credits](CREDITS.md)
 
 The demo combines close-range combat, teacher allies, mission objectives and checkpoints. Play with a desktop keyboard and mouse; the performance recorded in the validation notes is not a guarantee for every device or browser.
 
