@@ -1,4 +1,22 @@
-# การล้างแค้นของนักศึกษาติด F
+# F-Student Revenge | การล้างแค้นของนักศึกษาติด F
+
+A three-stage, single-player 3D beat-'em-up set in a satirical university, built by **CP410844 Group 3** with Godot 4.7.2 and Blender.
+
+[Play the browser demo](https://avocadough.github.io/f-student-revenge/) · [Game design](DESIGN.md) · [Validation](VALIDATION.md) · [Credits](CREDITS.md)
+
+The demo combines close-range combat, teacher allies, mission objectives and checkpoints. Play with a desktop keyboard and mouse; the performance recorded in the validation notes is not a guarantee for every device or browser.
+
+| Explore the project | Contents |
+| --- | --- |
+| [project.godot](project.godot), [Scenes/](Scenes/), [Scripts/](Scripts/) | Godot project, scenes and gameplay logic |
+| [Art/](Art/), [Assets/](Assets/) | Editable art and game assets |
+| [docs/](docs/), [Verification/](Verification/) | Web export and recorded verification evidence |
+
+Open `project.godot` in Godot 4.7.2 Standard and press **F5** to run the project locally. Asset attribution and third-party licenses are documented in [CREDITS.md](CREDITS.md) and [LICENSE](LICENSE).
+
+---
+
+## รายละเอียดโครงการ (ภาษาไทย)
 
 เดโมเกมต่อสู้สามมิติสำหรับรายวิชา **CP410844 — Group 3** พัฒนาด้วย **Godot 4.7.2** และแก้โมเดล/แอนิเมชันด้วย **Blender 5.2.2 LTS**
 
